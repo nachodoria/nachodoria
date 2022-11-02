@@ -1,0 +1,36 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Hind+Vadodara:wght@300;400;500;600;700&display=swap');
+:root{
+    --mode-background : #121212;
+    --mode-letter: #ffffff;
+    --mode-opacity1 : 85%;
+    --mode-opacity2 : 65%;
+    --mode-opacity3 : 30%;
+    --mode-stroke : 3px solid white;
+
+    --h1 : 128px;
+    --p : 32px;
+    --h2 : 48px;
+
+    --title-letter : "Hind Vadodara";
+    --weight1: 100;
+    --weight2: 200;
+    --weight3: 300;
+    --weight4: 400;
+    --weight5: 500;
+    --weight6: 600;
+    --weight7: 700;
+    --weight8: 800;
+}
+
+.App{
+    color: var(--mode-background);
+    width: max-content;
+    height: max-content;
+}
+
+.App h1{
+    font-family: var(--title-letter);
+    font-size: var(--h2);
+    font-weight: var(--weight1);
+}
