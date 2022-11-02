@@ -1,18 +1,23 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Hind+Vadodara:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Forum&display=swap');
+
 :root{
     --mode-background : #121212;
     --mode-letter: #ffffff;
     --mode-opacity1 : 85%;
     --mode-opacity2 : 65%;
     --mode-opacity3 : 30%;
-    --mode-stroke : 3px solid white;
+    --mode-stroke : 2px  white;
 
-    --h1 : 128px;
-    --p : 32px;
+    --h1 : 90px;
+    --p : 20px;
     --h2 : 48px;
 
-    --title-letter : "Hind Vadodara";
+    --subtitle-letter : "Hind Vadodara";
+    --title-letter: "Poppins";
+    --p-letter : "Forum";
     --weight1: 100;
     --weight2: 200;
     --weight3: 300;
@@ -21,16 +26,130 @@
     --weight6: 600;
     --weight7: 700;
     --weight8: 800;
+    
+
+}
+body{
+    margin: 0;
+    padding: 0;
+    margin-inline:70px;
+    background-color: var(--mode-background);
+
+ 
+}
+
+.main{
+    background-color: var(--mode-background);
+    width: 100%;
+    height: 100vh;
+    
 }
 
 .App{
-    color: var(--mode-background);
-    width: max-content;
-    height: max-content;
-}
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: row;
+    height: 100vh;
+    width: 100%;
+    }
+
 
 .App h1{
     font-family: var(--title-letter);
+    font-size: var(--h1);
+    font-weight: var(--weight7);
+    -webkit-text-stroke: var(--mode-stroke);
+    color: var(--mode-background);
+    margin: 0;
+    transition-duration: 300ms;
+    cursor: default;
+    
+
+}
+.App h1:hover{
+    -webkit-text-stroke: 0s;
+    color: var(--mode-letter);
+
+}
+
+.nave{
+    width: 380px;
+    height: 420px;
+    background-image: url(./assets/nave.svg);
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 1132px) {
+    
+    .App p{
+        font-size: 62px;
+    }
+}
+@media only screen and (max-width: 950px) {
+    .nave{
+        display: none;
+    }
+    .App p{
+        font-size: var(--h1);
+    }
+}
+@media only screen and (max-width: 752px) {
+    .App p{
+        font-size: var(--h2);
+    }
+}
+@media only screen and (max-width: 467px) {
+    .App p{
+        font-size: var(--p);
+        -webkit-text-stroke: 1px white;
+    }
+}
+
+
+.ab-me-section{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.ab-me-section h1{
+    margin: 0;
+    font-family: var(--title-letter);
     font-size: var(--h2);
+    font-weight: var(--weight7);
+    -webkit-text-stroke: var(--mode-stroke);
+    color: var(--mode-background);
+    opacity: var(--mode-opacity1);
+    margin: 0;
+    transition-duration: 300ms;
+    cursor: default;
+    width: fit-content;
+}
+.ab-me-section h1:hover{
+    -webkit-text-stroke: 0s;
+    color: var(--mode-letter);
+
+}
+
+.ab-me-section h2{
+    margin: 0;
+    font-family: var(--subtitle-letter);
+    font-weight: var(--weight5);
+    font-size: var(--h1);
+    color: var(--mode-letter);
+    opacity: var(--mode-opacity2);
+    margin-bottom: 40px;
+
+}
+
+.ab-me-section p{
+    margin: 0;
+    font-family: var(--p-letter);
     font-weight: var(--weight1);
+    font-size: var(--p);
+    color: var(--mode-letter);
+    opacity: var(--mode-opacity3);
+    max-width: 140vh;
 }
