@@ -26,9 +26,11 @@
     --weight6: 600;
     --weight7: 700;
     --weight8: 800;
+ 
     
 
 }
+
 body{
     margin: 0;
     padding: 0;
@@ -68,7 +70,7 @@ body{
 
 }
 .App h1:hover{
-    -webkit-text-stroke: 0s;
+    -webkit-text-stroke: 0;
     color: var(--mode-letter);
 
 }
@@ -128,7 +130,7 @@ body{
     width: fit-content;
 }
 .ab-me-section h1:hover{
-    -webkit-text-stroke: 0s;
+    -webkit-text-stroke: 0;
     color: var(--mode-letter);
 
 }
@@ -152,4 +154,42 @@ body{
     color: var(--mode-letter);
     opacity: var(--mode-opacity3);
     max-width: 140vh;
+}
+
+
+.projects-section{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
+    align-items: flex-end;
+}
+
+.projects-section h1{
+    margin: 0;
+    font-family: var(--title-letter);
+    font-size: var(--h2);
+    font-weight: var(--weight7);
+    -webkit-text-stroke: var(--mode-stroke);
+    color: var(--mode-background);
+    opacity: var(--mode-opacity1);
+    margin: 0;
+    transition-duration: 300ms;
+    cursor: default;
+    width: fit-content;
+}
+
+.projects-section h1:hover{
+    -webkit-text-stroke: 0;
+    color: var(--mode-letter);
+}
+
+.projects-section h2{
+    margin: 0;
+    font-family: var(--subtitle-letter);
+    font-weight: var(--weight5);
+    font-size: var(--h1);
+    color: var(--mode-letter);
+    opacity: var(--mode-opacity2);
+    margin-bottom: 40px;
 }
