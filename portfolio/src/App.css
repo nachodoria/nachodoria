@@ -3,13 +3,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Forum&display=swap');
 
 :root {
-    --mode-background: #121212;
-    --mode-letter: #ffffff;
+ 
     --mode-opacity1: 85%;
     --mode-opacity2: 65%;
     --mode-opacity3: 40%;
-    --mode-stroke: 2px white;
-    --ilustration: url(./assets/nave.svg);
 
     --h1: 90px;
     --p: 20px;
@@ -63,7 +60,7 @@ body {
 
 }
 
-.App {
+.start {
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -73,7 +70,7 @@ body {
 }
 
 
-.App h1 {
+.start h1 {
     font-family: var(--title-letter);
     font-size: var(--h1);
     font-weight: var(--weight7);
@@ -86,7 +83,7 @@ body {
 
 }
 
-.App h1:hover {
+.start h1:hover {
     -webkit-text-stroke: 0;
     color: var(--mode-letter);
 
@@ -102,11 +99,11 @@ body {
 
 @media only screen and (max-width: 1132px) {
 
-    .App p {
+    .start p {
         font-size: 62px;
     }
 
-    .App h1 {
+    .start h1 {
         width: min-content;
     }
 }
@@ -116,19 +113,19 @@ body {
         display: none;
     }
 
-    .App p {
+    .start p {
         font-size: var(--h1);
     }
 }
 
 @media only screen and (max-width: 752px) {
-    .App p {
+    .start p {
         font-size: var(--h2);
     }
 }
 
 @media only screen and (max-width: 467px) {
-    .App p {
+    .start p {
         font-size: var(--p);
         -webkit-text-stroke: 1px white;
     }
@@ -136,10 +133,10 @@ body {
 
 
 .ab-me-section {
-    height: 100vh;
+    height: 70vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
 }
 
 .ab-me-section h1 {

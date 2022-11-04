@@ -10,7 +10,7 @@ function App() {
   const scrollRef = useRef();
 
   useEffect(()=> {
-    Aos.init({duration : 2000});
+    Aos.init({duration : 4000});
 }, [])
 
     
@@ -29,9 +29,11 @@ function App() {
 
 
   const [theme, settheme] = useState("dark")
+  document.body.dataset.theme = theme
 
   const handleToggle = () => {
-    const newTheme = theme === "light" ? "dark" : "light"
+    const newTheme = theme === "dark" ? "light" : "dark"
+    console.log(newTheme)
     settheme(newTheme)
     document.body.dataset.theme = theme
   }
@@ -42,18 +44,17 @@ function App() {
     <>
       <div className='scroll' ref={scrollRef}>
         <div className="main" >
-          <div className="App" data-aos="fade-left" >
+          <div className="start" data-aos="fade-left" data-scroll-section>
 
             <h1
               data-scroll
               data-scroll-speed="8"
-              data-scroll-position="top"
-              data-scroll-direction="horizontal">ignacio doria</h1>
+              data-scroll-direction="horizontal"
+              >ignacio doria</h1>
 
             <div className='nave'
               data-scroll
-              data-scroll-offset="0,0"
-              data-scroll-speed="10"
+               data-scroll-speed="10"
               data-scroll-direction="vertical"
               onClick={handleToggle}
             ></div>
@@ -61,23 +62,13 @@ function App() {
         </div>
 
         <div className="ab-me-section" data-aos="fade-up">
-          <h1
-            data-scroll
-            data-scroll-speed="-1.2"
-            data-scroll-offset="0,10"
-
-          >about me</h1>
+          <h1>about me</h1>
           <h2>i'm an IT Student</h2>
           <p>My name is Ignacio Doria, I am a high school student in Argentina. Fortunately I discovered the front-end development skills and started developing them at a young age. I started to learn these skills in 2020 and now I can tell that I know JS, React JS, CSS, HTML, Python, and some PHP for some back-end needs. I am open-minded to the process of learning.</p>
         </div>
 
         <div className='projects-section' > 
-          <h1
-            data-scroll
-            data-scroll-speed="-1.2"
-            data-scroll-offset="10"
-
-          >projects</h1>
+          <h1>projects</h1>
           <h2
           >what do I do?</h2>
           <div className='projects-container'  >
