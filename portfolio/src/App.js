@@ -18,6 +18,13 @@ function App(){
   const projects = ["LINKEADOS", "LINK-IT","YOUDETECT", "$#%(#$?%#%#)" ];
 
 
+  const [theme, settheme] = useState("dark")
+ 
+  const handleToggle = () => {
+    const newTheme = theme ==="light" ? "dark" : "light"
+    settheme(newTheme)
+    document.body.dataset.theme = theme
+  }
 
   return (
   <>
@@ -36,6 +43,7 @@ function App(){
           data-scroll-offset	="0,0"
           data-scroll-speed="10"
           data-scroll-direction="vertical"
+          onClick={handleToggle}
          ></div>
         </div>
       </div>
