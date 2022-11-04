@@ -27,9 +27,15 @@
     --weight7: 700;
     --weight8: 800;
  
-    
-
+    background-color: var(--mode-background);
 }
+
+[data-theme = "light"]{
+    --mode-background : #C9C5C1;
+    --mode-letter: #121212;
+    --mode-stroke : 2px  white;
+}
+
 
 body{
     margin: 0;
@@ -66,7 +72,7 @@ body{
     margin: 0;
     transition-duration: 300ms;
     cursor: default;
-    
+    width: fit-content;
 
 }
 .App h1:hover{
@@ -86,6 +92,10 @@ body{
     
     .App p{
         font-size: 62px;
+    }
+
+    .App h1{
+        width: min-content;
     }
 }
 @media only screen and (max-width: 950px) {
@@ -163,6 +173,7 @@ body{
     flex-direction: column;
     justify-content:flex-start;
     align-items: flex-end;
+    margin-top: 40px;
 }
 
 .projects-section h1{
@@ -193,3 +204,5 @@ body{
     opacity: var(--mode-opacity2);
     margin-bottom: 40px;
 }
+
+

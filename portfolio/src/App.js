@@ -1,54 +1,63 @@
 import './App.css';
-import React, { useState, useEffect } from 'react';
-import Aos from "aos";
+import React, { useState, useEffect, useRef } from 'react';
+
+import locomotiveScroll from "locomotive-scroll";
+
 
 
 function App(){
-  
+  const scrollRef = useRef();
 
-  useEffect(()=> {
-    Aos.init({duration : 1000});
-}, [])
+  useEffect(() => {
+    const scroll = new locomotiveScroll({
+      el: scrollRef.current,
+      smooth: true
+    });
+  });
 
-const [darkMode, setDarkMode] = useState(true);
-
-let root = document.documentElement;
-let nave = document.documentElement;
-if (!darkMode){
-  root.style.setProperty('--mode-background', "white");
-  root.style.setProperty('--mode-letter', "black");
-  root.style.setProperty('--mode-stroke', "2px #484848 ");
-  nave.style.setProperty("background-image", "url(./assets/nave2.svg)")
-}
-
-else if (darkMode){
-  root.style.setProperty('--mode-background', "black");
-  root.style.setProperty('--mode-letter', "white");
-  root.style.setProperty('--mode-stroke', "2px #ffffff ");
-  nave.style.setProperty("background-image", "url(./assets/nave1.svg)")
-}
-
+  const projects = ["Linkeados", "Link-It","YouDetect", "$%$=%/&#$?%#%(#$?%#%#%?&#$/&$())" ]
 
   return (
   <>
-    <div className='main' data-aos="fade-down" >
-      <div className="App">
-        <h1>ignacio doria</h1>
-        <div className='nave' onClick={setDarkMode(!darkMode)}></div>
+   <div className='scroll'  ref={scrollRef}>
+      <div className="main" >
+        <div className="App" >
+
+          <h1 
+          data-scroll
+          data-scroll-speed="8"
+          data-scroll-position="top"
+          data-scroll-direction="horizontal">ignacio doria</h1>
+
+          <div className='nave'
+          data-scroll
+          data-scroll-offset	="0,0"
+          data-scroll-speed="10"
+          data-scroll-direction="vertical"
+         ></div>
+        </div>
       </div>
-    </div>
 
-      <div className='ab-me-section' data-aos="fade-left">
-          <h1>about me</h1>
-          <h2>i'm an IT Student</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      </div>
+        <div className="ab-me-section">
+            <h1
+            data-scroll
+            data-scroll-speed="-1.2"
+            
+            >about me</h1>
+            <h2>i'm an IT Student</h2>
+            <p>My name is Ignacio Doria, I am a high school student in Argentina. Fortunately I discovered the front-end development skills and started developing them at a young age. I started to learn these skills in 2020 and now I can tell that I know JS, React JS, CSS, HTML, Python, and some PHP for some back-end needs. I am open-minded to the process of learning.</p>
+         </div>
 
-      <div className='projects-section' data-aos="fade-right">
-          <h1>projects</h1>
-          <h2>what do I do?</h2>
-      
+        <div className='projects-section'>
+            <h1
+             data-scroll
+             data-scroll-speed="-1.2"
+            >projects</h1>
+            <h2          
+            >what do I do?</h2>
+            
 
+        </div>
       </div>
   </>
   );
