@@ -1,24 +1,23 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Hind+Vadodara:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,800;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Forum&display=swap');
 
-:root{
-    --mode-background : #121212;
+:root {
+    --mode-background: #121212;
     --mode-letter: #ffffff;
-    --mode-opacity1 : 85%;
-    --mode-opacity2 : 65%;
-    --mode-opacity3 : 40%;
-    --mode-stroke : 2px  white;
-    --ilustration : url(./assets/nave.svg);
+    --mode-opacity1: 85%;
+    --mode-opacity2: 65%;
+    --mode-opacity3: 40%;
+    --mode-stroke: 2px white;
+    --ilustration: url(./assets/nave.svg);
 
-    --h1 : 90px;
-    --p : 20px;
-    --h2 : 48px;
+    --h1: 90px;
+    --p: 20px;
+    --h2: 48px;
 
-    --subtitle-letter : "Hind Vadodara";
+    --subtitle-letter: "Hind Vadodara";
     --title-letter: "Poppins";
-    --p-letter : "Forum";
+    --p-letter: "Forum";
     --weight1: 100;
     --weight2: 200;
     --weight3: 300;
@@ -27,53 +26,54 @@
     --weight6: 600;
     --weight7: 700;
     --weight8: 800;
- 
+
 }
 
-body[data-theme = "light"]{
-    --mode-background : #C9C5C1;
+body[data-theme="light"] {
+    --mode-background: #C9C5C1;
     --mode-letter: #121212;
-    --mode-stroke : 2px  black;
-    --ilustration : url(./assets/nave2.svg)
+    --mode-stroke: 2px black;
+    --ilustration: url(./assets/nave2.svg)
 }
-body[data-theme = "dark"]{
-    --mode-background : #121212;
+
+body[data-theme="dark"] {
+    --mode-background: #121212;
     --mode-letter: #ffffff;
-    --mode-stroke : 2px  white;
-    --ilustration : url(./assets/nave.svg)
+    --mode-stroke: 2px white;
+    --ilustration: url(./assets/nave.svg)
 }
 
 
-body{
+body {
     transition: 200ms;
 
     margin: 0;
     padding: 0;
-    margin-inline:70px;
+    margin-inline: 70px;
     background-color: var(--mode-background);
 
- 
+
 }
 
-.main{
+.main {
     transition: 200ms;
     background-color: var(--mode-background);
     width: 100%;
     height: 100vh;
-    
+
 }
 
-.App{
+.App {
     display: flex;
     align-items: center;
     justify-content: space-around;
     flex-direction: row;
     height: 100vh;
     width: 100%;
-    }
+}
 
 
-.App h1{
+.App h1 {
     font-family: var(--title-letter);
     font-size: var(--h1);
     font-weight: var(--weight7);
@@ -85,59 +85,64 @@ body{
     width: fit-content;
 
 }
-.App h1:hover{
+
+.App h1:hover {
     -webkit-text-stroke: 0;
     color: var(--mode-letter);
 
 }
 
-.nave{
+.nave {
     transition: 400ms;
     width: 380px;
-    height: 420px;
+    height: 550px;
     background-image: var(--ilustration);
     cursor: pointer;
 }
 
 @media only screen and (max-width: 1132px) {
-    
-    .App p{
+
+    .App p {
         font-size: 62px;
     }
 
-    .App h1{
+    .App h1 {
         width: min-content;
     }
 }
+
 @media only screen and (max-width: 950px) {
-    .nave{
+    .nave {
         display: none;
     }
-    .App p{
+
+    .App p {
         font-size: var(--h1);
     }
 }
+
 @media only screen and (max-width: 752px) {
-    .App p{
+    .App p {
         font-size: var(--h2);
     }
 }
+
 @media only screen and (max-width: 467px) {
-    .App p{
+    .App p {
         font-size: var(--p);
         -webkit-text-stroke: 1px white;
     }
 }
 
 
-.ab-me-section{
+.ab-me-section {
     height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-.ab-me-section h1{
+.ab-me-section h1 {
     margin: 0;
     font-family: var(--title-letter);
     font-size: var(--h2);
@@ -150,13 +155,14 @@ body{
     cursor: default;
     width: fit-content;
 }
-.ab-me-section h1:hover{
+
+.ab-me-section h1:hover {
     -webkit-text-stroke: 0;
     color: var(--mode-letter);
 
 }
 
-.ab-me-section h2{
+.ab-me-section h2 {
     margin: 0;
     font-family: var(--subtitle-letter);
     font-weight: var(--weight5);
@@ -167,7 +173,7 @@ body{
 
 }
 
-.ab-me-section p{
+.ab-me-section p {
     margin: 0;
     font-family: var(--p-letter);
     font-weight: var(--weight1);
@@ -178,22 +184,22 @@ body{
 }
 
 @media only screen and (max-width: 677px) {
-    .ab-me-section h2{
+    .ab-me-section h2 {
         text-align: left;
     }
 }
 
 
-.projects-section{
+.projects-section {
     height: max-content;
     display: flex;
     flex-direction: column;
-    justify-content:flex-start;
+    justify-content: flex-start;
     align-items: flex-end;
-    margin-top: 40px;
+    margin-top: 130px;
 }
 
-.projects-section h1{
+.projects-section h1 {
     margin: 0;
     font-family: var(--title-letter);
     font-size: var(--h2);
@@ -209,12 +215,12 @@ body{
 
 }
 
-.projects-section h1:hover{
+.projects-section h1:hover {
     -webkit-text-stroke: 0;
     color: var(--mode-letter);
 }
 
-.projects-section h2{
+.projects-section h2 {
     margin: 0;
     font-family: var(--subtitle-letter);
     font-weight: var(--weight5);
@@ -226,43 +232,49 @@ body{
 }
 
 
-.projects-container{
+.projects-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-.project{
+.project {
     margin: 20px;
+    margin-block: 100px;
     display: flex;
     flex-direction: row;
 }
 
-.project p{
+
+.project p {
     font-family: var(--p-letter);
     font-weight: var(--weight1);
     font-size: 18px;
     color: var(--mode-letter);
     opacity: var(--mode-opacity3);
 }
+
 @media only screen and (max-width: 677px) {
-    .projects-section h2{
+    .projects-section h2 {
         text-align: right;
     }
-    .project{
+
+    .project {
         flex-direction: column;
     }
 }
+
 @media only screen and (max-width: 833px) {
-    .project{
-        flex-direction: column!important;
+    .project {
+        flex-direction: column !important;
         align-items: center;
-         text-align: center;
+        text-align: center;
     }
-    .project p{
-        margin-inline: 0!important;
-        text-align: center!important;
+
+    .project p {
+        margin-inline: 0 !important;
+        text-align: center !important;
 
     }
 }
