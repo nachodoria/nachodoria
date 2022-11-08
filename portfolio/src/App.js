@@ -1,4 +1,5 @@
 import './App.css';
+import "./locomotive-scroll.css"
 import React, { useState, useEffect, useRef } from 'react';
 
 import locomotiveScroll from "locomotive-scroll";
@@ -10,20 +11,19 @@ function App() {
 
 
 
-    
+
   useEffect(() => {
+
     const scroll = new locomotiveScroll({
       el: scrollRef.current,
       smooth: true,
-      repeat:true,
-      lerp: 0.3
     });
 
-    
+
   });
 
-  
-  const projects = ["LINKEADOS", "LINK-IT", "YOUDETECT", "random"];
+
+  const projects = ["linkea2", "link-it", "youdetect", "random"];
 
 
   const [theme, settheme] = useState("dark")
@@ -39,22 +39,25 @@ function App() {
 
   return (
     <>
-     <div className='scroll' ref={scrollRef}>
-        <div className="main" >
-          <div className="start"  data-scroll-section data-scroll-section-id="section1">
+      <div className='scroll'  ref={scrollRef}>
+        <div className="main" data-scroll-container >
+          <div className="start" data-scroll-section data-scroll-section-id="section1">
             <h1
               data-scroll
               data-scroll-speed="4"
               data-scroll-direction="horizontal"
+              data-scroll-position="top"
 
-              
-              >ignacio doria</h1>
+
+
+            >ignacio doria</h1>
 
             <div className='nave'
               data-scroll
               data-scroll-speed="-4"
               data-scroll-direction="horizontal"
-              data-scroll-position	="top"
+              data-scroll-position="top"
+
 
               onClick={handleToggle}
             ></div>
@@ -63,22 +66,32 @@ function App() {
 
         <div className="ab-me-section" data-scroll-section data-scroll-section-id="section2" >
           <h1
-          data-scroll
-          data-scroll-direction="horizontal"
-          data-scroll-speed="4">about me</h1>
+            data-scroll
+            data-scroll-direction="vectical"
+            data-scroll-position="top"
+            data-scroll-speed="2">about me</h1>
           <h2
-          data-scroll
-          data-scroll-direction="horizontal"
-          data-scroll-speed="6">i'm an IT Student</h2>
+           data-scroll
+           data-scroll-direction="vectical"
+           data-scroll-position="top"
+
+           data-scroll-speed="1">i'm an IT Student</h2>
           <p
-          data-scroll
-          data-scroll-direction="horizontal"
-          data-scroll-speed="8">My name is Ignacio Doria, I am a high school student in Argentina. Fortunately I discovered the front-end development skills and started developing them at a young age. I started to learn these skills in 2020 and now I can tell that I know JS, React JS, CSS, HTML, Python, and some PHP for some back-end needs. I am open-minded to the process of learning.</p>
+          
+           >My name is Ignacio Doria, I am a high school student in Argentina. Fortunately I discovered the front-end development skills and started developing them at a young age. I started to learn these skills in 2020 and now I can tell that I know JS, React JS, CSS, HTML, Python, and some PHP for some back-end needs. I am open-minded to the process of learning.</p>
         </div>
 
-        <div className='projects-section' data-scroll-section data-scroll-section-id="section3" > 
-          <h1>projects</h1>
+        <div className='projects-section' data-scroll-section data-scroll-section-id="section3" >
+          <h1 data-scroll
+            data-scroll-direction="vertical"
+            data-scroll-speed="1"
+            >projects</h1>
           <h2
+            data-scroll
+            data-scroll-direction="vectical"
+            data-scroll-position="bottom"
+ 
+            data-scroll-speed="2"
           >what do I do?</h2>
           <div className='projects-container'  >
             {projects.map(function (i, a) {
@@ -92,7 +105,7 @@ function App() {
           </div>
 
         </div>
-        </div>    
+      </div>
     </>
   );
 }

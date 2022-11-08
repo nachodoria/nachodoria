@@ -75,6 +75,7 @@ body {
     font-size: var(--h1);
     font-weight: var(--weight7);
     -webkit-text-stroke: var(--mode-stroke);
+    opacity: var(--mode-opacity1);
     color: var(--mode-background);
     margin: 0;
     transition-duration: 300ms;
@@ -133,10 +134,10 @@ body {
 
 
 .ab-me-section {
-    height: 70vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: flex-end;
 }
 
 .ab-me-section h1 {
@@ -144,9 +145,8 @@ body {
     font-family: var(--title-letter);
     font-size: var(--h2);
     font-weight: var(--weight7);
-    -webkit-text-stroke: var(--mode-stroke);
-    color: var(--mode-background);
-    opacity: var(--mode-opacity1);
+    color: var(--mode-letter);
+    opacity: var(--mode-opacity2);
     margin: 0;
     transition-duration: 300ms;
     cursor: default;
@@ -165,7 +165,7 @@ body {
     font-weight: var(--weight5);
     font-size: var(--h1);
     color: var(--mode-letter);
-    opacity: var(--mode-opacity2);
+    opacity: var(--mode-opacity1);
     margin-bottom: 40px;
 
 }
@@ -191,9 +191,9 @@ body {
     height: max-content;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: flex-end;
     align-items: flex-end;
-    margin-top: 130px;
+    margin-top: 400px;
 }
 
 .projects-section h1 {
@@ -201,21 +201,16 @@ body {
     font-family: var(--title-letter);
     font-size: var(--h2);
     font-weight: var(--weight7);
-    -webkit-text-stroke: var(--mode-stroke);
-    color: var(--mode-background);
-    opacity: var(--mode-opacity1);
+    color: var(--mode-letter);
+    opacity: var(--mode-opacity2);
     margin: 0;
-    transition-duration: 300ms;
     cursor: default;
     width: fit-content;
     margin-bottom: 20px;
 
 }
 
-.projects-section h1:hover {
-    -webkit-text-stroke: 0;
-    color: var(--mode-letter);
-}
+
 
 .projects-section h2 {
     margin: 0;
@@ -223,7 +218,7 @@ body {
     font-weight: var(--weight5);
     font-size: var(--h1);
     color: var(--mode-letter);
-    opacity: var(--mode-opacity2);
+    opacity: var(--mode-opacity1);
     margin-bottom: 100px;
 
 }
