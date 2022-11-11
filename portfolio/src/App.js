@@ -103,7 +103,7 @@ function App() {
                 <div className='project' key={a} style={a % 2 ? { flexDirection: "row-reverse" } : { flexDirection: "row" }} >
                   <h1
                   data-scroll
-                  data-scroll-speed="3"
+                  data-scroll-speed="4"
                   data-scroll-direction="vectical"
 
   
@@ -119,15 +119,35 @@ function App() {
                 </div>) 
             })}
           </div>
-            
-        </div>
-        <div className='social-media-container'>
-              <span className='instagram'></span>
-              <span className='twitter'></span>
-              <span className='github'></span>
-              <span className='mail'></span>
+          <div className='social-media-container' >
+              <svg 
+                data-scroll
+                data-scroll-speed="4"
+                data-scroll-direction="vectical"  
+                className='instagram'
+                rel="noreferrer" target="_blank" href='https://www.instagram.com/nacho.doria/'></svg>
+              <svg  
+              data-scroll
+              data-scroll-speed="3"
+              data-scroll-direction="vectical"
+              className='twitter'
+              rel="noreferrer" target="_blank" href='https://twitter.com/NachoDoria_'></svg>
+              <svg 
+              data-scroll
+              data-scroll-speed="2"
+              data-scroll-direction="vectical"
+              className='github'
+              rel="noreferrer" target="_blank" href='https://github.com/nachodoria'></svg>
+              <svg
+              data-scroll
+              data-scroll-speed="1"
+              data-scroll-direction="vectical"
+              onClick={() => window.location = 'mailto:ignaciodoriaoberman@gmail.com'}
+              className='mail'></svg>
 
             </div>
+        </div>
+        
       </div>
     </>
   );

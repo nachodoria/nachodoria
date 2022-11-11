@@ -276,6 +276,15 @@ body {
         flex-direction: column;
     }
 }
+@media only screen and (max-width: 480px) {
+    .projects-section h2 {
+        font-size: 60px;
+     }
+     .ab-me-section h2{
+         font-size: 60px;
+     }
+
+}
 
 @media only screen and (max-width: 833px) {
     .project {
@@ -289,6 +298,9 @@ body {
         text-align: center !important;
 
     }
+    .project h1{
+        margin: 0;
+    }
 }
 
 @media only screen and (max-width: 407px) {
@@ -301,6 +313,13 @@ body {
      h2{
         transform: scale(0.6x);
     }
+    .ab-me-section{
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+    .ab-me-section h1{
+        text-align: left;
+    }
 }
 
 .social-media-container{
@@ -308,12 +327,17 @@ body {
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 20vh;
+    height: 30vh;
+    z-index: 5;
 }
-.social-media-container span{
+.social-media-container svg{
    margin-inline: 20px;
+   transition: 200ms;
+   cursor: pointer;
 }
-
+.social-media-container svg:hover{
+    transform: translateY(-10px);
+ }
 .instagram{
     width: 35px;
     height: 35px;
