@@ -1,31 +1,16 @@
 import './App.css';
 import "./locomotive-scroll.css"
 import React, { useState, useEffect, useRef } from 'react';
-
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 import LocomotiveScroll from 'locomotive-scroll';
 
 
 function App() {
   const scrollRef = useRef();
 
-  const [title, setTitle] = useState("#%#%$&#%/&/(&/)=)(=????¡*¨*[]_::_;$");
 
-  useEffect(() => {
-    function makeid(length) {
-      var result = '';
-      var characters = '/%$/%/%()&()&(&&#%#%$&#%/&/(&/)=)(=????¡*¨*[]_::_;$"%$&"#!"$13';
-      var charactersLength = characters.length;
-      for (var i = 0; i < length; i++) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-      }
-
-      return result
-    }
-    setTitle(makeid(25));
-    document.title = title;
-  }, [title])
-
-
+  AOS.init();
 
   useEffect(() => {
 
@@ -57,7 +42,7 @@ function App() {
     <>
       <div className='scroll' ref={scrollRef}>
         <div className="main" data-scroll-container >
-          <div className="start" data-scroll-section data-scroll-section-id="section1" id='js-target'>
+          <div className="start" data-scroll-section data-scroll-section-id="section1" >
             <h1
               data-scroll
               data-scroll-speed="4"
@@ -103,13 +88,14 @@ function App() {
 
         <div className='projects-section' data-scroll-section data-scroll-section-id="section3" >
           <h1 data-scroll
-            data-scroll-direction="vertical"
-            data-scroll-speed="1"
+            data-scroll-direction="vectical"
+            data-scroll-position="top"
+            data-scroll-speed="2"
           >projects</h1>
           <h2
             data-scroll
             data-scroll-direction="vectical"
-            data-scroll-position="bottom"
+            data-scroll-position="top"
             data-scroll-delay="0.1"
             data-scroll-speed="1"
           >what do I do?</h2>
@@ -126,8 +112,9 @@ function App() {
                     style={a % 2 ? { minWidth: "200px" } : { minWidth: "100px" }}
                   >{[i]}</h1>
                   <p data-scroll
-                    data-scroll-speed="2"
+                    data-scroll-speed="1"
                     data-scroll-direction="vectical"
+                    
 
 
 
@@ -135,34 +122,35 @@ function App() {
                 </div>)
             })}
           </div>
-          <div className='social-media-container' >
-            <svg
-              data-scroll
-              data-scroll-speed="4"
-              data-scroll-direction="vectical"
-              className='instagram'
-              rel="noreferrer" target="_blank" href='https://www.instagram.com/nacho.doria/'></svg>
-            <svg
-              data-scroll
-              data-scroll-speed="3"
-              data-scroll-direction="vectical"
-              className='twitter'
-              rel="noreferrer" target="_blank" href='https://twitter.com/NachoDoria_'></svg>
-            <svg
-              data-scroll
-              data-scroll-speed="2"
-              data-scroll-direction="vectical"
-              className='github'
-              rel="noreferrer" target="_blank" href='https://github.com/nachodoria'></svg>
-            <svg
-              data-scroll
-              data-scroll-speed="1"
-              data-scroll-direction="vectical"
-              onClick={() => window.location = 'mailto:ignaciodoriaoberman@gmail.com'}
-              className='mail'></svg>
-
-          </div>
         </div>
+        <div className='social-media-container' data-scroll-section data-scroll-section-id="section4" >
+          <svg
+            data-scroll
+            data-scroll-speed="4"
+            data-scroll-direction="vectical"
+            className='instagram'
+            rel="noreferrer" target="_blank" href='https://www.instagram.com/nacho.doria/'></svg>
+          <svg
+            data-scroll
+            data-scroll-speed="3"
+            data-scroll-direction="vectical"
+            className='twitter'
+            rel="noreferrer" target="_blank" href='https://twitter.com/NachoDoria_'></svg>
+          <svg
+            data-scroll
+            data-scroll-speed="2"
+            data-scroll-direction="vectical"
+            className='github'
+            rel="noreferrer" target="_blank" href='https://github.com/nachodoria'></svg>
+          <svg
+            data-scroll
+            data-scroll-speed="1"
+            data-scroll-direction="vectical"
+            onClick={() => window.location = 'mailto:ignaciodoriaoberman@gmail.com'}
+            className='mail'></svg>
+
+        </div>
+
 
       </div>
     </>
