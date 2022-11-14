@@ -9,22 +9,17 @@ import LocomotiveScroll from 'locomotive-scroll';
 function App() {
   const scrollRef = useRef();
 
-
-  AOS.init();
-
   useEffect(() => {
-
-    const scroll = new LocomotiveScroll({
+    setTimeout(()=>{
+      const scroll = new LocomotiveScroll({
       el: scrollRef.current,
       smooth: true,
     });
+    },4000);
+    
+  },[]);
 
 
-
-  });
-
-
-  const projects = ["linkea2", "link-it", "youdetect", "random"];
 
 
   const [theme, settheme] = useState("dark")
@@ -36,11 +31,48 @@ function App() {
     document.body.dataset.theme = theme
   }
 
+  
+  const [title, setTitle] = useState("#%#%$&#%/&/(&/)=)(=????¡*¨*[]_::_;$");
+
+  useEffect(() => {
+    function makeid(length) {
+      var result = '';
+      var characters = '/%$/%/%()&()&(&&#%#%$&#%/&/(&/)=)(=????¡*¨*[]_::_;$"%$&"#!"$';
+      var charactersLength = characters.length;
+      for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+
+      return result
+    }
+    setTitle(makeid(10));
+    
+   
+  }, [title])
+
+
+  const projects = ["linkea2", "link-it", "youdetect", "random"];
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 3900);
+  }, []);
+ 
+
 
 
   return (
     <>
+    {loading ? (
+        <div className="loader-container">
+      	  <h1 className="txt-loader" onClick={handleToggle}>{title}</h1>
+        </div>
+        ) : (
       <div className='scroll' ref={scrollRef}>
+          
         <div className="main" data-scroll-container >
           <div className="start" data-scroll-section data-scroll-section-id="section1" >
             <h1
@@ -114,7 +146,7 @@ function App() {
                   <p data-scroll
                     data-scroll-speed="1"
                     data-scroll-direction="vectical"
-                    
+
 
 
 
@@ -151,8 +183,9 @@ function App() {
 
         </div>
 
-
+      
       </div>
+      )}
     </>
   );
 }
