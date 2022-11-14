@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import LocomotiveScroll from 'locomotive-scroll';
+import Sound from "react-sound"
 
 
 function App() {
@@ -68,6 +69,7 @@ function App() {
     <>
     {loading ? (
         <div className="loader-container">
+          <Sound url=''/>
       	  <h1 className="txt-loader" onClick={handleToggle}>{title}</h1>
         </div>
         ) : (
