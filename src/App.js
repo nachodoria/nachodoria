@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import LocomotiveScroll from 'locomotive-scroll';
-import Sound from "react-sound"
 
 
 function App() {
@@ -69,7 +68,6 @@ function App() {
     <>
     {loading ? (
         <div className="loader-container">
-          <Sound url=''/>
       	  <h1 className="txt-loader" onClick={handleToggle}>{title}</h1>
         </div>
         ) : (
@@ -157,7 +155,19 @@ function App() {
             })}
           </div>
         </div>
+
+         <div className='divider' data-scroll-section data-scroll-section-id="section3.5"></div>
+
         <div className='social-media-container' data-scroll-section data-scroll-section-id="section4" >
+        <div>
+        <span
+            data-scroll
+            data-scroll-speed="1"
+            data-scroll-direction="vectical"
+            
+            >Reach out for collaboration or say hi at <br></br><span className='mail' onClick={() => window.location = 'mailto:ignaciodoriaoberman@gmail.com'}>@ignaciodoriaoberman@gmail.com</span></span>
+        </div>
+        <div>
           <svg
             data-scroll
             data-scroll-speed="4"
@@ -176,15 +186,10 @@ function App() {
             data-scroll-direction="vectical"
             className='github'
             rel="noreferrer" target="_blank" href='https://github.com/nachodoria'></svg>
-          <svg
-            data-scroll
-            data-scroll-speed="1"
-            data-scroll-direction="vectical"
-            onClick={() => window.location = 'mailto:ignaciodoriaoberman@gmail.com'}
-            className='mail'></svg>
-
+         
         </div>
-
+        </div>
+       
       
       </div>
       )}

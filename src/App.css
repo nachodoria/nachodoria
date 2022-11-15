@@ -358,18 +358,27 @@ body {
     }
 }
 
+.divider{
+    width: 100%;
+    margin-top: 180px;
+    height: 0.1vh;
+    background-color: var(--mode-letter);
+}
+
 .social-media-container{
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     width: 100%;
     height: 30vh;
     z-index: 5;
+
 }
 .social-media-container svg{
    margin-inline: 20px;
    transition: 200ms;
    cursor: pointer;
+   margin-right: 30px;
 }
 .social-media-container svg:hover{
     transform: translateY(-10px);
@@ -390,8 +399,16 @@ body {
     height: 35px;
     background-image: var(--github);
 }
+.social-media-container span{
+    font-family: var(--p-letter);
+    color: var(--mode-letter);
+    opacity: var(--mode-opacity1);
+    margin-left: 20px;
+}
 .mail{
-    width: 35px;
-    height: 35px;
-    background-image: var(--mail);
+   text-decoration: underline;
+   color: var(--mode-letter);
+   cursor: pointer;
+   opacity: var(--mode-opacity1);
+
 }
