@@ -171,6 +171,11 @@ body {
         -webkit-text-stroke: 1px white;
     }
 }
+@media only screen and (max-width: 467px) {
+    .start h1 {
+        transform: scale(0.7);
+    }
+}
 
 
 .ab-me-section {
@@ -342,7 +347,7 @@ body {
     transform: scale(0.6);
     }
      h2{
-        transform: scale(0.6x);
+        transform: scale(0.6);
     }
     .ab-me-section{
         align-items: flex-start;
