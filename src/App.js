@@ -22,7 +22,7 @@ function App() {
 
 
 
-  const [theme, settheme] = useState("dark")
+  const [theme, settheme] = useState("light")
   document.body.dataset.theme = theme
 
   const handleToggle = () => {
@@ -51,7 +51,7 @@ function App() {
   }, [title])
 
 
-  const projects = ["linkea2", "link-it", "youdetect", "random"];
+  const projects = ["linkea2", "link-it", "v1", "v2"];
 
   const [loading, setLoading] = useState(true);
 
@@ -72,6 +72,11 @@ function App() {
         </div>
         ) : (
       <div className='scroll' ref={scrollRef}>
+        <div className='toggle-dark-mode' onClick={handleToggle}>
+        <span class="material-symbols-outlined" >
+            {theme == "light" ? "dark_mode" : "light_mode"}
+            </span>
+        </div>
           
         <div className="main" data-scroll-container >
           <div className="start" data-scroll-section data-scroll-section-id="section1" >
@@ -141,7 +146,7 @@ function App() {
                     data-scroll-direction="vectical"
 
 
-                    style={a % 2 ? { minWidth: "200px" } : { minWidth: "100px" }}
+                    style={a % 2 ? { minWidth: "200px", textAlign:"left" } : { minWidth: "200px", textAlign:"right" }}
                   >{[i]}</h1>
                   <p data-scroll
                     data-scroll-speed="1"
@@ -150,7 +155,7 @@ function App() {
 
 
 
-                    style={a % 2 ? { marginRight: "300px" } : { marginLeft: "300px", textAlign: "right" }}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse </p>
+                    style={a % 2 ? { marginRight: "300px" } : { marginLeft: "300px" }}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse </p>
                 </div>)
             })}
           </div>

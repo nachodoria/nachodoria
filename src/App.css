@@ -138,6 +138,13 @@ body {
     cursor: pointer;
 }
 
+.toggle-dark-mode{
+    display: none;
+    align-items: flex-end;
+    justify-content: flex-end;
+    margin-top: 40px;
+}
+
 @media only screen and (max-width: 1132px) {
 
     .start p {
@@ -152,6 +159,9 @@ body {
 @media only screen and (max-width: 950px) {
     .nave {
         display: none;
+    }
+    .toggle-dark-mode{
+        display: flex;
     }
 
     .start p {
@@ -332,10 +342,13 @@ body {
     .project p {
         margin-inline: 0 !important;
         text-align: center !important;
+       
 
     }
     .project h1{
         margin: 0;
+        text-align: center !important;
+
     }
 }
 
@@ -363,6 +376,7 @@ body {
     margin-top: 180px;
     height: 0.1vh;
     background-color: var(--mode-letter);
+    opacity: var(--mode-opacity1);
 }
 
 .social-media-container{
@@ -402,13 +416,26 @@ body {
 .social-media-container span{
     font-family: var(--p-letter);
     color: var(--mode-letter);
-    opacity: var(--mode-opacity1);
     margin-left: 20px;
 }
 .mail{
-   text-decoration: underline;
+ text-decoration: underline;
    color: var(--mode-letter);
    cursor: pointer;
-   opacity: var(--mode-opacity1);
+   transition: 200ms;
 
+}
+
+.mail:hover{
+    opacity: var(--mode-opacity2);
+
+}
+
+@media only screen and (max-width: 609px) {
+    .social-media-container{
+        flex-direction: column;
+        margin-top: 50px;
+        align-items: flex-start;
+        margin-bottom: 20px;
+    }
 }
