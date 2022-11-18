@@ -52,6 +52,11 @@ function App() {
 
 
   const projects = ["linkea2", "link-it", "v1", "v2"];
+  const projectsContent = ["Linkea2 is an HTML-CSS-JS-PHP based virtual campus for school purposes, in the web application, professors can upload tasks and files, and students can upload their homeworks and take notes of the class in the campus",
+   "Link-It is a MERN Stack project (React JS, Node JS, Angular and MongoDB) which helps people in enterprises to organize themselves and have a confortable space to comunicate. Project is in development."
+  , "Personal Portfolio V1 was made in React and was one of my first React projects, it is a simplistic portfolio that shows information about my projects",
+   "Personal Portfolio V2 is the project you are seeing right now. It was also made in React but with the attempt to practice dark and light mode, locomotive-scroll(shoutout to them) and better practices in React "];
+
 
   const [loading, setLoading] = useState(true);
 
@@ -72,11 +77,6 @@ function App() {
         </div>
         ) : (
       <div className='scroll' ref={scrollRef}>
-        <div className='toggle-dark-mode' onClick={handleToggle}>
-        <span class="material-symbols-outlined" >
-            {theme == "light" ? "dark_mode" : "light_mode"}
-            </span>
-        </div>
           
         <div className="main" data-scroll-container >
           <div className="start" data-scroll-section data-scroll-section-id="section1" >
@@ -85,9 +85,6 @@ function App() {
               data-scroll-speed="4"
               data-scroll-direction="horizontal"
               data-scroll-position="top"
-
-
-
             >ignacio doria</h1>
 
             <div className='nave'
@@ -137,8 +134,7 @@ function App() {
             data-scroll-speed="1"
           >what do I do?</h2>
           <div className='projects-container'  >
-            {projects.map(function (i, a) {
-              return (
+            {projects.map( (i, a)=> (
                 <div className='project' key={a} style={a % 2 ? { flexDirection: "row-reverse" } : { flexDirection: "row" }} >
                   <h1
                     data-scroll
@@ -147,7 +143,7 @@ function App() {
 
 
                     style={a % 2 ? { minWidth: "200px", textAlign:"left" } : { minWidth: "200px", textAlign:"right" }}
-                  >{[i]}</h1>
+                  >{projects[a]}</h1>
                   <p data-scroll
                     data-scroll-speed="1"
                     data-scroll-direction="vectical"
@@ -155,46 +151,35 @@ function App() {
 
 
 
-                    style={a % 2 ? { marginRight: "300px" } : { marginLeft: "300px" }}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse </p>
-                </div>)
-            })}
-          </div>
+                    style={a % 2 ? { marginRight: "300px" } : { marginLeft: "300px" }}>{projectsContent[a]} </p>
+                </div>
+               ))}
+         </div>
         </div>
 
          <div className='divider' data-scroll-section data-scroll-section-id="section3.5"></div>
 
         <div className='social-media-container' data-scroll-section data-scroll-section-id="section4" >
-        <div>
-        <span
-            data-scroll
-            data-scroll-speed="1"
-            data-scroll-direction="vectical"
-            
-            >Reach out for collaboration or say hi at <br></br><span className='mail' onClick={() => window.location = 'mailto:ignaciodoriaoberman@gmail.com'}>@ignaciodoriaoberman@gmail.com</span></span>
+              <div data-scroll
+                  data-scroll-speed="1"
+                  data-scroll-direction="vertical" className='mail-logo'>
+                  <span>Reach out for collaboration or say hi at <br></br><span className='mail' onClick={() => window.location = 'mailto:ignaciodoriaoberman@gmail.com'}>@ignaciodoriaoberman@gmail.com</span></span>
+              </div>
+                <div data-scroll
+                  data-scroll-speed="2"
+                  data-scroll-direction="vertical"
+                  className='social-logos'>
+                <a
+                  className='instagram'
+                  rel="noreferrer" target="_blank" href='https://www.instagram.com/nacho.doria/'></a>
+                <a
+                  className='twitter'
+                  rel="noreferrer" target="_blank" href='https://twitter.com/NachoDoria_'></a>
+                <a
+                  className='github'
+                  rel="noreferrer" target="_blank" href  = "https://github.com/nachodoria"></a>
+              </div>
         </div>
-        <div>
-          <svg
-            data-scroll
-            data-scroll-speed="4"
-            data-scroll-direction="vectical"
-            className='instagram'
-            rel="noreferrer" target="_blank" href='https://www.instagram.com/nacho.doria/'></svg>
-          <svg
-            data-scroll
-            data-scroll-speed="3"
-            data-scroll-direction="vectical"
-            className='twitter'
-            rel="noreferrer" target="_blank" href='https://twitter.com/NachoDoria_'></svg>
-          <svg
-            data-scroll
-            data-scroll-speed="2"
-            data-scroll-direction="vectical"
-            className='github'
-            rel="noreferrer" target="_blank" href='https://github.com/nachodoria'></svg>
-         
-        </div>
-        </div>
-       
       
       </div>
       )}
