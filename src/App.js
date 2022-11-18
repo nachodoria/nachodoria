@@ -55,7 +55,7 @@ function App() {
   const projectsContent = ["Linkea2 is an HTML-CSS-JS-PHP based virtual campus for school purposes, in the web application, professors can upload tasks and files, and students can upload their homeworks and take notes of the class in the campus",
    "Link-It is a MERN Stack project (React JS, Node JS, Angular and MongoDB) which helps people in enterprises to organize themselves and have a confortable space to comunicate. Project is in development."
   , "Personal Portfolio V1 was made in React and was one of my first React projects, it is a simplistic portfolio that shows information about my projects",
-   "Personal Portfolio V2 is the project you are seeing right now. It was also made in React but with the attempt to practice dark and light mode, locomotive-scroll(shoutout to them) and better practices in React "];
+   "Personal Portfolio V2 is the project you are seeing right now. It was also made in React but with the attempt to practice dark and light mode, locomotive-scroll (shoutout to them) and better practices in React "];
 
 
   const [loading, setLoading] = useState(true);
