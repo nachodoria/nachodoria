@@ -51,11 +51,11 @@ function App() {
   }, [title])
 
 
-  const projects = ["linkea2", "link-it", "v1", "v2"];
-  const projectsContent = ["Linkea2 is an HTML-CSS-JS-PHP based virtual campus for school purposes, in the web application, professors can upload tasks and files, and students can upload their homeworks and take notes of the class in the campus",
+  const projects = ["linkea2", "link-it", "Portfolio V1", "Portfolio V2"];
+  const projectsContent = ["Linkea2 is an HTML-CSS-JS-PHP based virtual campus for school purposes, in this web application, professors can upload tasks and files, while students can upload their homeworks and take notes of the class in the campus",
    "Link-It is a MERN Stack project (React JS, Node JS, Angular and MongoDB) which helps people in enterprises to organize themselves and have a confortable space to comunicate. Project is in development."
   , "Personal Portfolio V1 was made in React and was one of my first React projects, it is a simplistic portfolio that shows information about my projects",
-   "Personal Portfolio V2 is the project you are seeing right now. It was also made in React but with the attempt to practice dark and light mode, locomotive-scroll (shoutout to them) and better practices in React "];
+   "Personal Portfolio V2 is the project you are seeing right now. It was also made in React but with the attempt to practice dark and light mode, locomotive-scroll (shoutout to them) and better practices in ReactJS "];
 
 
   const [loading, setLoading] = useState(true);
@@ -117,7 +117,7 @@ function App() {
             data-scroll-speed="2"
             data-scroll-direction="vectical"
 
-          >My name is Ignacio Doria, I am a high school student in Argentina. Fortunately I discovered the front-end development skills and started developing them at a young age. I started to learn these skills in 2020 and now I can tell that I know JS, React JS, CSS, HTML, Python, and some PHP for some back-end needs. I am open-minded to the process of learning.</p>
+          >My name is Ignacio Doria, I am a high school student in Argentina. Fortunately I discovered the Front-End and Ux/Ui enviroment and started venturing with it at a young age. I am open-minded and to the process of learning and I am pacient when it comes to solve issues.</p>
         </div>
 
         <div className='projects-section' data-scroll-section data-scroll-section-id="section3" >
