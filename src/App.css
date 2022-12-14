@@ -58,8 +58,6 @@ body[data-theme="dark"] {
     align-items: center;
     justify-content: center;
     transition: 200ms;
-    animation-name: appear-disapear;
-    animation-duration: 5s;
 
 
 }
@@ -68,15 +66,7 @@ body[data-theme="dark"] {
     font-family: var(--title-letter);
     cursor: pointer;
 }
-@keyframes appear {
-    from {opacity: 0;}
-    to {opacity: 1;}
-  }
-  @keyframes appear-disapear {
-   0%{opacity: 0;}
-   50%{opacity: 1;}
-   100%{opacity: 0;}
-  }
+
 
 body {
     transition: 200ms;
