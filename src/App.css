@@ -222,7 +222,6 @@ body {
 @media only screen and (max-width: 677px) {
     .ab-me-section h2 {
         text-align: left;
-        margin: 0;
     }
     .ab-me-section h1{
         margin: 0;
@@ -232,8 +231,21 @@ body {
         margin: 0;
 
     }
+    .ab-me-subtitle{
+        margin-left: 0px !important;
+    }
+    .projects-section-subtitle{
+        margin: 0 !important;
+
+    }
 }
 
+@media only screen and (max-width: 700px) {
+    .projects-section h2{
+        text-align: right;
+        margin: 0  ;
+    }
+}
 
 .projects-section {
     height: max-content;
@@ -315,6 +327,14 @@ body {
     }
 }
 @media only screen and (max-width: 480px) {
+    .projects-section h1 {
+        transform: scale(0.6);
+     }
+     .ab-me-section h1{
+       
+        transform: scale(0.6);
+
+    }
     .projects-section h2 {
         font-size: 60px;
         
@@ -322,6 +342,7 @@ body {
      .ab-me-section h2{
          font-size: 60px;
          margin: 0;
+
 
      }
 
@@ -344,27 +365,33 @@ body {
         text-align: center !important;
 
     }
-    .projects-section-subtitle{
-        margin: 0 !important;
-
-    }
+   
 }
 
 @media only screen and (max-width: 407px) {
     p{
       transform: scale(0.6);
+      text-align: left;
+
      }
     h1{
     transform: scale(0.6);
+    text-align: left;
+
     }
      h2{
-        transform: scale(0.6);
+        transform: scale(0.8);
+        text-align: left;
+
     }
     .ab-me-section{
-        align-items: flex-start;
-        justify-content: flex-start;
+        align-items: flex-start !important;
+        justify-content: flex-start !important;
     }
     .ab-me-section h1{
+        text-align: left;
+    }
+    .ab-me-section p{
         text-align: left;
     }
     .projects-section{
@@ -468,5 +495,17 @@ text-decoration: underline;
     }
     .mail-logo{
         align-items: flex-start;
+    }
+    .instagram,
+    .twitter,
+    .github{
+        transform: scale(0.8);
+
+    }
+    .social-media-container{
+        margin-left: 0px;
+    }
+    .social-logos{
+        margin-left: 10px;
     }
 }
