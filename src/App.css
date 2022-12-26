@@ -168,6 +168,9 @@ body {
     .start {
         transform: scale(0.8);
     }
+    body{
+        margin-inline: 20px;
+    }
 }
 
 
@@ -222,6 +225,7 @@ body {
 @media only screen and (max-width: 677px) {
     .ab-me-section h2 {
         text-align: left;
+        margin-left: 0;
     }
     .ab-me-section h1{
         margin: 0;
@@ -346,9 +350,7 @@ body {
      }
      .ab-me-section h2{
          font-size:80px;
-         margin: 0;
-
-
+         margin: 0 !important;
      }
 
 }
@@ -384,9 +386,8 @@ body {
     text-align: left;
 
     }
-     h2{
+    h2{
         transform: scale(0.8);
-        text-align: left;
 
     }
     .ab-me-section{
@@ -394,6 +395,9 @@ body {
         justify-content: flex-start !important;
     }
     .ab-me-section h1{
+        text-align: left;
+    }
+    .ab-me-section h2{
         text-align: left;
     }
     .ab-me-section p{

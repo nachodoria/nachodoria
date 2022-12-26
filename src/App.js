@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import { motion } from 'framer-motion';
 import AnimatedTitle from './animatedText/AnimatedTitle';
 import AnimatedSubtitle from './animatedText/AnimatedSubtitle';
@@ -18,18 +18,6 @@ function App() {
     document.body.dataset.theme = theme
   }
   
-
-
-  const projects = ["link-it", "Portfolio V1","J@pan", "Portfolio V2"];
-  const projectsContent = [
-    "Link-It is a MERN Stack project (React JS, Node JS, Angular and MongoDB) which helps people in enterprises to organize themselves and have a confortable space to comunicate. Project is in development."
-    , "Personal Portfolio V1 was made in React and was one of my first React projects, it is a simplistic portfolio that shows information about my projects",
-    "J@pan is my first framer-motion project which I personally enojoyed the process of learning one of the best libraries for React",
-    "Personal Portfolio V2 is the project you are seeing right now. It was also made in React but with the attempt to practice dark and light mode, locomotive-scroll (shoutout to them) and better practices in ReactJS "];
-
-
-
-
   return (
     <>
 
@@ -58,8 +46,7 @@ function App() {
 
           <motion.div className="ab-me-section" >
             <AnimatedSubtitle  cs={"ab-me-subtitle"} text={"about"}></AnimatedSubtitle>
-            <h2
-            >i'm an IT Student</h2>
+            <h2>i'm an IT Student</h2>
             <p
             >My name is Ignacio Doria, I am a high school student in Argentina. Fortunately I discovered the Front-End and Ux/Ui enviroment and started venturing with it at a young age. I am open-minded and to the process of learning and I am pacient when it comes to solve issues.</p>
           </motion.div>
@@ -69,17 +56,6 @@ function App() {
             <h2
             >my latest work</h2>
             <motion.div className='projects-container'  >
-
-                <motion.div className='project' style={{ flexDirection: "row" }} >
-                  <AnimatedProjectTitle
-                    cs={"projects-section-subtitle"}
-                    style={{ minWidth: "200px", textAlign: "right" }}
-                    text={"link-it"}
-                  ></AnimatedProjectTitle>
-                  <p
-                    style={{ marginLeft : "300px" }}>Link-It is a MERN Stack project (React JS, Node JS, Angular and MongoDB) which helps people in enterprises to organize themselves and have a confortable space to comunicate. Project is in development.
-                    </p>
-                </motion.div>
 
                 <motion.div className='project' style={{ flexDirection: "row-reverse" }} >
                     <AnimatedProjectTitle
