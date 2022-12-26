@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-function AnimatedProjectTitle({ text, cs }) {
+function AnimatedProjectTitle({ text, cs, href }) {
     const words = text.split("");
     const container = {
         hidden: { opacity: 0 },
@@ -32,7 +32,8 @@ function AnimatedProjectTitle({ text, cs }) {
     return (
         <motion.div className={cs} style={{ display: "flex", flexDirection: "row", marginRight:"50px" }} variants={container} initial="hidden" whileInView="visible">
             {words.map((word, index) => (
-                <motion.h1 variants={child} key={index}>{word}</motion.h1>
+                <motion.h1 variants={child} key={index}>
+                    <a href={href}>{word}</a></motion.h1>
 
             ))}
         </motion.div>

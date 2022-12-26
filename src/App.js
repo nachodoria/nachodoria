@@ -82,24 +82,26 @@ function App() {
                 </motion.div>
 
                 <motion.div className='project' style={{ flexDirection: "row-reverse" }} >
-                  <a>
                     <AnimatedProjectTitle
                     cs={"projects-section-subtitle"}
                     style={{ minWidth: "200px", textAlign: "left" }}
                     text={"Portfolio V1"}
                   ></AnimatedProjectTitle>
-                  </a>
                   <p
                     style={{ marginRight: "300px" }}>Personal Portfolio V1 was made in React and was one of my first React projects, it is a simplistic portfolio that shows information about my projects
                     </p>
                 </motion.div>
 
                 <motion.div className='project' style={{ flexDirection: "row" }} >
+                
                   <AnimatedProjectTitle
+                  href='https://japan-alpha.vercel.app/'
+                  rel="noreferrer" target="_blank"
                     cs={"projects-section-subtitle"}
                     style={{ minWidth: "200px", textAlign: "right" }}
                     text={"J@pan"}
                   ></AnimatedProjectTitle>
+         
                   <p
                     style={{ marginLeft: "300px" }}>J@pan is my first framer-motion project which I personally enojoyed the process of learning one of the best libraries for React
                     </p>
@@ -107,10 +109,13 @@ function App() {
 
                 <motion.div className='project' style={{ flexDirection: "row-reverse" }} >
                   <AnimatedProjectTitle
+                  href='https://ppv2beta.vercel.app/'
+                  rel="noreferrer" target="_blank"
                     cs={"projects-section-subtitle"}
                     style={{ minWidth: "200px", textAlign: "left" }}
                     text={"Portfolio V2"}
                   ></AnimatedProjectTitle>
+                  
                   <p
                     style={{ marginRight: "300px" }}>Personal Portfolio V2 is the project you are seeing right now. It was also made in React but with the attempt to practice dark and light mode and better practices in ReactJS 
                     </p>
