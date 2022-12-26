@@ -1,6 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Hind+Vadodara:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,800;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Forum&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@100;200;300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
 :root {
  
@@ -12,8 +11,8 @@
     --p: 20px;
     --h2: 48px;
 
-    --subtitle-letter: "Hind Vadodara";
-    --title-letter: "Poppins";
+    --subtitle-letter: "Space Grotesk";
+    --title-letter: "Sora";
     --p-letter: "Forum";
     --weight1: 100;
     --weight2: 200;
@@ -103,9 +102,8 @@ body {
     font-family: var(--title-letter);
     font-size: var(--h1);
     font-weight: var(--weight7);
-    -webkit-text-stroke: var(--mode-stroke);
     opacity: var(--mode-opacity1);
-    color: var(--mode-background);
+    color: var(--mode-letter);
     margin: 0;
     transition-duration: 300ms;
     cursor: default;

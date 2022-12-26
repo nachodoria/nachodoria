@@ -20,10 +20,11 @@ function App() {
   
 
 
-  const projects = ["link-it", "Portfolio V1", "Portfolio V2"];
+  const projects = ["link-it", "Portfolio V1","J@pan", "Portfolio V2"];
   const projectsContent = [
     "Link-It is a MERN Stack project (React JS, Node JS, Angular and MongoDB) which helps people in enterprises to organize themselves and have a confortable space to comunicate. Project is in development."
     , "Personal Portfolio V1 was made in React and was one of my first React projects, it is a simplistic portfolio that shows information about my projects",
+    "J@pan is my first framer-motion project which I personally enojoyed the process of learning one of the best libraries for React",
     "Personal Portfolio V2 is the project you are seeing right now. It was also made in React but with the attempt to practice dark and light mode, locomotive-scroll (shoutout to them) and better practices in ReactJS "];
 
 
@@ -68,17 +69,53 @@ function App() {
             <h2
             >my latest work</h2>
             <motion.div className='projects-container'  >
-              {projects.map((i, a) => (
-                <motion.div className='project' key={a} style={a % 2 ? { flexDirection: "row-reverse" } : { flexDirection: "row" }} >
+
+                <motion.div className='project' style={{ flexDirection: "row" }} >
                   <AnimatedProjectTitle
                     cs={"projects-section-subtitle"}
-                    text={projects[a]}
-                    style={a % 2 ? { minWidth: "200px", textAlign: "left" } : { minWidth: "200px", textAlign: "right" }}
+                    style={{ minWidth: "200px", textAlign: "right" }}
+                    text={"link-it"}
                   ></AnimatedProjectTitle>
                   <p
-                    style={a % 2 ? { marginRight: "300px" } : { marginLeft: "300px" }}> {projectsContent[a]}</p>
+                    style={{ marginLeft : "300px" }}>Link-It is a MERN Stack project (React JS, Node JS, Angular and MongoDB) which helps people in enterprises to organize themselves and have a confortable space to comunicate. Project is in development.
+                    </p>
                 </motion.div>
-              ))}
+
+                <motion.div className='project' style={{ flexDirection: "row-reverse" }} >
+                  <a>
+                    <AnimatedProjectTitle
+                    cs={"projects-section-subtitle"}
+                    style={{ minWidth: "200px", textAlign: "left" }}
+                    text={"Portfolio V1"}
+                  ></AnimatedProjectTitle>
+                  </a>
+                  <p
+                    style={{ marginRight: "300px" }}>Personal Portfolio V1 was made in React and was one of my first React projects, it is a simplistic portfolio that shows information about my projects
+                    </p>
+                </motion.div>
+
+                <motion.div className='project' style={{ flexDirection: "row" }} >
+                  <AnimatedProjectTitle
+                    cs={"projects-section-subtitle"}
+                    style={{ minWidth: "200px", textAlign: "right" }}
+                    text={"J@pan"}
+                  ></AnimatedProjectTitle>
+                  <p
+                    style={{ marginLeft: "300px" }}>J@pan is my first framer-motion project which I personally enojoyed the process of learning one of the best libraries for React
+                    </p>
+                </motion.div>
+
+                <motion.div className='project' style={{ flexDirection: "row-reverse" }} >
+                  <AnimatedProjectTitle
+                    cs={"projects-section-subtitle"}
+                    style={{ minWidth: "200px", textAlign: "left" }}
+                    text={"Portfolio V2"}
+                  ></AnimatedProjectTitle>
+                  <p
+                    style={{ marginRight: "300px" }}>Personal Portfolio V2 is the project you are seeing right now. It was also made in React but with the attempt to practice dark and light mode and better practices in ReactJS 
+                    </p>
+                </motion.div>
+
             </motion.div>
           </motion.div>
 
