@@ -163,10 +163,12 @@ body {
         font-size: var(--p);
         -webkit-text-stroke: 1px white;
     }
-}
-@media only screen and (max-width: 467px) {
-    .start h1 {
+   .start h1 {
         transform: scale(0.7);
+    }}
+@media only screen and (max-width: 380px) {
+    .start {
+        transform: scale(0.8);
     }
 }
 
@@ -328,19 +330,19 @@ body {
 }
 @media only screen and (max-width: 480px) {
     .projects-section h1 {
-        transform: scale(0.6);
+        transform: scale(0.8);
      }
      .ab-me-section h1{
        
-        transform: scale(0.6);
+        transform: scale(0.8);
 
     }
     .projects-section h2 {
-        font-size: 60px;
+        font-size:80px;
         
      }
      .ab-me-section h2{
-         font-size: 60px;
+         font-size:80px;
          margin: 0;
 
 
@@ -370,12 +372,12 @@ body {
 
 @media only screen and (max-width: 407px) {
     p{
-      transform: scale(0.6);
+      transform: scale(0.9);
       text-align: left;
 
      }
     h1{
-    transform: scale(0.6);
+    transform: scale(0.8);
     text-align: left;
 
     }
