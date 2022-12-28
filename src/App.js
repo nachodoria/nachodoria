@@ -85,7 +85,7 @@ function App() {
 
                 <motion.div className='project' style={{ flexDirection: "row-reverse" }} >
                   <AnimatedProjectTitle
-                  href='https://ppv2beta.vercel.app/'
+                  href='https://nachodoria.vercel.app/'
                   rel="noreferrer" target="_blank"
                     cs={"projects-section-subtitle"}
                     style={{ minWidth: "200px", textAlign: "left" }}
