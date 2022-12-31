@@ -59,6 +59,8 @@ function App() {
 
                 <motion.div className='project' style={{ flexDirection: "row-reverse" }} >
                     <AnimatedProjectTitle
+                     href='https://v0-ejp4yfx7r-nachodoria.vercel.app/'
+                     rel="noreferrer" target="_blank"
                     cs={"projects-section-subtitle"}
                     style={{ minWidth: "200px", textAlign: "left" }}
                     text={"Portfolio V1"}
@@ -94,6 +96,20 @@ function App() {
                   
                   <p
                     style={{ marginRight: "300px" }}>Personal Portfolio V2 is the project you are seeing right now. It was also made in React but with the attempt to practice dark and light mode and better practices in ReactJS 
+                    </p>
+                </motion.div>
+
+                <motion.div className='project' style={{ flexDirection: "row" }} >
+                  <AnimatedProjectTitle
+                  href='https://the-earthly-decor.vercel.app/'
+                  rel="noreferrer" target="_blank"
+                    cs={"projects-section-subtitle"}
+                    style={{ minWidth: "200px", textAlign: "right" }}
+                    text={"The Earthly Décor"}
+                  ></AnimatedProjectTitle>
+                  
+                  <p
+                    style={{ marginLeft: "300px" }}>The Earthly Décor🌱 is my latest project. It is a landing about a furniture shop. I loved the natural colors in this project and enjoyed doing it. 
                     </p>
                 </motion.div>
 
