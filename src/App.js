@@ -48,7 +48,7 @@ function App() {
             <AnimatedSubtitle  cs={"ab-me-subtitle"} text={"about"}></AnimatedSubtitle>
             <h2>i'm an IT Student</h2>
             <p
-            >My name is Ignacio Doria, I am a high school student in Argentina. Fortunately I discovered the Front-End and Ux/Ui enviroment and started venturing with it at a young age. I am open-minded and to the process of learning and I am pacient when it comes to solve issues.</p>
+            >I am Ignacio Doria, a high school student residing in Argentina. I am pleased to say that I have discovered the field of Front-End and User Experience/User Interface Design at a young age and have begun to explore it. I possess an open-minded attitude towards learning and am patient when faced with challenges and issues to resolve.</p>
           </motion.div>
 
           <motion.div className='projects-section' >
