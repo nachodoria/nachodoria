@@ -109,7 +109,7 @@ function App() {
                   ></AnimatedProjectTitle>
                   
                   <p
-                    style={{ marginLeft: "300px" }}>My most recent project, The Earthly Décor🌱, is a landing page for a furniture shop. I found the use of natural colors in this project to be particularly appealing, and I thoroughly enjoyed the experience of creating it.. 
+                    style={{ marginLeft: "300px" }}>My most recent project, The Earthly Décor🌱, is a landing page for a furniture shop. I found the use of natural colors in this project to be particularly appealing, and I thoroughly enjoyed the experience of creating it.
                     </p>
                 </motion.div>
 
