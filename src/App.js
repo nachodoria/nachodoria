@@ -66,7 +66,7 @@ function App() {
                     text={"Portfolio V1"}
                   ></AnimatedProjectTitle>
                   <p
-                    style={{ marginRight: "300px" }}>Personal Portfolio V1 was made in React and was one of my first React projects, it is a simplistic portfolio that shows information about my projects
+                    style={{ marginRight: "300px" }}>Personal Portfolio V1, one of my early projects utilizing React, is a simple portfolio website that displays information about my various projects. It was constructed using React.
                     </p>
                 </motion.div>
 
@@ -81,7 +81,7 @@ function App() {
                   ></AnimatedProjectTitle>
          
                   <p
-                    style={{ marginLeft: "300px" }}>J@pan is my first framer-motion project which I personally enojoyed the process of learning one of the best libraries for React
+                    style={{ marginLeft: "300px" }}>My first project utilizing the library Framer-Motion was J@pan, which I personally found to be an enjoyable learning experience. Framer-Motion is widely considered to be one of the best libraries available for React.
                     </p>
                 </motion.div>
 
@@ -95,7 +95,7 @@ function App() {
                   ></AnimatedProjectTitle>
                   
                   <p
-                    style={{ marginRight: "300px" }}>Personal Portfolio V2 is the project you are seeing right now. It was also made in React but with the attempt to practice dark and light mode and better practices in ReactJS 
+                    style={{ marginRight: "300px" }}>The Personal Portfolio V2, the current version you are viewing, is constructed using React. This iteration was created with the intent to practice implementing a dark and light mode feature and to improve upon best practices in ReactJS. 
                     </p>
                 </motion.div>
 
@@ -109,7 +109,7 @@ function App() {
                   ></AnimatedProjectTitle>
                   
                   <p
-                    style={{ marginLeft: "300px" }}>The Earthly Décor🌱 is my latest project. It is a landing about a furniture shop. I loved the natural colors in this project and enjoyed doing it. 
+                    style={{ marginLeft: "300px" }}>My most recent project, The Earthly Décor🌱, is a landing page for a furniture shop. I found the use of natural colors in this project to be particularly appealing, and I thoroughly enjoyed the experience of creating it.. 
                     </p>
                 </motion.div>
 
