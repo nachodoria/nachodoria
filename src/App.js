@@ -104,7 +104,7 @@ function App() {
           <AnimatedDivider></AnimatedDivider>
           <motion.div className='social-media-container' >
             <motion.div className='mail-logo'>
-              <span>Reach out for collaboration or say hi at <br></br><span className='mail' onClick={() => window.location = 'mailto:ignaciodoriaoberman@gmail.com'}>@ignaciodoriaoberman@gmail.com</span></span>
+              <span>Reach out for collaboration or say hi at <br></br><span className='mail' onClick={() => window.location = 'mailto:ignaciodoriaoberman@gmail.com'}>ignaciodoriaoberman@gmail.com</span></span>
             </motion.div>
             <motion.div
               className='social-logos'>
