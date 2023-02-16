@@ -70,21 +70,6 @@ function App() {
                     </p>
                 </motion.div>
 
-                <motion.div className='project' style={{ flexDirection: "row" }} >
-                
-                  <AnimatedProjectTitle
-                  href='https://japan-alpha.vercel.app/'
-                  rel="noreferrer" target="_blank"
-                    cs={"projects-section-subtitle"}
-                    style={{ minWidth: "200px", textAlign: "right" }}
-                    text={"J@pan"}
-                  ></AnimatedProjectTitle>
-         
-                  <p
-                    style={{ marginLeft: "300px" }}>My first project utilizing the library Framer-Motion was J@pan, which I personally found to be an enjoyable learning experience. Framer-Motion is widely considered to be one of the best libraries available for React.
-                    </p>
-                </motion.div>
-
                 <motion.div className='project' style={{ flexDirection: "row-reverse" }} >
                   <AnimatedProjectTitle
                   href='https://nachodoria.vercel.app/'
