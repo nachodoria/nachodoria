@@ -109,7 +109,21 @@ function App() {
                   ></AnimatedProjectTitle>
                   
                   <p
-                    style={{ marginLeft: "300px" }}>My most recent project, The Earthly Décor🌱, is a landing page for a furniture shop. I found the use of natural colors in this project to be particularly appealing, and I thoroughly enjoyed the experience of creating it.
+                    style={{ marginLeft: "300px" }}>One of my most recent project, The Earthly Décor🌱, is a landing page for a furniture shop. I found the use of natural colors in this project to be particularly appealing, and I thoroughly enjoyed the experience of creating it.
+                    </p>
+                </motion.div>
+
+                <motion.div className='project' style={{ flexDirection: "row" }} >
+                  <AnimatedProjectTitle
+                  href='https://ignacioswallpapers.vercel.app/'
+                  rel="noreferrer" target="_blank"
+                    cs={"projects-section-subtitle"}
+                    style={{ minWidth: "200px", textAlign: "right" }}
+                    text={"Wallpapers"}
+                  ></AnimatedProjectTitle>
+                  
+                  <p
+                    style={{ marginLeft: "300px" }}>Ignacio's Wallpapers is a project that is a personal favourite, no because of the art but for what each wallpaper means. Thank you for supporting it!🎨
                     </p>
                 </motion.div>
 
