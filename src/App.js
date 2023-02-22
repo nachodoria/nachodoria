@@ -108,7 +108,7 @@ function App() {
                   ></AnimatedProjectTitle>
                   
                   <p
-                    style={{ marginLeft: "300px" }}>Ignacio's Wallpapers is a project that is a personal favourite, no because of the art but for what each wallpaper means. Thank you for supporting it!🎨
+                    style={{ marginLeft: "300px" }}>Ignacio's Wallpapers is a personal favorite project, not only for the art but also for the significance behind each wallpaper. I am grateful for your support!🎨
                     </p>
                 </motion.div>
 
