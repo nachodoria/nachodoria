@@ -48,7 +48,8 @@ function App() {
             <AnimatedSubtitle  cs={"ab-me-subtitle"} text={"about"}></AnimatedSubtitle>
             <h2>i'm an IT Student</h2>
             <p
-            >I am Ignacio Doria, a high school student residing in Argentina. I am pleased to say that I have discovered the field of Front-End and User Experience/User Interface Design at a young age and have begun to explore it. I possess an open-minded attitude towards learning and am patient when faced with challenges and issues to resolve.</p>
+            >I have a great passion for technology and programming, and I greatly enjoy developing web applications. I graduated from ORT Argentina Belgrano High School, where I majored in Information and Communication Technology. This year 2023, I will be able to make one of my most cherished dreams come true: to study Computer Science in one of the most recognized countries in this field worldwide, specifically at York University in Toronto, Canada. 💻
+</p>
           </motion.div>
 
           <motion.div className='projects-section' >
