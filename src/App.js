@@ -25,8 +25,8 @@ function App() {
           <motion.div className="main" >
             <motion.div className="start"  >
               <motion.div>
-                <AnimatedTitle text={"ignacio"}></AnimatedTitle>
-                <AnimatedTitle text={"doria"}></AnimatedTitle>
+                <AnimatedTitle text={"I'm"}></AnimatedTitle>
+                <AnimatedTitle text={"Ignacio"}></AnimatedTitle>
               </motion.div>
               <motion.div className='nave'
                 initial={{
