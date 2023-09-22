@@ -87,15 +87,29 @@ function App() {
 
                 <motion.div className='project' style={{ flexDirection: "row" }} >
                   <AnimatedProjectTitle
-                  href='https://ignacioswallpapers.vercel.app/'
+                  href='https://galaxy-generator-peach.vercel.app/'
                   rel="noreferrer" target="_blank"
                     cs={"projects-section-subtitle"}
                     style={{ minWidth: "200px", textAlign: "right" }}
-                    text={"Wallpapers"}
+                    text={"Galaxy Generator"}
                   ></AnimatedProjectTitle>
                   
                   <p
-                    style={{ marginLeft: "300px" }}>Ignacio's Wallpapers is a personal favorite project, not only for the art but also for the significance behind each wallpaper. I am grateful for your support!🎨
+                    style={{ marginLeft: "212px" }}> This Galaxy Generator is a project made fully in THREEJS with the help of Bruno Simon's course "Three Js Journey". 
+                    </p>
+                </motion.div>
+
+                <motion.div className='project' style={{ flexDirection: "row" }} >
+                  <AnimatedProjectTitle
+                  href='https://threejs-journey-portalscene.vercel.app/'
+                  rel="noreferrer" target="_blank"
+                    cs={"projects-section-subtitle"}
+                    style={{ minWidth: "200px", textAlign: "right" }}
+                    text={"Golden Portal"}
+                  ></AnimatedProjectTitle>
+                  
+                  <p
+                    style={{ marginLeft: "300px" }}>This Golden Portal is the second project I made following Bruno Simon's course "Three Js Journey", this project is made in fully THREEJS with Blender 3D Software.
                     </p>
                 </motion.div>
 
