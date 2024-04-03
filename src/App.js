@@ -48,7 +48,7 @@ function App() {
             <AnimatedSubtitle  cs={"ab-me-subtitle"} text={"about"}></AnimatedSubtitle>
             <h2>i'm an IT Student</h2>
             <p
-            >I have a great passion for technology and programming, and I greatly enjoy developing web applications. I graduated from ORT Argentina Belgrano High School, where I majored in Information and Communication Technology. This year 2023, I will be able to make one of my most cherished dreams come true: to study Computer Science in one of the most recognized countries in this field worldwide, specifically at York University in Toronto, Canada. 💻
+            >Greetings! I'm Ignacio, originally from Buenos Aires, Argentina, now calling Toronto, Canada home. Currently, I'm pursuing my passion for computer science as a student at York University, striving to enrich both my expertise and practical experience in the field.
 </p>
           </motion.div>
 
