@@ -1,10 +1,10 @@
 # 👋 Hi, I'm Ignacio Doria Oberman
 
-📍 Toronto, ON, Canada  
-📞 647-504-8840  
-✉️ ignaciodoria01@gmail.com  
-🌐 [Portfolio Website](https://ignacio-doria.vercel.app/)  
-🌎 Languages: Spanish / English  
+Toronto, ON, Canada  
+647-504-8840  
+ignaciodoria01@gmail.com  
+[Portfolio](https://ignacio-doria.vercel.app/)  
+Languages: Spanish / English  
 
 ---
 
