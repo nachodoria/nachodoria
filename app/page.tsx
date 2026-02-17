@@ -3,8 +3,6 @@ import Home from "./pages/home/home";
 import About from "./pages/about/about";
 import Projects from "./pages/projects/projects";
 import Contact from "./pages/contact/contact";
-import { Suspense } from 'react';
-import Loading from "./loading";
 import { NextUIProvider } from "@nextui-org/react";
 
 

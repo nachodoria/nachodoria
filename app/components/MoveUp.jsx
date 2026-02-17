@@ -16,7 +16,7 @@ const Character = styled(motion.span)`
 
 export default function MoveUp(text, className, delay) {
     const txt = text.text;
-    const cl = text.className;
+    const cl = text.className ?? text.cl;
     const dl = text.delay;
     const ctrls = useAnimation();
 
@@ -29,23 +29,21 @@ export default function MoveUp(text, className, delay) {
         if (inView) {
             ctrls.start("visible");
         }
-        if (!inView) {
-            ctrls.start("hidden");
-        }
     }, [ctrls, inView]);
 
 
     const characterAnimation = {
         hidden: {
             opacity: 0,
-            y: `0.25em`,
+            y: 10,
         },
         visible: {
             opacity: 1,
-            y: `0em`,
+            y: 0,
             transition: {
+                type: "tween",
                 delay: dl,
-                duration: 1,
+                duration: 0.8,
                 ease: [0.2, 0.65, 0.3, 0.9],
             },
         },
@@ -54,9 +52,9 @@ export default function MoveUp(text, className, delay) {
     return (
         <motion.h1 className={cl} ref={ref}
             aria-hidden="true"
-            key={txt}
             initial="hidden"
             animate={ctrls}
+            style={{ willChange: "transform, opacity" }}
             variants={characterAnimation}>
             {txt}
         </motion.h1>

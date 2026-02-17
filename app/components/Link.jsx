@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import styled from "styled-components";
 import { useAnimation, motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Link } from "@nextui-org/react";
@@ -10,7 +9,6 @@ export default function AnimatedLink(text, className, delay, h) {
     const cl = text.className;
     const dl = text.delay;
     const href = text.h;
-
     const ctrls = useAnimation();
 
     const { ref, inView } = useInView({
@@ -22,35 +20,33 @@ export default function AnimatedLink(text, className, delay, h) {
         if (inView) {
             ctrls.start("visible");
         }
-        if (!inView) {
-            ctrls.start("hidden");
-        }
     }, [ctrls, inView]);
-
 
     const characterAnimation = {
         hidden: {
             opacity: 0,
-            y: `0.25em`,
+            y: 10,
         },
         visible: {
             opacity: 1,
-            y: `0em`,
+            y: 0,
             transition: {
+                type: "tween",
                 delay: dl,
-                duration: 1,
+                duration: 0.8,
                 ease: [0.2, 0.65, 0.3, 0.9],
             },
         },
     };
 
     return (
-        <motion.div className={cl} ref={ref}
+        <motion.div className={cl}
+            ref={ref}
             aria-hidden="true"
-            key={txt}
             initial="hidden"
             animate={ctrls}
-            variants={characterAnimation}>
+            variants={characterAnimation}
+            style={{ willChange: "transform, opacity", backfaceVisibility: "hidden", WebkitFontSmoothing: "antialiased" }}>
             <Link target="_blank" color="primary" href={href}>
                 {txt}
             </Link>

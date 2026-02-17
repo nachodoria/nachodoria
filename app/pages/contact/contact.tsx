@@ -37,7 +37,6 @@ export default function Contact() {
     const [name, setName] = useState('');
     const [isValidEmail, setIsValidEmail] = useState(true);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    console.log(email)
 
     const handleEmailChange = (value: string) => {
         setEmail(value);
@@ -54,8 +53,6 @@ export default function Contact() {
     const handleNameChange = (name: string) => {
         setName(name);
     };
-    4
-
 
     const form = useRef<HTMLFormElement>(null);
 
@@ -74,30 +71,28 @@ export default function Contact() {
 
             }
             )
-                .then((result) => {
-                    console.log('SUCCESS!', result.text);
+                .then(() => {
                     onOpen();
                 }, (error) => {
-                    console.log('FAILURE...', error.message);
-                    alert("Plese check your data is correct!");
+                    alert(`Please check your data is correct! (${error.message})`);
                 });
 
         }
     };
     return (
-        <div className="flex items-center justify-center flex-col h-screen w-full">
-            <div className="w-full px-16 flex items-start flex-col justify-between sm:w-1/2 sm:px-0 ">
+        <div className="flex min-h-screen w-full flex-col items-center justify-center">
+            <div className="flex w-full max-w-4xl flex-col items-start justify-between px-6 py-20 sm:px-10">
                 <MoveUp delay={0.5} text="Ready to innovate? Contact me 📫" className="pb-3 text-left font-monosans font-medium text-xl text-foreground subpixel-antialiased w-full sm:text-4xl" ></MoveUp>
                 <MoveUp delay={0.7} text="I am open to creative and cooperative work. " className="text-left font-monosans font-medium text-lg text-foreground/70 subpixel-antialiased sm:text-2xl" ></MoveUp>
                 <form onSubmit={sendEmail} ref={form} className='dark w-full'>
                     <Object dl={1.5} cl="w-full">
-                        <MyInput type="text" name="user_name" onValueChange={handleNameChange} value={name} className="w-10/12 sm:w-6/12 pt-5 sm:pt-8" variant="bordered" size="lg" label="Name"></MyInput>
+                        <MyInput type="text" name="user_name" onValueChange={handleNameChange} value={name} className="w-full pt-5 sm:w-8/12 sm:pt-8" variant="bordered" size="lg" label="Name"></MyInput>
                     </Object>
                     <Object dl={1.5} cl="w-full">
-                        <MyInput type="email" name="user_email" onValueChange={handleEmailChange} value={email} isInvalid={isValidEmail ? false : true} errorMessage={isValidEmail ? "" : "Please enter a valid email"} className="w-10/12 sm:w-6/12 pt-5 sm:pt-8 " variant="bordered" size="lg" label="Email"></MyInput>
+                        <MyInput type="email" name="user_email" onValueChange={handleEmailChange} value={email} isInvalid={isValidEmail ? false : true} errorMessage={isValidEmail ? "" : "Please enter a valid email"} className="w-full pt-5 sm:w-8/12 sm:pt-8 " variant="bordered" size="lg" label="Email"></MyInput>
                     </Object>
                     <Object dl={1.7} cl="w-full">
-                        <MyInput name="message" onValueChange={handleIdeaChange} value={idea} className="w-full sm:w-9/12 pt-4 sm:pt-8" variant="bordered" size="lg" label="Your Idea"></MyInput>
+                        <MyInput name="message" onValueChange={handleIdeaChange} value={idea} className="w-full pt-4 sm:w-10/12 sm:pt-8" variant="bordered" size="lg" label="Your Idea"></MyInput>
                     </Object>
                     <Object dl={2}>
                         <Button type="submit" isDisabled={!isValidEmail || email == '' || name == '' || idea == ''} value="Send" color="primary" className="mt-4 sm:mt-8" size="lg">Send your Idea</Button>
@@ -127,10 +122,10 @@ export default function Contact() {
                         </ModalContent>
                     </Modal>
                 </form>
-                <div className="flex items-start justify-start flex-col pt-6 w-full lg:flex-row lg:items-center ">
+                <div className="flex w-full flex-col items-start justify-start pt-6 sm:flex-row sm:items-center">
                     <MoveUp delay={2} text="Or email me at" className="pr-2 min-w-32 text-left font-monosans font-medium text-md text-foreground/70 subpixel-antialiased sm:text-lg"></MoveUp>
                     <Object dl={2}>
-                        <a className="text-left font-monosans font-medium text-md text-foreground/50 subpixel-antialiased hover:text-foreground/90 duration-250 sm:text-lg" href="mailto:ignaciodoria01@gmail.com">ignaciodoria01@gmail.com</a>
+                        <a className="break-all text-left font-monosans font-medium text-md text-foreground/50 subpixel-antialiased hover:text-foreground/90 duration-250 sm:text-lg" href="mailto:ignaciodoria01@gmail.com">ignaciodoria01@gmail.com</a>
                     </Object>
                 </div>
                 <MoveUp delay={2.7} text="All rights reserved © Ignacio Doria Oberman 2024" className="pt-4 text-left font-monosans font-medium text-sm text-foreground/70 subpixel-antialiased sm:text-lg" ></MoveUp>

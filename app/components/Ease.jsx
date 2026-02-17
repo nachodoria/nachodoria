@@ -16,24 +16,20 @@ export default function Ease({ text, delay, cl  }) {
         if (inView) {
             controls.start("visible");
         }
-        if (!inView) {
-            controls.start("hidden");
-        }
     }, [controls, inView]);
 
     const easeIn = {
         hidden: {
             opacity: 0,
-            transition: { duration: 1.5, ease: [0.2, 0.65, 0.3, 0.9] }
+            transition: { type: "tween", duration: 1.2, ease: [0.2, 0.65, 0.3, 0.9] }
 
         },
         visible: {
             opacity: 1,
             transition: {
+                type: "tween",
                 delay: delay,
-                duration: 1.5, ease: [0.2, 0.65, 0.3, 0.9],
-                damping: 300,
-                stiffness: 100
+                duration: 1.2, ease: [0.2, 0.65, 0.3, 0.9]
             }
 
         }
@@ -48,7 +44,7 @@ export default function Ease({ text, delay, cl  }) {
                         initial="hidden"
                         animate={controls}
                         variants={easeIn}
-                        transition={{ duration: .5, ease: [0.2, 0.65, 0.3, 0.9] }}
+                        style={{ willChange: "opacity" }}
                         ref={ref}
                     >
                         {text}

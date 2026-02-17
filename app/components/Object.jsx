@@ -15,22 +15,20 @@ export default function Object(props, cl, dl) {
         if (inView) {
             ctrls.start("visible");
         }
-        if (!inView) {
-            ctrls.start("hidden");
-        }
     }, [ctrls, inView]);
 
     const animation = {
         hidden: {
             opacity: 0,
-            y: `0.25em`,
+            y: 10,
         },
         visible: {
             opacity: 1,
-            y: `0em`,
+            y: 0,
             transition: {
+                type: "tween",
                 delay: props.dl,
-                duration: 1,
+                duration: 0.8,
                 ease: [0.2, 0.65, 0.3, 0.9],
             },
         },
@@ -41,6 +39,7 @@ export default function Object(props, cl, dl) {
             aria-hidden="true"
             initial="hidden"
             animate={ctrls}
+            style={{ willChange: "transform, opacity" }}
             variants={animation}
             className={props.cl}>
                 {props.children}
