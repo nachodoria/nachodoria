@@ -1,6 +1,7 @@
 "use client";
 import MoveUp from '../../components/MoveUp';
 import AnimatedLink from "../../components/Link.jsx"
+import Object from "../../components/Object.jsx";
 
 export default function Projects() {
     return (
@@ -49,7 +50,9 @@ export default function Projects() {
                         <MoveUp text={"2022 -"} delay={2.2} cl="text-sm font-monosans font-regular text-foreground subpixel-antialiased text-center"></MoveUp>
                     </div>
                     <AnimatedLink delay={2.2} h="https://galaxy-generator-peach.vercel.app" text={"Galaxy Generator"} className="text-blue-400 hover:text-blue-400/90 duration-100 text-md sm:text-lg font-monosans font-regular outline-none "></AnimatedLink>
-                    <span className="px-2 text-foreground/40">|</span>
+                    <Object dl={2.25} cl="px-2 text-foreground/40">
+                        <span>|</span>
+                    </Object>
                     <AnimatedLink delay={2.3} h="https://threejs-journey-portalscene.vercel.app" text={"Golden Portal"} className="text-blue-400 hover:text-blue-400/90 duration-100 text-md sm:text-lg font-monosans font-regular outline-none "></AnimatedLink>
 
                 </div>
