@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -101,29 +102,104 @@ export default function WorkSection() {
             target: window,
             type: "wheel,touch",
             onChangeY(self) {
-                const scrollFactor = 1;
-                const pixelsPerSecond = 150;
+                // Next.js/Browser scroll delta: positive for down, negative for up
+                const direction = self.deltaY > 0 ? 1 : -1;
+
+                // 1. Smoothly transition the base direction
+                gsap.to(loop, {
+                    timeScale: direction,
+                    duration: 0.5,
+                    overwrite: "auto"
+                });
+
+                // 2. Smoothly advance the playhead based on scroll delta
+                // Using a duration (e.g. 0.8s) instead of 0 creates a "momentum" follow effect
+                // that masks the discrete steps of a mouse wheel and the micro-jitter of a trackpad.
+                const scrollFactor = 0.8;
+                const pixelsPerSecond = 100;
                 const scrollDeltaSeconds = (self.deltaY * scrollFactor) / pixelsPerSecond;
 
-                // Flip base direction (1 = Forward/Left, -1 = Backward/Right)
-                // Next.js scroll delta is positive for down, negative for up
-                const direction = self.deltaY > 0 ? 1 : -1;
-                gsap.set(loop, { timeScale: direction });
-
-                // Duration 0 makes the reaction instant. No need for ease.
                 gsap.to(loop, {
                     totalTime: `+=${scrollDeltaSeconds}`,
-                    duration: 0,
+                    duration: 0.8,
+                    ease: "power2.out",
                     overwrite: "auto"
                 });
             }
         });
 
+        // 1. Grid Reveal Animation (Outer Container) - TONED DOWN
+        gsap.utils.toArray(".project-card").forEach((card: any, index: number) => {
+            gsap.fromTo(card,
+                { y: 80, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1.2,
+                    delay: index * 0.15,
+                    ease: "power2.out", // Softer ease as requested
+                    scrollTrigger: {
+                        trigger: card,
+                        start: "top 95%",
+                        toggleActions: "play none none reverse",
+                        onEnter: () => ScrollTrigger.refresh()
+                    }
+                }
+            );
+
+            // 2. Parallax Away Animation (Inner Content)
+            const content = card.querySelector(".card-content");
+            const speeds = [-60, -120, -90, -160, -100];
+
+            gsap.to(content, {
+                y: speeds[index % speeds.length],
+                ease: "none",
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top center",
+                    end: "bottom top",
+                    scrub: 1.5,
+                }
+            });
+        });
+
+        // Global refresh after everything is settled to fix "jumping"
+        const refreshId = gsap.delayedCall(1.5, () => ScrollTrigger.refresh());
+
         return () => {
             loop.kill();
             obs.kill();
+            refreshId.kill();
+            ScrollTrigger.getAll().forEach(st => st.kill());
         };
     }, { scope: sectionRef });
+
+    const projects = [
+        {
+            slug: "portfolio",
+            title: "Personal Portfolio",
+            languages: ["NextJS", "GSAP", "Lenis", "Tailwind CSS"]
+        },
+        {
+            slug: "text-animations",
+            title: "Text Animations",
+            languages: ["NextJS", "Framer Motion", "Observer API"]
+        },
+        {
+            slug: "threejs-worlds",
+            title: "Three JS Worlds",
+            languages: ["ThreeJS", "Blender"]
+        },
+        {
+            slug: "fridge-finder",
+            title: "Fridge Finder",
+            languages: ["Dart", "Flutter"]
+        }
+    ];
+
+    const setCursorHover = (isHovering: boolean) => {
+        window.dispatchEvent(new CustomEvent("cursorHover", { detail: { isHovering } }));
+    };
 
     return (
         <section
@@ -132,26 +208,62 @@ export default function WorkSection() {
             className="w-full min-h-screen bg-[var(--foreground)] text-[var(--background)] flex flex-col items-center justify-start py-20 overflow-hidden"
         >
             {/* Horizontal Marquee Text Wrap */}
-            <div className="w-full overflow-hidden select-none mb-20 border-y border-[var(--background-o)] py-10 flex flex-col will-change-transform">
+            <div className="w-full overflow-hidden select-none mb-32 border-y border-[var(--background-o)] py-10 flex flex-col will-change-transform">
                 <div
                     ref={railRef}
                     className="rail flex whitespace-nowrap text-[8vw] font-sans font-bold leading-none tracking-tighter uppercase opacity-90 will-change-transform"
                 >
                     {/* Items for the horizontal loop helper */}
                     {Array.from({ length: 6 }).map((_, i) => (
-                        <h4 key={i} className="marquee-item px-10">
+                        <h4 key={i} className="marquee-item px-10 will-change-transform" style={{ force3D: "true" } as any}>
                             Some of my work
                         </h4>
                     ))}
                 </div>
             </div>
 
-            {/* Content Placeholder */}
-            <div className="flex flex-col items-center justify-center flex-grow text-center px-4">
-                <p className="text-2xl md:text-4xl font-sans font-medium tracking-tight opacity-50 max-w-3xl leading-snug">
-                    Discover my latest projects and experiments through a lens of clean design and smooth, intuitive interaction.
-                </p>
+            {/* Project Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-24 w-full max-w-7xl px-[5vw] mb-32">
+                {projects.map((project, index) => (
+                    <Link
+                        key={index}
+                        href={`/work/${project.slug}`}
+                        className="project-card flex flex-col cursor-none"
+                    >
+                        <div className="card-content flex flex-col gap-6 will-change-transform">
+                            {/* Image Placeholder */}
+                            <div
+                                className="w-full aspect-[16/10] bg-[var(--background)] rounded-[2.5rem] overflow-hidden relative transition-transform duration-700 group-hover:scale-[1.02] shadow-2xl"
+                                onMouseEnter={() => setCursorHover(true)}
+                                onMouseLeave={() => setCursorHover(false)}
+                            >
+                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-10 transition-opacity">
+                                    <span className="text-3xl font-medium uppercase tracking-tighter text-black">
+                                        {project.title}
+                                    </span>
+                                </div>
+                            </div>
+
+                            {/* Badges & Title */}
+                            <div className="flex flex-col gap-3 px-2">
+                                <div className="flex flex-wrap gap-3">
+                                    {project.languages.map((lang, i) => (
+                                        <span key={i} className="text-xs uppercase tracking-widest text-[var(--foreground-text)]/40 font-bold border border-[var(--foreground-text)]/10 px-3 py-1 rounded-full">
+                                            {lang}
+                                        </span>
+                                    ))}
+                                </div>
+                                <h3 className="text-3xl md:text-[3.5vw] font-medium tracking-tighter text-[var(--foreground-text)] leading-none mt-1">
+                                    {project.title}
+                                </h3>
+                            </div>
+                        </div>
+                    </Link>
+                ))}
             </div>
+
+            {/* Footer space */}
+            <div className="py-20"></div>
         </section>
     );
 }
