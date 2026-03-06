@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 👋 Hi, I'm Ignacio Doria Oberman
 
-## Getting Started
+Toronto, ON, Canada  
+647-504-8840  
+ignaciodoria01@gmail.com  
+[Portfolio](https://ignacio-doria.vercel.app/)  
+Languages: Spanish / English  
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🎓 Education
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**York University – Toronto, Canada**  
+*BSc in Computer Science (Honours)* (2023–Present)  
+Currently in my third year, building a strong foundation in algorithms, software development, and mathematics.  
+Courses include: Object-Oriented Programming, Computational Thinking, Problem Solving, Calculus, and Linear Algebra.  
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**ORT Argentina Belgrano – Buenos Aires, Argentina**  
+*High School Diploma in Information Technology* (2018–2022)  
+- Graduated with Honors (GPA: 9.75/10)  
+- 1st Place, Taub Young Entrepreneurship Program (2021)  
+- Strengthened teamwork and communication skills through group projects  
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 💻 Skills
 
-To learn more about Next.js, take a look at the following resources:
+- **Languages:** JavaScript, CSS, HTML5, XML, Java, C, Dart  
+- **Frameworks & Libraries:** ReactJS, NextJS, GSAP, Locomotive Scroll (Lenis), Tailwind CSS, ThreeJS, Flutter, NextUI, Framer Motion  
+- **Design Tools:** Figma, Blender  
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🚀 Projects
 
-## Deploy on Vercel
+### 🌐 [Personal Portfolio (2026)](https://ignacio-doria.vercel.app/)
+A high-performance personal portfolio featuring advanced GSAP animations, a truly infinite marquee, and perfectly fluid smooth scrolling.  
+**Technologies:** NextJS, GSAP (ScrollTrigger & Observer), Locomotive Scroll (Lenis), Tailwind CSS
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### ✨ Text Animations by Ignacio (2023)
+Built a library of reusable text animations to inspire developers.  
+**Technologies:** NextJS, Framer Motion, Observer API  
+
+### 🌍 Three JS Worlds
+A collection of interactive **ThreeJS experiments and 3D web scenes** built to explore graphics, animation, and real-time rendering on the web.  
+This project showcases multiple ThreeJS creations including **Golden Portal** and **Galaxy Generator**.
+
+**Technologies:** ThreeJS, Blender  
+
+### ♟️ Othello Board
+Implementation of the classic **Othello (Reversi)** board game. Players can play **against another player or against an AI** while the system validates moves and flips discs automatically.
+
+**Technologies:** Java, Object-Oriented Programming  
+
+### 📱 Fridge Finder
+A mobile application designed to help users **organize fridge inventory, track expiration dates, and manage food items efficiently**.
+
+**Technologies:** Dart, Flutter  
+
+---
+
+## 📫 Contact
+Feel free to reach out for collaborations or opportunities:  
+**Email:** ignaciodoria01@gmail.com  
+**Phone:** 647-504-8840  
