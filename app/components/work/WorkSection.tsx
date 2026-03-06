@@ -97,47 +97,31 @@ export default function WorkSection() {
             paddingRight: 50, // Gap between items
         });
 
-        // Use Observer to detect scroll and speed up the loop
-        let speedTween: gsap.core.Timeline | null = null;
-
         const obs = Observer.create({
             target: window,
-            type: "wheel",
+            type: "wheel,touch",
             onChangeY(self) {
-                const screenWidth = window.innerWidth;
-                const intensity = screenWidth < 1024 ? 1.1 : screenWidth < 1536 ? 1.3 : 2;
+                const scrollFactor = 1;
+                const pixelsPerSecond = 150;
+                const scrollDeltaSeconds = (self.deltaY * scrollFactor) / pixelsPerSecond;
 
-                let factor = 2;
-                if (self.deltaY < 0) {
-                    factor *= -1;
-                }
+                // Flip base direction (1 = Forward/Left, -1 = Backward/Right)
+                // Next.js scroll delta is positive for down, negative for up
+                const direction = self.deltaY > 0 ? 1 : -1;
+                gsap.set(loop, { timeScale: direction });
 
-                if (speedTween) speedTween.kill();
-
-                speedTween = gsap.timeline({
-                    defaults: { ease: "none" }
-                })
-                    .to(loop, {
-                        timeScale: factor * intensity,
-                        duration: 0.5,
-                        overwrite: true
-                    })
-                    .to(loop, {
-                        timeScale: factor / 2.5,
-                        duration: 1.2
-                    }, "+=0.2")
-                    .to(loop, {
-                        timeScale: self.deltaY < 0 ? -1 : 1,
-                        duration: 1.5,
-                        ease: "power2.out"
-                    }, "+=0.1");
+                // Duration 0 makes the reaction instant. No need for ease.
+                gsap.to(loop, {
+                    totalTime: `+=${scrollDeltaSeconds}`,
+                    duration: 0,
+                    overwrite: "auto"
+                });
             }
         });
 
         return () => {
             loop.kill();
             obs.kill();
-            if (speedTween) speedTween.kill();
         };
     }, { scope: sectionRef });
 

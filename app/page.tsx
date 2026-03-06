@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AnimatedTitle from "./components/main/AnimatedTitle";
 import SubHeader from "./components/main/SubHeader";
 import Navbar from "./components/global/Navbar";
@@ -11,11 +11,20 @@ import WorkSection from "./components/work/WorkSection";
 export default function Home() {
   const [isReady, setIsReady] = useState(false);
 
-  window.onload = function() {
-    setTimeout(function() {
-      window.scrollTo(0, 0);
-    }, 100); // Delays execution by 100 milliseconds
-  };
+  useEffect(() => {
+    const handleLoad = () => {
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+      }, 100);
+    };
+
+    if (document.readyState === "complete") {
+      handleLoad();
+    } else {
+      window.addEventListener("load", handleLoad);
+      return () => window.removeEventListener("load", handleLoad);
+    }
+  }, []);
 
   return (
     <SmoothScroll>
