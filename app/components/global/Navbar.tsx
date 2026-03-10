@@ -2,10 +2,11 @@
 
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef, useState } from "react";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 interface NavbarProps {
     isReady: boolean;
@@ -13,18 +14,54 @@ interface NavbarProps {
 
 export default function Navbar({ isReady }: NavbarProps) {
     const container = useRef<HTMLDivElement>(null);
-    const [activeItem, setActiveItem] = useState<string | null>(null);
+    const [activeItem, setActiveItem] = useState<string>("About");
     const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+    const navItems = [
+        { label: "About", target: "top" },
+        { label: "Work", target: "#work-section" },
+        { label: "Contact", target: "#contact" },
+    ];
+
+    const handleNavClick = (item: string, target: string) => {
+        setActiveItem(item);
+
+        if (target === "top") {
+            gsap.killTweensOf(window);
+            gsap.to(window, {
+                duration: 1.15,
+                ease: "expo.inOut",
+                scrollTo: {
+                    y: 0,
+                    autoKill: false,
+                },
+                overwrite: "auto",
+            });
+            return;
+        }
+
+        const targetEl = document.querySelector(target);
+        if (!targetEl) return;
+
+        gsap.killTweensOf(window);
+        gsap.to(window, {
+            duration: 1.15,
+            ease: "expo.inOut",
+            scrollTo: {
+                y: targetEl,
+                autoKill: false,
+            },
+            overwrite: "auto",
+        });
+    };
 
     useGSAP(() => {
         if (isReady && container.current) {
-            // Set initial color state
             gsap.set(container.current, {
                 "--nav-active": "var(--foreground)",
                 "--nav-dim": "var(--foreground-o)",
+                backgroundColor: "transparent",
             });
 
-            // Entrance animation
             gsap.to(".nav-item", {
                 opacity: 1,
                 y: 0,
@@ -35,54 +72,76 @@ export default function Navbar({ isReady }: NavbarProps) {
                 force3D: true
             });
 
-            // Synchronized color inversion on scroll
-            const tl = gsap.timeline({ paused: true });
-            tl.to(container.current, {
-                backgroundColor: "var(--foreground)",
-                "--nav-active": "var(--background)",
-                "--nav-dim": "var(--background-o)",
-                duration: 0.6,
-                ease: "power2.inOut",
-                force3D: true
-            });
-
             ScrollTrigger.create({
                 trigger: "#work-section",
-                start: "top 12%", // Matches the h-[12vh] of your navbar
+                start: "top top",
+                end: "bottom top",
                 onEnter: () => {
-                    tl.play();
                     setActiveItem("Work");
                 },
+                onEnterBack: () => {
+                    setActiveItem("Work");
+                },
+                onLeave: () => {
+                    setActiveItem("Contact");
+                },
                 onLeaveBack: () => {
-                    tl.reverse();
-                    setActiveItem(null);
+                    setActiveItem("About");
                 },
             });
         }
     }, [isReady]);
+
+    useGSAP(() => {
+        if (!isReady || !container.current) return;
+
+        const focusedItem = hoveredItem ?? activeItem;
+        const navItems = gsap.utils.toArray<HTMLElement>(".nav-item");
+
+        gsap.to(navItems, {
+            opacity: focusedItem ? 0.45 : 1,
+            duration: 0.2,
+            ease: "power2.out",
+            overwrite: "auto",
+        });
+
+        if (focusedItem) {
+            const focusedEl = container.current.querySelector<HTMLElement>(`.nav-item[data-nav="${focusedItem}"]`);
+            if (focusedEl) {
+                gsap.to(focusedEl, {
+                    opacity: 1,
+                    duration: 0.2,
+                    ease: "power2.out",
+                    overwrite: "auto",
+                });
+            }
+        }
+    }, [isReady, activeItem, hoveredItem]);
 
     return (
         <nav
             ref={container}
             className="fixed top-0 left-0 w-full flex justify-end items-center h-[12vh] px-[5vw] gap-[4vw] md:gap-10 font-sans font-medium text-[3.5vw] md:text-xl tracking-tight z-[100]"
         >
-            {["Work", "About", "Contact"].map((item) => {
-                const isHighlighted = hoveredItem ? hoveredItem === item : activeItem === item;
+            {navItems.map(({ label, target }) => {
+                const focusedItem = hoveredItem ?? activeItem;
+                const isHighlighted = focusedItem === label;
 
                 return (
-                    <a
-                        key={item}
-                        href={`#${item.toLowerCase()}`}
-                        onClick={() => setActiveItem(item)}
-                        onMouseEnter={() => setHoveredItem(item)}
+                    <button
+                        type="button"
+                        key={label}
+                        data-nav={label}
+                        onClick={() => handleNavClick(label, target)}
+                        onMouseEnter={() => setHoveredItem(label)}
                         onMouseLeave={() => setHoveredItem(null)}
-                        className="nav-item opacity-0 translate-y-[-10px] transition-colors duration-300 cursor-none will-change-[transform,opacity,color]"
+                        className="nav-item page-transition-nav bg-transparent opacity-0 translate-y-[-20px] transition-colors duration-200 ease-out will-change-[transform,opacity,color] cursor-none"
                         style={{
                             color: isHighlighted ? "var(--nav-active)" : "var(--nav-dim)"
                         } as any}
                     >
-                        {item}
-                    </a>
+                        {label}
+                    </button>
                 );
             })}
         </nav>

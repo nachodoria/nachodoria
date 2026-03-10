@@ -2,10 +2,127 @@
 
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
-export default function AnimatedTitle({ text, onComplete }: { text: string; onComplete?: () => void }) {
+interface AnimatedTitleProps {
+    text: string;
+    onComplete?: () => void;
+    skipAnimation?: boolean;
+}
+
+const HOVER_FONTS = [
+    "var(--font-corben)",
+    "var(--font-chicle)",
+    "var(--font-caprasimo)",
+    "var(--font-yellowtail)",
+    "var(--font-young-serif)",
+    "var(--font-righteous)",
+    "var(--font-dorsa)",
+    "var(--font-ranchers)",
+    "var(--font-smokum)",
+];
+
+function TitleLetter({ char, hoverEnabled }: { char: string; hoverEnabled: boolean }) {
+    const baseRef = useRef<HTMLSpanElement>(null);
+    const [isHovered, setIsHovered] = useState(false);
+    const [hoverFont, setHoverFont] = useState<string>(HOVER_FONTS[0]);
+    const [hoverScale, setHoverScale] = useState(1);
+    const [hoverWidth, setHoverWidth] = useState<number | null>(null);
+
+    const measureFontWidth = (fontFamily: string) => {
+        if (!baseRef.current) return 0;
+
+        const styles = window.getComputedStyle(baseRef.current);
+        const probe = document.createElement("span");
+        probe.textContent = char;
+        probe.style.position = "absolute";
+        probe.style.visibility = "hidden";
+        probe.style.pointerEvents = "none";
+        probe.style.whiteSpace = "pre";
+        probe.style.fontSize = styles.fontSize;
+        probe.style.fontWeight = styles.fontWeight;
+        probe.style.fontStyle = styles.fontStyle;
+        probe.style.lineHeight = styles.lineHeight;
+        probe.style.textTransform = styles.textTransform;
+        probe.style.fontFamily = fontFamily;
+        probe.style.padding = "0";
+        probe.style.margin = "0";
+
+        document.body.appendChild(probe);
+        const width = probe.getBoundingClientRect().width;
+        document.body.removeChild(probe);
+
+        return width;
+    };
+
+    const handleMouseEnter = () => {
+        if (!hoverEnabled || !baseRef.current) return;
+
+        const nextFont = HOVER_FONTS[Math.floor(Math.random() * HOVER_FONTS.length)];
+        const baseWidth = baseRef.current.getBoundingClientRect().width;
+        const nextWidth = measureFontWidth(nextFont);
+        setHoverFont(nextFont);
+        setHoverScale(nextWidth > 0 ? Math.min(1, baseWidth / nextWidth) : 1);
+        setHoverWidth(baseWidth);
+        setIsHovered(true);
+    };
+
+    const handleMouseLeave = () => {
+        setIsHovered(false);
+        setHoverWidth(null);
+        setHoverScale(1);
+    };
+
+    return (
+        <span
+            className="relative inline-block align-baseline"
+            style={isHovered && hoverWidth ? { width: `${hoverWidth}px` } : undefined}
+        >
+            <span
+                ref={baseRef}
+                className="inline-block"
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                style={{ opacity: isHovered ? 0 : 1 }}
+            >
+                {char}
+            </span>
+            <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 flex items-center justify-center whitespace-pre"
+                style={{
+                    opacity: isHovered ? 1 : 0,
+                    fontFamily: hoverFont,
+                    transform: `scaleX(${hoverScale})`,
+                    transformOrigin: "center center",
+                }}
+            >
+                {char}
+            </span>
+        </span>
+    );
+}
+
+export default function AnimatedTitle({ text, onComplete, skipAnimation = false }: AnimatedTitleProps) {
     const container = useRef<HTMLHeadingElement>(null);
+    const [canHover, setCanHover] = useState(false);
+    const [titleSettled, setTitleSettled] = useState(false);
+
+    useEffect(() => {
+        if (typeof window === "undefined") return;
+
+        const mediaQuery = window.matchMedia("(hover: hover) and (pointer: fine) and (min-width: 1024px)");
+        const syncHoverAvailability = () => {
+            setCanHover(mediaQuery.matches);
+        };
+
+        syncHoverAvailability();
+        mediaQuery.addEventListener("change", syncHoverAvailability);
+
+        return () => {
+            mediaQuery.removeEventListener("change", syncHoverAvailability);
+        };
+    }, []);
 
     useGSAP(
         () => {
@@ -13,9 +130,30 @@ export default function AnimatedTitle({ text, onComplete }: { text: string; onCo
             const parent = container.current.parentElement;
             if (!parent) return;
 
+            const finishTitleAnimation = () => {
+                onComplete?.();
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        setTitleSettled(true);
+                    });
+                });
+            };
+
+            if (skipAnimation) {
+                gsap.set(container.current, {
+                    fontSize: "14vw",
+                    letterSpacing: "-0.05em",
+                });
+                gsap.set(parent, {
+                    y: "-25vh",
+                });
+                finishTitleAnimation();
+                return;
+            }
+
             const tl = gsap.timeline({
                 delay: 0.5,
-                onComplete: () => onComplete?.()
+                onComplete: finishTitleAnimation
             });
 
             // Step 1: Reveal from bottom
@@ -43,8 +181,10 @@ export default function AnimatedTitle({ text, onComplete }: { text: string; onCo
                 force3D: true
             }, "-=0.1");
         },
-        { scope: container }
+        { scope: container, dependencies: [skipAnimation] }
     );
+
+    const hoverEnabled = canHover && titleSettled;
 
     return (
         <h1
@@ -54,9 +194,18 @@ export default function AnimatedTitle({ text, onComplete }: { text: string; onCo
             className="flex whitespace-nowrap text-6xl md:text-8xl font-sans font-bold tracking-tighter text-[var(--foreground)] drop-shadow-sm select-none will-change-[font-size,transform]"
         >
             {text.split(" ").map((word, i) => (
-                <span key={i} className="relative inline-block overflow-hidden py-4 px-2 -my-4 -mx-2">
-                    <span className="word inline-block translate-y-0 will-change-transform">
-                        {word}
+                <span
+                    key={i}
+                    className={`relative inline-block py-4 px-2 -my-4 -mx-2 ${titleSettled ? "overflow-visible" : "overflow-hidden"}`}
+                >
+                    <span className="word inline-flex translate-y-0 will-change-transform">
+                        {word.split("").map((char, index) => (
+                            <TitleLetter
+                                key={`${word}-${index}-${char}`}
+                                char={char}
+                                hoverEnabled={hoverEnabled}
+                            />
+                        ))}
                     </span>
                     {i < text.split(" ").length - 1 && <span>&nbsp;</span>}
                 </span>

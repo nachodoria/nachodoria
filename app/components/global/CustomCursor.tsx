@@ -28,12 +28,12 @@ export default function CustomCursor() {
 
             if (isHovering) {
                 gsap.to(cursor, {
-                    width: 80,
-                    height: 80,
+                    width: 60,
+                    height: 60,
                     backgroundColor: "var(--background)",
                     mixBlendMode: "normal",
                     duration: 0.8,
-                    ease: "elastic.out(1, 0.4)",
+                    ease: "elastic.out(1, 0.8)",
                     overwrite: "auto"
                 });
                 gsap.to(text, {

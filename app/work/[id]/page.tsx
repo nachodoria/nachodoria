@@ -2,11 +2,9 @@
 
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { useRef } from "react";
-import Link from "next/link";
+import { useLayoutEffect, useRef, useState } from "react";
 import CustomCursor from "@/app/components/global/CustomCursor";
-import SmoothScroll from "@/app/components/global/SmoothScroll";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 const projectData: Record<string, any> = {
     "portfolio": {
@@ -43,70 +41,126 @@ const projectData: Record<string, any> = {
 
 export default function ProjectPage() {
     const { id } = useParams();
+    const router = useRouter();
     const project = projectData[id as string];
     const containerRef = useRef<HTMLDivElement>(null);
+    const [isLeaving, setIsLeaving] = useState(false);
+
+    useLayoutEffect(() => {
+        const html = document.documentElement;
+        const body = document.body;
+
+        html.style.overflow = "";
+        body.style.overflow = "";
+        body.style.pointerEvents = "";
+        window.scrollTo(0, 0);
+    }, []);
 
     useGSAP(() => {
-        gsap.from(".reveal", {
-            y: 50,
-            opacity: 0,
-            duration: 1,
-            stagger: 0.2,
-            ease: "power3.out"
+        const entering = gsap.utils.toArray<HTMLElement>(".project-enter");
+
+        gsap.to(entering, {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            ease: "power3.out",
+            overwrite: "auto",
         });
     }, { scope: containerRef });
 
     if (!project) return <div>Project not found</div>;
 
-    const setCursorHover = (isHovering: boolean) => {
-        window.dispatchEvent(new CustomEvent("cursorHover", { detail: { isHovering } }));
+    const handleBack = () => {
+        if (isLeaving) return;
+
+        setIsLeaving(true);
+
+        const html = document.documentElement;
+        const body = document.body;
+        const leaving = gsap.utils.toArray<HTMLElement>(".project-enter");
+
+        window.dispatchEvent(new CustomEvent("portfolio-scroll-stop"));
+        html.style.overflow = "hidden";
+        body.style.overflow = "hidden";
+        body.style.pointerEvents = "none";
+
+        gsap.timeline({
+            defaults: {
+                overwrite: "auto",
+            },
+            onComplete: () => {
+                router.push("/", { scroll: false });
+            },
+        })
+            .to(leaving, {
+                y: -20,
+                opacity: 0,
+                duration: 0.5,
+                ease: "power3.out",
+            }, 0)
+            .to({}, {
+                duration: 0.18,
+            });
     };
 
     return (
-        <main ref={containerRef} className="bg-[var(--background)] h-screen w-full text-[var(--foreground)] px-[5vw] py-16 flex flex-col justify-between overflow-hidden">
+        <main ref={containerRef} className="bg-[var(--background)] min-h-screen w-full overflow-x-hidden text-[var(--foreground)] px-[5vw] py-16 flex flex-col gap-16">
             <CustomCursor />
 
             {/* Back Button */}
-            <Link href="/" className="fixed top-8 left-10 text-xl font-medium uppercase tracking-tight z-50 hover:opacity-50 transition-opacity">
-                Back
-            </Link>
+            <div className="overflow-hidden">
+                <button
+                    type="button"
+                    onClick={handleBack}
+                    disabled={isLeaving}
+                    className="project-enter fixed top-8 left-10 bg-transparent text-xl font-medium uppercase tracking-tight z-50 opacity-70 hover:opacity-100 transition-opacity translate-y-[30px] cursor-none disabled:pointer-events-none"
+                >
+                    Back
+                </button>
+            </div>
 
-            {/* Project Title - Smaller as requested */}
-            <h1 className="reveal text-4xl md:text-6xl font-bold leading-none tracking-tighter uppercase text-center">
-                {project.title}
-            </h1>
+            {/* Project Title */}
+            <div className="overflow-hidden">
+                <h1 className="project-enter text-4xl md:text-5xl lg:text-[5.6vw] font-medium leading-[0.92] tracking-tight uppercase text-center opacity-0 translate-y-[60px]">
+                    {project.title}
+                </h1>
+            </div>
 
             {/* Central Image Placeholder */}
-            <div className="reveal w-full max-w-6xl mx-auto aspect-[16/8] bg-[var(--foreground)] rounded-[2.5rem] overflow-hidden relative shadow-2xl">
-                <div className="absolute inset-0 flex items-center justify-center opacity-10">
-                    <span className="text-[5vw] font-bold uppercase tracking-tighter text-[var(--background)]">
-                        {project.title}
-                    </span>
+            <div className="overflow-hidden rounded-[2.5rem]">
+                <div className="project-enter w-full max-w-[62rem] mx-auto aspect-[16/8] bg-[var(--foreground)] rounded-[2.5rem] overflow-hidden relative shadow-2xl opacity-0 translate-y-[60px]">
+                    <div className="absolute inset-0 flex items-center justify-center opacity-10">
+                        <span className="text-[5vw] font-bold uppercase tracking-tighter text-[var(--background)]">
+                            {project.title}
+                        </span>
+                    </div>
                 </div>
             </div>
 
             {/* Footer Section: Overview Left, Info Right */}
-            <div className="reveal w-full max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-12 mt-10">
-                {/* Down Left: Overview */}
-                <div className="flex-1">
-                    <h2 className="text-4xl md:text-6xl font-bold tracking-tight uppercase leading-none">
-                        Overview
-                    </h2>
-                </div>
+            <div className="overflow-hidden">
+                <div className="project-enter w-full max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-12 mt-10 opacity-0 translate-y-[60px]">
+                    {/* Down Left: Overview */}
+                    <div className="flex-1">
+                        <h2 className="text-4xl md:text-6xl font-bold tracking-tight uppercase leading-none">
+                            Overview
+                        </h2>
+                    </div>
 
-                {/* Down Right: Description & Tech */}
-                <div className="flex-[2] flex flex-col items-end text-right gap-8">
-                    <p className="text-lg md:text-xl font-normal leading-tight opacity-90 max-w-xl">
-                        {project.description}
-                    </p>
-
-                    <div className="flex flex-col gap-1 items-end">
-                        <span className="text-[10px] uppercase tracking-[0.2em] font-bold opacity-40">Technologies</span>
-                        <p className="text-sm md:text-base font-bold tracking-tight">
-                            {project.technologies}
+                    {/* Down Right: Description & Tech */}
+                    <div className="flex-[2] flex flex-col items-end text-right gap-8">
+                        <p className="text-lg md:text-xl font-normal leading-tight opacity-90 max-w-xl">
+                            {project.description}
                         </p>
-                        <div className="mt-2 h-[1px] w-20 bg-[var(--foreground)] opacity-20"></div>
-                        <p className="text-xs opacity-40 font-bold mt-1">{project.year}</p>
+
+                        <div className="flex flex-col gap-1 items-end">
+                            <span className="text-[10px] uppercase tracking-[0.2em] font-bold opacity-40">Technologies</span>
+                            <p className="text-sm md:text-base font-bold tracking-tight">
+                                {project.technologies}
+                            </p>
+                            <div className="mt-2 h-[1px] w-20 bg-[var(--foreground)] opacity-20"></div>
+                            <p className="text-xs opacity-40 font-bold mt-1">{project.year}</p>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,11 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Observer } from "gsap/all";
 import { useRef } from "react";
+import ProjectCard, { WorkProject } from "./ProjectCard";
+import { usePageTransition } from "../../hooks/usePageTransition";
 
 gsap.registerPlugin(ScrollTrigger, Observer);
 
@@ -38,7 +39,7 @@ function horizontalLoop(items: any[], config: any) {
             xPercents[i] = snap(parseFloat(gsap.getProperty(el, "x", "px") as string) / w * 100 + Number(gsap.getProperty(el, "xPercent")));
             return xPercents[i];
         },
-        force3D: true // Ensure GPU acceleration for all items
+        force3D: true
     });
 
     gsap.set(items, { x: 0 });
@@ -86,8 +87,21 @@ export default function WorkSection() {
     const sectionRef = useRef<HTMLElement>(null);
     const railRef = useRef<HTMLDivElement>(null);
 
+    const setCursorHover = (isHovering: boolean) => {
+        window.dispatchEvent(new CustomEvent("cursorHover", { detail: { isHovering } }));
+    };
+
+    const persistHomeScroll = () => {
+        sessionStorage.setItem("home-scroll-y", String(window.scrollY));
+    };
+
+    const { isTransitioning, transitionTo } = usePageTransition({
+        scopeRef: sectionRef,
+        onBeforeNavigate: persistHomeScroll,
+    });
+
     useGSAP(() => {
-        if (!railRef.current) return;
+        if (!railRef.current || !sectionRef.current) return;
 
         const items = gsap.utils.toArray(".marquee-item");
 
@@ -95,30 +109,22 @@ export default function WorkSection() {
         const loop = horizontalLoop(items, {
             repeat: -1,
             speed: 1.5,
-            paddingRight: 50, // Gap between items
+            paddingRight: 50,
         });
 
         const obs = Observer.create({
             target: window,
             type: "wheel,touch",
             onChangeY(self) {
-                // Next.js/Browser scroll delta: positive for down, negative for up
                 const direction = self.deltaY > 0 ? 1 : -1;
-
-                // 1. Smoothly transition the base direction
                 gsap.to(loop, {
                     timeScale: direction,
                     duration: 0.5,
                     overwrite: "auto"
                 });
-
-                // 2. Smoothly advance the playhead based on scroll delta
-                // Using a duration (e.g. 0.8s) instead of 0 creates a "momentum" follow effect
-                // that masks the discrete steps of a mouse wheel and the micro-jitter of a trackpad.
                 const scrollFactor = 0.8;
                 const pixelsPerSecond = 100;
                 const scrollDeltaSeconds = (self.deltaY * scrollFactor) / pixelsPerSecond;
-
                 gsap.to(loop, {
                     totalTime: `+=${scrollDeltaSeconds}`,
                     duration: 0.8,
@@ -128,29 +134,28 @@ export default function WorkSection() {
             }
         });
 
-        // 1. Grid Reveal Animation (Outer Container) - TONED DOWN
-        gsap.utils.toArray(".project-card").forEach((card: any, index: number) => {
+        // 1. Grid Reveal Animation
+        const cards = gsap.utils.toArray(".project-card");
+        cards.forEach((card: any, index: number) => {
             gsap.fromTo(card,
-                { y: 80, opacity: 0 },
+                { y: 56, opacity: 0 },
                 {
                     y: 0,
                     opacity: 1,
-                    duration: 1.2,
-                    delay: index * 0.15,
-                    ease: "power2.out", // Softer ease as requested
+                    duration: 1.35,
+                    delay: index * 0.12,
+                    ease: "power3.out",
                     scrollTrigger: {
                         trigger: card,
-                        start: "top 95%",
+                        start: "top 112%",
                         toggleActions: "play none none reverse",
-                        onEnter: () => ScrollTrigger.refresh()
                     }
                 }
             );
 
-            // 2. Parallax Away Animation (Inner Content)
+            // 2. Parallax
             const content = card.querySelector(".card-content");
             const speeds = [-60, -120, -90, -160, -100];
-
             gsap.to(content, {
                 y: speeds[index % speeds.length],
                 ease: "none",
@@ -163,18 +168,14 @@ export default function WorkSection() {
             });
         });
 
-        // Global refresh after everything is settled to fix "jumping"
-        const refreshId = gsap.delayedCall(1.5, () => ScrollTrigger.refresh());
-
         return () => {
-            loop.kill();
-            obs.kill();
-            refreshId.kill();
+            if (loop) loop.kill();
+            if (obs) obs.kill();
             ScrollTrigger.getAll().forEach(st => st.kill());
         };
     }, { scope: sectionRef });
 
-    const projects = [
+    const projects: WorkProject[] = [
         {
             slug: "portfolio",
             title: "Personal Portfolio",
@@ -197,72 +198,37 @@ export default function WorkSection() {
         }
     ];
 
-    const setCursorHover = (isHovering: boolean) => {
-        window.dispatchEvent(new CustomEvent("cursorHover", { detail: { isHovering } }));
-    };
-
     return (
         <section
             id="work-section"
             ref={sectionRef}
-            className="w-full min-h-screen bg-[var(--foreground)] text-[var(--background)] flex flex-col items-center justify-start py-20 overflow-hidden"
+            className="w-full min-h-screen flex flex-col items-center justify-start py-40 overflow-hidden"
+            style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}
         >
-            {/* Horizontal Marquee Text Wrap */}
-            <div className="w-full overflow-hidden select-none mb-32 border-y border-[var(--background-o)] py-10 flex flex-col will-change-transform">
-                <div
-                    ref={railRef}
-                    className="rail flex whitespace-nowrap text-[8vw] font-sans font-bold leading-none tracking-tighter uppercase opacity-90 will-change-transform"
-                >
-                    {/* Items for the horizontal loop helper */}
-                    {Array.from({ length: 6 }).map((_, i) => (
-                        <h4 key={i} className="marquee-item px-10 will-change-transform" style={{ force3D: "true" } as any}>
-                            Some of my work
-                        </h4>
-                    ))}
-                </div>
-            </div>
-
-            {/* Project Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-24 w-full max-w-7xl px-[5vw] mb-32">
-                {projects.map((project, index) => (
-                    <Link
-                        key={index}
-                        href={`/work/${project.slug}`}
-                        className="project-card flex flex-col cursor-none"
-                    >
-                        <div className="card-content flex flex-col gap-6 will-change-transform">
-                            {/* Image Placeholder */}
-                            <div
-                                className="w-full aspect-[16/10] bg-[var(--background)] rounded-[2.5rem] overflow-hidden relative transition-transform duration-700 group-hover:scale-[1.02] shadow-2xl"
-                                onMouseEnter={() => setCursorHover(true)}
-                                onMouseLeave={() => setCursorHover(false)}
-                            >
-                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-10 transition-opacity">
-                                    <span className="text-3xl font-medium uppercase tracking-tighter text-black">
-                                        {project.title}
-                                    </span>
-                                </div>
-                            </div>
-
-                            {/* Badges & Title */}
-                            <div className="flex flex-col gap-3 px-2">
-                                <div className="flex flex-wrap gap-3">
-                                    {project.languages.map((lang, i) => (
-                                        <span key={i} className="text-xs uppercase tracking-widest text-[var(--foreground-text)]/40 font-bold border border-[var(--foreground-text)]/10 px-3 py-1 rounded-full">
-                                            {lang}
-                                        </span>
-                                    ))}
-                                </div>
-                                <h3 className="text-3xl md:text-[3.5vw] font-medium tracking-tighter text-[var(--foreground-text)] leading-none mt-1">
-                                    {project.title}
-                                </h3>
-                            </div>
-                        </div>
-                    </Link>
+            <div
+                ref={railRef}
+                className="rail page-transition-item page-transition-text flex whitespace-nowrap text-[8vw] font-sans font-bold leading-none tracking-tighter uppercase opacity-90 mb-32 py-10"
+            >
+                {Array.from({ length: 6 }).map((_, i) => (
+                    <h4 key={i} className="marquee-item px-10">
+                        Some of my work
+                    </h4>
                 ))}
             </div>
 
-            {/* Footer space */}
+            <div className="grid w-full px-[5vw] mb-32 grid-cols-1 gap-8 md:w-[74vw] md:max-w-none md:px-0 md:grid-cols-8 md:gap-10">
+                {projects.map((project, index) => (
+                    <ProjectCard
+                        key={project.slug}
+                        project={project}
+                        href={`/work/${project.slug}`}
+                        variant={index === 0 || index === projects.length - 1 ? "wide" : "narrow"}
+                        disabled={isTransitioning}
+                        onNavigate={transitionTo}
+                        onCursorHover={setCursorHover}
+                    />
+                ))}
+            </div>
             <div className="py-20"></div>
         </section>
     );

@@ -23,6 +23,39 @@
 
 html {
   cursor: none;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+a {
+  cursor: none;
+}
+
+body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.c-scrollbar,
+.c-scrollbar_thumb,
+.lenis-scrollbar,
+.lenis-scrollbar .lenis-scrollbar-thumb {
+  opacity: 0 !important;
+  display: none !important;
+  pointer-events: none !important;
 }
 
 html.lenis,
@@ -33,4 +66,22 @@ html.lenis body {
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+@keyframes typewriter-cursor-blink {
+  0%, 49% {
+    opacity: 1;
+  }
+
+  50%, 100% {
+    opacity: 0;
+  }
+}
+
+.typewriter-cursor {
+  animation: typewriter-cursor-blink 1s steps(1, end) infinite;
+}
+
+.typewriter-ending {
+  animation: typewriter-cursor-blink 1s steps(1, end) infinite;
 }
