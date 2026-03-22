@@ -1,0 +1,12 @@
+
+> portfolio@0.1.0 dev
+> next dev --webpack
+
+▲ Next.js 16.1.6 (webpack)
+- Local:         http://localhost:3000
+- Network:       http://10.0.0.110:3000
+
+✓ Starting...
+✓ Ready in 1812ms
+○ Compiling /work/[id] ...
+ GET /work/portfolio 200 in 5.3s (compile: 5.1s, render: 186ms)

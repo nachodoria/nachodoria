@@ -1,34 +1,40 @@
 @import "tailwindcss";
 
 :root {
-  --background: #FB8115;
-  --background-o: #fb801588;
-  --foreground: #343534;
-  --foreground-o: #34353473;
-  --foreground-text: #FFE2B5;
+  --background: #5ea85d;
+  --background-o: #5ea85d88;
+  --foreground: #112712;
+  --foreground-o: #112712bf;
+  --foreground-secondary: #5ea85d;
+  --foreground-tertiary: #3f7d3e;
+  --hero-title-color: #fefae0;
+  --hero-title-dim: #fefae0bf;
+}
+
+html,
+body {
+  --highlight: #5ea85d;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-highlight: var(--highlight);
   --font-sans: var(--font-instrument-sans);
+  --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: light) {
   :root {
-    --background: #FB8115;
-    --foreground: #343534;
+    --background: #5ea85d;
+    --foreground: #112712;
+    --foreground-secondary: #5ea85d;
   }
 }
 
 html {
-  cursor: none;
   scrollbar-width: none;
   -ms-overflow-style: none;
-}
-
-a {
-  cursor: none;
 }
 
 body {
@@ -69,11 +75,14 @@ body {
 }
 
 @keyframes typewriter-cursor-blink {
-  0%, 49% {
+
+  0%,
+  49% {
     opacity: 1;
   }
 
-  50%, 100% {
+  50%,
+  100% {
     opacity: 0;
   }
 }
@@ -82,6 +91,132 @@ body {
   animation: typewriter-cursor-blink 1s steps(1, end) infinite;
 }
 
-.typewriter-ending {
-  animation: typewriter-cursor-blink 1s steps(1, end) infinite;
+@keyframes contact-link-shake {
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-1px) rotate(-0.5deg);
+  }
+
+  50% {
+    transform: translateX(1.5px) rotate(0.5deg);
+  }
+
+  75% {
+    transform: translateX(-0.75px) rotate(-0.25deg);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .contact-link:hover {
+    animation: contact-link-shake 0.22s ease-out 1;
+  }
+
+  .project-card:hover .project-card-title {
+    color: var(--highlight);
+    opacity: 1;
+  }
+
+  .button--anthe:hover::before {
+    -webkit-clip-path: polygon(0% 0%, 92% 0%, 100% 50%, 92% 100%, 0% 100%);
+    clip-path: polygon(0% 0%, 92% 0%, 100% 50%, 92% 100%, 0% 100%);
+  }
+
+  .button--anthe:hover span {
+    transform: translate3d(-3px, 0, 0);
+  }
+}
+
+.transition-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.transition-panel {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: translateY(100%);
+  will-change: transform;
+}
+
+.panel-1 {
+  background: var(--foreground-secondary);
+}
+
+.panel-2 {
+  background: var(--foreground);
+}
+
+.panel-3 {
+  background: var(--foreground-secondary);
+}
+
+.project-card-title {
+  color: var(--foreground);
+  opacity: 0.42;
+  transition: color 220ms ease-out, opacity 220ms ease-out;
+}
+
+.text-highlight-var {
+  color: var(--highlight);
+}
+
+.bg-highlight-var {
+  background-color: var(--highlight);
+}
+
+.border-highlight-var {
+  border-color: var(--highlight);
+}
+
+/* Infinite horizontal text scroll inside CTA circle */
+@keyframes marquee-x {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.button--anthe {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  color: var(--background);
+  background: none;
+}
+
+.button--anthe::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: var(--foreground);
+  opacity: 0.94;
+  -webkit-clip-path: polygon(0% 0%, 100% 0, 100% 50%, 100% 100%, 0% 100%);
+  clip-path: polygon(0% 0%, 100% 0, 100% 50%, 100% 100%, 0% 100%);
+  transition: clip-path 0.32s cubic-bezier(0.24, 0.9, 0.34, 1), -webkit-clip-path 0.32s cubic-bezier(0.24, 0.9, 0.34, 1);
+}
+
+.button--anthe span {
+  position: relative;
+  z-index: 1;
+  display: block;
+  mix-blend-mode: normal;
+  transition: transform 0.32s cubic-bezier(0.24, 0.9, 0.34, 1);
+  will-change: transform;
 }

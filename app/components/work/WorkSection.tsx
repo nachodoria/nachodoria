@@ -5,105 +5,127 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Observer } from "gsap/all";
 import { useRef } from "react";
-import ProjectCard, { WorkProject } from "./ProjectCard";
-import { usePageTransition } from "../../hooks/usePageTransition";
+import { useTransitionState } from "next-transition-router";
+import ProjectCard from "./ProjectCard";
+import { projects } from "../../data/projects";
 
 gsap.registerPlugin(ScrollTrigger, Observer);
 
+interface HorizontalLoopConfig {
+    repeat?: number;
+    paused?: boolean;
+    speed?: number;
+    snap?: number | false;
+    paddingRight?: number | string;
+    reversed?: boolean;
+}
+
+type HorizontalLoopTimeline = gsap.core.Timeline & {
+    current: () => number;
+    next: (vars?: gsap.TweenVars) => gsap.core.Tween;
+    previous: (vars?: gsap.TweenVars) => gsap.core.Tween;
+    toIndex: (index: number, vars?: gsap.TweenVars) => gsap.core.Tween;
+    times: number[];
+};
+
 /**
  * GSAP Helper: Horizontal Loop
- * @link https://gsap.com/docs/v3/HelperFunctions/helpers/seamlessLoop
  */
-function horizontalLoop(items: any[], config: any) {
-    items = gsap.utils.toArray(items);
-    config = config || {};
-    let tl = gsap.timeline({
+function horizontalLoop(items: HTMLElement[] | string, config: HorizontalLoopConfig = {}) {
+    const elements = gsap.utils.toArray<HTMLElement>(items);
+    const tl = gsap.timeline({
         repeat: config.repeat,
         paused: config.paused,
         defaults: { ease: "none" },
         onReverseComplete: () => { tl.totalTime(tl.rawTime() + tl.duration() * 100); }
-    }),
-        length = items.length,
-        startX = items[0].offsetLeft,
-        times: number[] = [],
-        widths: number[] = [],
-        xPercents: number[] = [],
-        curIndex = 0,
-        pixelsPerSecond = (config.speed || 1) * 100,
-        snap = config.snap === false ? (v: any) => v : gsap.utils.snap(config.snap || 1),
-        totalWidth: number, curX: number, distanceToStart: number, distanceToLoop: number, item: any, i: number;
+    }) as HorizontalLoopTimeline;
+    const length = elements.length;
+    const startX = elements[0].offsetLeft;
+    const times: number[] = [];
+    const widths: number[] = [];
+    const xPercents: number[] = [];
+    let curIndex = 0;
+    const pixelsPerSecond = (config.speed || 1) * 100;
+    const snap = config.snap === false
+        ? (value: number) => value
+        : gsap.utils.snap(config.snap || 1);
 
-    gsap.set(items, {
+    gsap.set(elements, {
         xPercent: (i, el) => {
-            let w = widths[i] = parseFloat(gsap.getProperty(el, "width", "px") as string);
+            const w = widths[i] = parseFloat(gsap.getProperty(el, "width", "px") as string);
             xPercents[i] = snap(parseFloat(gsap.getProperty(el, "x", "px") as string) / w * 100 + Number(gsap.getProperty(el, "xPercent")));
             return xPercents[i];
         },
         force3D: true
     });
 
-    gsap.set(items, { x: 0 });
-    totalWidth = items[length - 1].offsetLeft + xPercents[length - 1] / 100 * widths[length - 1] - startX + items[length - 1].offsetWidth * Number(gsap.getProperty(items[length - 1], "scaleX")) + (parseFloat(config.paddingRight) || 0);
+    gsap.set(elements, { x: 0 });
+    const totalWidth = elements[length - 1].offsetLeft
+        + xPercents[length - 1] / 100 * widths[length - 1]
+        - startX
+        + elements[length - 1].offsetWidth * Number(gsap.getProperty(elements[length - 1], "scaleX"))
+        + (parseFloat(String(config.paddingRight || 0)) || 0);
 
-    for (i = 0; i < length; i++) {
-        item = items[i];
-        curX = xPercents[i] / 100 * widths[i];
-        distanceToStart = item.offsetLeft + curX - startX;
-        distanceToLoop = distanceToStart + widths[i] * Number(gsap.getProperty(item, "scaleX"));
+    for (let i = 0; i < length; i += 1) {
+        const item = elements[i];
+        const curX = xPercents[i] / 100 * widths[i];
+        const distanceToStart = item.offsetLeft + curX - startX;
+        const distanceToLoop = distanceToStart + widths[i] * Number(gsap.getProperty(item, "scaleX"));
         tl.to(item, { xPercent: snap((curX - distanceToLoop) / widths[i] * 100), duration: distanceToLoop / pixelsPerSecond }, 0)
             .fromTo(item, { xPercent: snap((curX - distanceToLoop + totalWidth) / widths[i] * 100) }, { xPercent: xPercents[i], duration: (curX - distanceToLoop + totalWidth - curX) / pixelsPerSecond, immediateRender: false }, distanceToLoop / pixelsPerSecond)
             .add("label" + i, distanceToStart / pixelsPerSecond);
         times[i] = distanceToStart / pixelsPerSecond;
     }
 
-    function toIndex(index: number, vars: any) {
-        vars = vars || {};
-        (Math.abs(index - curIndex) > length / 2) && (index += index > curIndex ? -length : length);
-        let newIndex = gsap.utils.wrap(0, length, index),
-            time = times[newIndex];
+    function toIndex(index: number, vars: gsap.TweenVars = {}) {
+        if (Math.abs(index - curIndex) > length / 2) {
+            index += index > curIndex ? -length : length;
+        }
+
+        const newIndex = gsap.utils.wrap(0, length, index);
+        let time = times[newIndex];
+
         if (time > tl.time() !== index > curIndex) {
             vars.modifiers = { time: gsap.utils.wrap(0, tl.duration()) };
             time += tl.duration() * (index > curIndex ? 1 : -1);
         }
+
         curIndex = newIndex;
         vars.overwrite = true;
         return tl.tweenTo(time, vars);
     }
 
-    (tl as any).next = (vars: any) => toIndex(curIndex + 1, vars);
-    (tl as any).previous = (vars: any) => toIndex(curIndex - 1, vars);
-    (tl as any).current = () => curIndex;
-    (tl as any).toIndex = (index: number, vars: any) => toIndex(index, vars);
-    (tl as any).times = times;
+    tl.next = (vars = {}) => toIndex(curIndex + 1, vars);
+    tl.previous = (vars = {}) => toIndex(curIndex - 1, vars);
+    tl.current = () => curIndex;
+    tl.toIndex = (index: number, vars = {}) => toIndex(index, vars);
+    tl.times = times;
     tl.progress(1, true).progress(0, true);
+
     if (config.reversed) {
-        (tl as any).vars.onReverseComplete();
+        tl.vars.onReverseComplete?.();
         tl.reverse();
     }
+
     return tl;
 }
 
 export default function WorkSection() {
     const sectionRef = useRef<HTMLElement>(null);
     const railRef = useRef<HTMLDivElement>(null);
-
-    const setCursorHover = (isHovering: boolean) => {
-        window.dispatchEvent(new CustomEvent("cursorHover", { detail: { isHovering } }));
-    };
+    const { stage } = useTransitionState();
+    const isTransitioning = stage !== "none";
 
     const persistHomeScroll = () => {
         sessionStorage.setItem("home-scroll-y", String(window.scrollY));
     };
 
-    const { isTransitioning, transitionTo } = usePageTransition({
-        scopeRef: sectionRef,
-        onBeforeNavigate: persistHomeScroll,
-    });
-
     useGSAP(() => {
         if (!railRef.current || !sectionRef.current) return;
 
-        const items = gsap.utils.toArray(".marquee-item");
+        const items = gsap.utils.toArray<HTMLElement>(".marquee-item", railRef.current);
+        const idleTimeScale = 0.38;
+        let settleTween: gsap.core.Tween | null = null;
 
         // Initialize the seamless horizontal loop
         const loop = horizontalLoop(items, {
@@ -112,22 +134,28 @@ export default function WorkSection() {
             paddingRight: 50,
         });
 
+        loop.timeScale(idleTimeScale);
+
         const obs = Observer.create({
-            target: window,
+            target: sectionRef.current,
             type: "wheel,touch",
             onChangeY(self) {
                 const direction = self.deltaY > 0 ? 1 : -1;
+                const boost = gsap.utils.clamp(2, 3, 2 + Math.abs(self.deltaY) / 180);
+
+                settleTween?.kill();
+
                 gsap.to(loop, {
-                    timeScale: direction,
-                    duration: 0.5,
+                    timeScale: direction * boost,
+                    duration: 0.35,
+                    ease: "power3.out",
                     overwrite: "auto"
                 });
-                const scrollFactor = 0.8;
-                const pixelsPerSecond = 100;
-                const scrollDeltaSeconds = (self.deltaY * scrollFactor) / pixelsPerSecond;
-                gsap.to(loop, {
-                    totalTime: `+=${scrollDeltaSeconds}`,
-                    duration: 0.8,
+
+                settleTween = gsap.to(loop, {
+                    timeScale: direction * idleTimeScale,
+                    duration: 1.4,
+                    delay: 0.08,
                     ease: "power2.out",
                     overwrite: "auto"
                 });
@@ -135,101 +163,73 @@ export default function WorkSection() {
         });
 
         // 1. Grid Reveal Animation
-        const cards = gsap.utils.toArray(".project-card");
-        cards.forEach((card: any, index: number) => {
+        const cards = gsap.utils.toArray<HTMLElement>(".project-card", sectionRef.current);
+        cards.forEach((card, index) => {
             gsap.fromTo(card,
-                { y: 56, opacity: 0 },
+                { opacity: 0.3 },
                 {
-                    y: 0,
                     opacity: 1,
-                    duration: 1.35,
-                    delay: index * 0.12,
-                    ease: "power3.out",
+                    duration: 0.4,
+                    delay: index * 0.04,
+                    ease: "power1.out",
                     scrollTrigger: {
                         trigger: card,
-                        start: "top 112%",
+                        start: "top 92%",
                         toggleActions: "play none none reverse",
                     }
                 }
             );
-
-            // 2. Parallax
-            const content = card.querySelector(".card-content");
-            const speeds = [-60, -120, -90, -160, -100];
-            gsap.to(content, {
-                y: speeds[index % speeds.length],
-                ease: "none",
-                scrollTrigger: {
-                    trigger: card,
-                    start: "top center",
-                    end: "bottom top",
-                    scrub: 1.5,
-                }
-            });
         });
 
         return () => {
+            settleTween?.kill();
             if (loop) loop.kill();
             if (obs) obs.kill();
-            ScrollTrigger.getAll().forEach(st => st.kill());
         };
     }, { scope: sectionRef });
-
-    const projects: WorkProject[] = [
-        {
-            slug: "portfolio",
-            title: "Personal Portfolio",
-            languages: ["NextJS", "GSAP", "Lenis", "Tailwind CSS"]
-        },
-        {
-            slug: "text-animations",
-            title: "Text Animations",
-            languages: ["NextJS", "Framer Motion", "Observer API"]
-        },
-        {
-            slug: "threejs-worlds",
-            title: "Three JS Worlds",
-            languages: ["ThreeJS", "Blender"]
-        },
-        {
-            slug: "fridge-finder",
-            title: "Fridge Finder",
-            languages: ["Dart", "Flutter"]
-        }
-    ];
 
     return (
         <section
             id="work-section"
             ref={sectionRef}
-            className="w-full min-h-screen flex flex-col items-center justify-start py-40 overflow-hidden"
+            className="flex min-h-[100svh] w-full flex-col items-center justify-start overflow-hidden py-24 md:py-40"
             style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}
         >
-            <div
-                ref={railRef}
-                className="rail page-transition-item page-transition-text flex whitespace-nowrap text-[8vw] font-sans font-bold leading-none tracking-tighter uppercase opacity-90 mb-32 py-10"
-            >
-                {Array.from({ length: 6 }).map((_, i) => (
-                    <h4 key={i} className="marquee-item px-10">
-                        Some of my work
-                    </h4>
-                ))}
+            <h2 className="sr-only">Selected work</h2>
+            <div className="mb-16 w-full overflow-hidden md:mb-32">
+                <div
+                    ref={railRef}
+                    className="rail flex whitespace-nowrap py-6 font-sans text-[12vw] font-bold leading-none tracking-tighter uppercase opacity-100 md:py-10 md:text-[8vw]"
+                >
+                    {Array.from({ length: 6 }).map((_, i) => (
+                        <p key={i} aria-hidden="true" className="marquee-item px-10">
+                            Some of my work
+                        </p>
+                    ))}
+                </div>
             </div>
 
-            <div className="grid w-full px-[5vw] mb-32 grid-cols-1 gap-8 md:w-[74vw] md:max-w-none md:px-0 md:grid-cols-8 md:gap-10">
-                {projects.map((project, index) => (
-                    <ProjectCard
-                        key={project.slug}
-                        project={project}
-                        href={`/work/${project.slug}`}
-                        variant={index === 0 || index === projects.length - 1 ? "wide" : "narrow"}
-                        disabled={isTransitioning}
-                        onNavigate={transitionTo}
-                        onCursorHover={setCursorHover}
-                    />
-                ))}
+            <div className="mb-20 flex w-full flex-col gap-12 px-[5vw] md:mb-32 md:w-[82vw] md:max-w-none md:px-0 lg:w-[78vw]">
+                {projects.map((project, index) => {
+                    const speeds = [1, 0.85, 1.15, 0.9];
+                    const speed = speeds[index % speeds.length];
+
+                    return (
+                        <div key={project.slug} className="w-full flex flex-col pt-8 md:pt-12" data-speed={speed}>
+                            <ProjectCard
+                                project={project}
+                                href={`/work/${project.slug}`}
+                                disabled={isTransitioning}
+                                onNavigate={persistHomeScroll}
+                            />
+                            {index !== projects.length - 1 && (
+                                <div className="mt-8 h-px w-full bg-[var(--foreground)]/15 md:mt-12" />
+                            )}
+                        </div>
+                    );
+                })}
             </div>
-            <div className="py-20"></div>
+            <div className="py-6 md:py-10"></div>
         </section>
     );
 }

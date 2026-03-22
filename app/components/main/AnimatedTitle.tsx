@@ -22,17 +22,41 @@ const HOVER_FONTS = [
     "var(--font-smokum)",
 ];
 
+const HOVER_RESET_DELAY = 300;
+
 function TitleLetter({ char, hoverEnabled }: { char: string; hoverEnabled: boolean }) {
     const baseRef = useRef<HTMLSpanElement>(null);
+    const widthCacheRef = useRef<Map<string, number>>(new Map());
+    const resetTimeoutRef = useRef<number | null>(null);
     const [isHovered, setIsHovered] = useState(false);
     const [hoverFont, setHoverFont] = useState<string>(HOVER_FONTS[0]);
     const [hoverScale, setHoverScale] = useState(1);
     const [hoverWidth, setHoverWidth] = useState<number | null>(null);
 
+    useEffect(() => {
+        return () => {
+            if (resetTimeoutRef.current !== null) {
+                window.clearTimeout(resetTimeoutRef.current);
+            }
+        };
+    }, []);
+
     const measureFontWidth = (fontFamily: string) => {
         if (!baseRef.current) return 0;
 
         const styles = window.getComputedStyle(baseRef.current);
+        const cacheKey = [
+            char,
+            fontFamily,
+            styles.fontSize,
+            styles.fontWeight,
+            styles.fontStyle,
+        ].join("|");
+        const cachedWidth = widthCacheRef.current.get(cacheKey);
+        if (cachedWidth !== undefined) {
+            return cachedWidth;
+        }
+
         const probe = document.createElement("span");
         probe.textContent = char;
         probe.style.position = "absolute";
@@ -51,12 +75,18 @@ function TitleLetter({ char, hoverEnabled }: { char: string; hoverEnabled: boole
         document.body.appendChild(probe);
         const width = probe.getBoundingClientRect().width;
         document.body.removeChild(probe);
+        widthCacheRef.current.set(cacheKey, width);
 
         return width;
     };
 
     const handleMouseEnter = () => {
         if (!hoverEnabled || !baseRef.current) return;
+
+        if (resetTimeoutRef.current !== null) {
+            window.clearTimeout(resetTimeoutRef.current);
+            resetTimeoutRef.current = null;
+        }
 
         const nextFont = HOVER_FONTS[Math.floor(Math.random() * HOVER_FONTS.length)];
         const baseWidth = baseRef.current.getBoundingClientRect().width;
@@ -68,19 +98,26 @@ function TitleLetter({ char, hoverEnabled }: { char: string; hoverEnabled: boole
     };
 
     const handleMouseLeave = () => {
-        setIsHovered(false);
-        setHoverWidth(null);
-        setHoverScale(1);
+        if (resetTimeoutRef.current !== null) {
+            window.clearTimeout(resetTimeoutRef.current);
+        }
+
+        resetTimeoutRef.current = window.setTimeout(() => {
+            setIsHovered(false);
+            setHoverWidth(null);
+            setHoverScale(1);
+            resetTimeoutRef.current = null;
+        }, HOVER_RESET_DELAY);
     };
 
     return (
         <span
-            className="relative inline-block align-baseline"
+            className="relative inline-flex align-baseline leading-none"
             style={isHovered && hoverWidth ? { width: `${hoverWidth}px` } : undefined}
         >
             <span
                 ref={baseRef}
-                className="inline-block"
+                className="inline-flex leading-none"
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 style={{ opacity: isHovered ? 0 : 1 }}
@@ -89,7 +126,7 @@ function TitleLetter({ char, hoverEnabled }: { char: string; hoverEnabled: boole
             </span>
             <span
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 flex items-center justify-center whitespace-pre"
+                className="pointer-events-none absolute inset-0 flex items-end justify-center whitespace-pre leading-none"
                 style={{
                     opacity: isHovered ? 1 : 0,
                     fontFamily: hoverFont,
@@ -191,12 +228,12 @@ export default function AnimatedTitle({ text, onComplete, skipAnimation = false 
             ref={container}
             data-scroll
             data-scroll-speed="0.3"
-            className="flex whitespace-nowrap text-6xl md:text-8xl font-sans font-bold tracking-tighter text-[var(--foreground)] drop-shadow-sm select-none will-change-[font-size,transform]"
+            className="flex whitespace-nowrap text-6xl md:text-8xl font-sans font-bold tracking-tighter leading-none text-[var(--foreground)] drop-shadow-sm select-none will-change-[font-size,transform]"
         >
             {text.split(" ").map((word, i) => (
                 <span
                     key={i}
-                    className={`relative inline-block py-4 px-2 -my-4 -mx-2 ${titleSettled ? "overflow-visible" : "overflow-hidden"}`}
+                    className={`relative inline-block ${titleSettled ? "overflow-visible" : "overflow-hidden"}`}
                 >
                     <span className="word inline-flex translate-y-0 will-change-transform">
                         {word.split("").map((char, index) => (

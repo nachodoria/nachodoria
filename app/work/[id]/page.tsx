@@ -1,168 +1,119 @@
 "use client";
 
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { useLayoutEffect, useRef, useState } from "react";
-import CustomCursor from "@/app/components/global/CustomCursor";
-import { useParams, useRouter } from "next/navigation";
+import { CSSProperties, useLayoutEffect } from "react";
+import Image from "next/image";
+import { Link } from "next-transition-router";
+import { useParams } from "next/navigation";
+import { Reveal } from "@/app/components/transition/Reveal";
+import { Title } from "@/app/components/transition/Title";
+import { projectsBySlug } from "../../data/projects";
 
-const projectData: Record<string, any> = {
-    "portfolio": {
-        title: "Personal Portfolio",
-        description: "A high-performance personal portfolio featuring advanced GSAP animations, a truly infinite marquee, and perfectly fluid smooth scrolling.",
-        technologies: "NextJS, GSAP, Lenis, Tailwind CSS",
-        year: "2026"
-    },
-    "text-animations": {
-        title: "Text Animations",
-        description: "Built a library of reusable text animations to inspire developers.",
-        technologies: "NextJS, Framer Motion, Observer API",
-        year: "2023"
-    },
-    "threejs-worlds": {
-        title: "Three JS Worlds",
-        description: "A collection of interactive ThreeJS experiments and 3D web scenes built to explore graphics, animation, and real-time rendering on the web. This project showcases multiple ThreeJS creations including Golden Portal and Galaxy Generator.",
-        technologies: "ThreeJS, Blender",
-        year: "2024"
-    },
-    "othello-board": {
-        title: "Othello Board",
-        description: "Implementation of the classic Othello (Reversi) board game. Players can play against another player or against an AI while the system validates moves and flips discs automatically.",
-        technologies: "Java, Object-Oriented Programming",
-        year: "2023"
-    },
-    "fridge-finder": {
-        title: "Fridge Finder",
-        description: "A mobile application designed to help users organize fridge inventory, track expiration dates, and manage food items efficiently.",
-        technologies: "Dart, Flutter",
-        year: "2024"
-    }
-};
+const withAlpha = (hex: string, alphaHex: string) => `${hex}${alphaHex}`;
 
 export default function ProjectPage() {
     const { id } = useParams();
-    const router = useRouter();
-    const project = projectData[id as string];
-    const containerRef = useRef<HTMLDivElement>(null);
-    const [isLeaving, setIsLeaving] = useState(false);
+    const project = projectsBySlug[id as string];
+    const detailImageSrc = project?.detailImageSrc ?? project?.imageSrc ?? "";
+    const pageStyle = {
+        "--background": "#ffffeb",
+        "--background-o": withAlpha("#ffffeb", "88"),
+        "--foreground": "#112712",
+        "--foreground-o": withAlpha("#112712", "bf"),
+        "--foreground-secondary": "#5ea85d",
+        "--foreground-tertiary": "#3f7d3e",
+        "--hero-title-color": "#112712",
+        "--hero-title-dim": withAlpha("#112712", "bf"),
+        "--highlight": "#5ea85d",
+    } as CSSProperties;
 
     useLayoutEffect(() => {
-        const html = document.documentElement;
-        const body = document.body;
-
-        html.style.overflow = "";
-        body.style.overflow = "";
-        body.style.pointerEvents = "";
         window.scrollTo(0, 0);
     }, []);
 
-    useGSAP(() => {
-        const entering = gsap.utils.toArray<HTMLElement>(".project-enter");
-
-        gsap.to(entering, {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            ease: "power3.out",
-            overwrite: "auto",
-        });
-    }, { scope: containerRef });
-
-    if (!project) return <div>Project not found</div>;
-
-    const handleBack = () => {
-        if (isLeaving) return;
-
-        setIsLeaving(true);
-
-        const html = document.documentElement;
-        const body = document.body;
-        const leaving = gsap.utils.toArray<HTMLElement>(".project-enter");
-
-        window.dispatchEvent(new CustomEvent("portfolio-scroll-stop"));
-        html.style.overflow = "hidden";
-        body.style.overflow = "hidden";
-        body.style.pointerEvents = "none";
-
-        gsap.timeline({
-            defaults: {
-                overwrite: "auto",
-            },
-            onComplete: () => {
-                router.push("/", { scroll: false });
-            },
-        })
-            .to(leaving, {
-                y: -20,
-                opacity: 0,
-                duration: 0.5,
-                ease: "power3.out",
-            }, 0)
-            .to({}, {
-                duration: 0.18,
-            });
-    };
+    if (!project) {
+        return <div>Project not found</div>;
+    }
 
     return (
-        <main ref={containerRef} className="bg-[var(--background)] min-h-screen w-full overflow-x-hidden text-[var(--foreground)] px-[5vw] py-16 flex flex-col gap-16">
-            <CustomCursor />
+        <main
+            className="min-h-[100svh] overflow-x-hidden bg-[var(--background)] px-[5vw] py-8 text-[var(--foreground)] md:py-10"
+            style={pageStyle}
+        >
+            <div className="mx-auto flex min-h-[calc(100svh-4rem)] w-full max-w-[1400px] flex-col gap-10 lg:min-h-[calc(100svh-5rem)] lg:gap-14">
+                <Reveal delay={0} distance={18}>
+                    <Link
+                        href="/"
+                        scroll={false}
+                        className="inline-flex w-fit items-center gap-2 leading-none text-sm font-semibold uppercase tracking-[0.16em] opacity-70 transition-opacity duration-200 hover:opacity-100 md:text-base"
+                    >
+                        Back
+                    </Link>
+                </Reveal>
 
-            {/* Back Button */}
-            <div className="overflow-hidden">
-                <button
-                    type="button"
-                    onClick={handleBack}
-                    disabled={isLeaving}
-                    className="project-enter fixed top-8 left-10 bg-transparent text-xl font-medium uppercase tracking-tight z-50 opacity-70 hover:opacity-100 transition-opacity translate-y-[30px] cursor-none disabled:pointer-events-none"
-                >
-                    Back
-                </button>
-            </div>
-
-            {/* Project Title */}
-            <div className="overflow-hidden">
-                <h1 className="project-enter text-4xl md:text-5xl lg:text-[5.6vw] font-medium leading-[0.92] tracking-tight uppercase text-center opacity-0 translate-y-[60px]">
-                    {project.title}
-                </h1>
-            </div>
-
-            {/* Central Image Placeholder */}
-            <div className="overflow-hidden rounded-[2.5rem]">
-                <div className="project-enter w-full max-w-[62rem] mx-auto aspect-[16/8] bg-[var(--foreground)] rounded-[2.5rem] overflow-hidden relative shadow-2xl opacity-0 translate-y-[60px]">
-                    <div className="absolute inset-0 flex items-center justify-center opacity-10">
-                        <span className="text-[5vw] font-bold uppercase tracking-tighter text-[var(--background)]">
-                            {project.title}
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            {/* Footer Section: Overview Left, Info Right */}
-            <div className="overflow-hidden">
-                <div className="project-enter w-full max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-12 mt-10 opacity-0 translate-y-[60px]">
-                    {/* Down Left: Overview */}
-                    <div className="flex-1">
-                        <h2 className="text-4xl md:text-6xl font-bold tracking-tight uppercase leading-none">
-                            Overview
-                        </h2>
-                    </div>
-
-                    {/* Down Right: Description & Tech */}
-                    <div className="flex-[2] flex flex-col items-end text-right gap-8">
-                        <p className="text-lg md:text-xl font-normal leading-tight opacity-90 max-w-xl">
-                            {project.description}
-                        </p>
-
-                        <div className="flex flex-col gap-1 items-end">
-                            <span className="text-[10px] uppercase tracking-[0.2em] font-bold opacity-40">Technologies</span>
-                            <p className="text-sm md:text-base font-bold tracking-tight">
-                                {project.technologies}
-                            </p>
-                            <div className="mt-2 h-[1px] w-20 bg-[var(--foreground)] opacity-20"></div>
-                            <p className="text-xs opacity-40 font-bold mt-1">{project.year}</p>
+                <section className="grid flex-1 gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-center lg:gap-16">
+                    <div className="flex max-w-xl flex-col justify-center gap-7 lg:gap-9">
+                        <div className="space-y-3">
+                            <Title
+                                delay={0.05}
+                                className="font-mono text-4xl font-semibold uppercase leading-[0.9] tracking-[-0.04em] sm:text-5xl lg:text-[clamp(3.8rem,5vw,6.4rem)]"
+                            >
+                                {project.title}
+                            </Title>
                         </div>
+
+                        <Reveal delay={0.1} distance={24}>
+                            <p className="max-w-xl text-[1.08rem] leading-[1.6] text-[var(--foreground)]/88 md:text-[1.22rem]">
+                                {project.longDescription}
+                            </p>
+                        </Reveal>
+
+                        <div className="font-mono flex flex-col gap-2 pt-2 text-[0.95rem] tracking-tight text-[var(--foreground)]/70 md:text-[1.05rem]">
+                            <Reveal delay={0.16} distance={12}>
+                                <p>
+                                    <span className="font-semibold text-[var(--foreground)]">Stack: </span>
+                                    {project.technologies.join(", ")}
+                                </p>
+                            </Reveal>
+                            <Reveal delay={0.22} distance={12}>
+                                <p>
+                                    <span className="font-semibold text-[var(--foreground)]">Year: </span>
+                                    {project.year}
+                                </p>
+                            </Reveal>
+                        </div>
+
+                        {project.linkHref ? (
+                            <Reveal delay={0.28} distance={18} className="mt-4">
+                                <a
+                                    href={project.linkHref}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="button--anthe inline-flex w-fit items-center rounded-full px-8 py-3.5 leading-none text-[0.85rem] font-semibold tracking-wide md:px-10 md:py-4 md:text-[0.95rem]"
+                                >
+                                    <span>{project.linkLabel ?? "View Project"}</span>
+                                </a>
+                            </Reveal>
+                        ) : null}
                     </div>
-                </div>
+
+                    <Reveal
+                        delay={0.03}
+                        direction="right"
+                        distance={80}
+                        imageScale={1.08}
+                        className="relative h-[32vh] min-h-[230px] overflow-hidden rounded-[1.8rem] border border-[var(--foreground)]/12 shadow-[0_24px_60px_rgba(0,0,0,0.16)] sm:h-[38vh] lg:h-[50vh]"
+                    >
+                        <Image
+                            src={detailImageSrc}
+                            alt={project.imageAlt}
+                            fill
+                            priority
+                            quality={88}
+                            sizes="(min-width: 1280px) 46vw, (min-width: 1024px) 44vw, 88vw"
+                            className="object-cover object-center"
+                        />
+                    </Reveal>
+                </section>
             </div>
         </main>
     );

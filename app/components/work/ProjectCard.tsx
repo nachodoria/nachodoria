@@ -1,98 +1,111 @@
 "use client";
 
-import gsap from "gsap";
-import { type MouseEvent, useRef } from "react";
-
-export interface WorkProject {
-    slug: string;
-    title: string;
-    languages: string[];
-}
+import Image from "next/image";
+import { Link } from "next-transition-router";
+import { useState } from "react";
+import { projectThemesBySlug, type ProjectData } from "../../data/projects";
+import ProjectHoverCard from "./ProjectHoverCard";
 
 interface ProjectCardProps {
-    project: WorkProject;
+    project: ProjectData;
     href: string;
-    variant: "wide" | "narrow";
     disabled: boolean;
-    onNavigate: (href: string) => void;
-    onCursorHover: (isHovering: boolean) => void;
+    onNavigate: () => void;
 }
 
 export default function ProjectCard({
     project,
     href,
-    variant,
     disabled,
     onNavigate,
-    onCursorHover,
 }: ProjectCardProps) {
-    const mediaRef = useRef<HTMLDivElement>(null);
-    const isWide = variant === "wide";
-
-    const handleMouseMove = (event: MouseEvent<HTMLDivElement>) => {
-        if (!mediaRef.current) return;
-
-        const bounds = mediaRef.current.getBoundingClientRect();
-        const offsetX = (event.clientX - bounds.left) / bounds.width - 0.5;
-        const offsetY = (event.clientY - bounds.top) / bounds.height - 0.5;
-        const drift = 10;
-
-        gsap.to(mediaRef.current, {
-            x: -offsetX * drift,
-            y: -offsetY * drift,
-            duration: 0.45,
-            ease: "power3.out",
-            overwrite: "auto",
-        });
+    const [isHovered, setIsHovered] = useState(false);
+    const imageSizes = "(min-width: 1024px) 36vw, (min-width: 768px) 40vw, 90vw";
+    const panelColor = projectThemesBySlug[project.slug]?.panelColor ?? "var(--foreground)";
+    const handleCardHoverStart = () => {
+        setIsHovered(true);
     };
-
-    const handleMouseLeave = () => {
-        onCursorHover(false);
-
-        if (!mediaRef.current) return;
-
-        gsap.to(mediaRef.current, {
-            x: 0,
-            y: 0,
-            duration: 0.55,
-            ease: "power3.out",
-            overwrite: "auto",
-        });
+    const handleCardHoverEnd = () => {
+        setIsHovered(false);
     };
 
     return (
-        <button
-            type="button"
-            onClick={() => onNavigate(href)}
-            disabled={disabled}
+        <Link
+            href={href}
+            scroll={false}
+            aria-disabled={disabled}
             aria-label={`Open ${project.title}`}
-            className={`project-card group flex w-full flex-col text-left cursor-none disabled:pointer-events-none ${isWide ? "md:col-span-5" : "md:col-span-3"}`}
+            className={`project-card group flex w-full flex-col pb-8 md:pb-12 ${disabled ? "pointer-events-none" : ""}`}
+            onClick={(event) => {
+                if (disabled) {
+                    event.preventDefault();
+                    return;
+                }
+
+                onNavigate();
+            }}
+            onPointerEnter={(event) => {
+                if (event.pointerType !== "mouse") return;
+                if (!isHovered) handleCardHoverStart();
+            }}
+            onPointerLeave={(event) => {
+                if (event.pointerType !== "mouse") return;
+                handleCardHoverEnd();
+            }}
+            onFocus={handleCardHoverStart}
+            onBlur={handleCardHoverEnd}
         >
-            <div className="card-content flex flex-col will-change-transform">
-                <div
-                    className="page-transition-item page-transition-visual relative h-[28vh] min-h-[220px] overflow-hidden rounded-[2.75rem] shadow-2xl md:h-[34vh]"
-                    onMouseEnter={() => onCursorHover(true)}
-                    onMouseMove={handleMouseMove}
-                    onMouseLeave={handleMouseLeave}
+            {/* Top Row: Title & Year/Tech */}
+            <div className="flex w-full items-start justify-between mb-4 md:mb-6">
+                <h3
+                    className="project-card-title font-mono text-[1.4rem] font-medium tracking-tight leading-none md:text-[2rem]"
+                    style={{
+                        color: "var(--foreground, #343534)",
+                        opacity: isHovered ? 1 : 0.9,
+                        transition: "opacity 0.3s ease"
+                    }}
                 >
-                    <div
-                        ref={mediaRef}
-                        className="absolute inset-0 w-full overflow-hidden rounded-[2.75rem] transition-[transform,opacity] duration-700 ease-out group-hover:scale-[1.02] group-hover:opacity-[0.82]"
-                        style={{ backgroundColor: "currentColor" }}
-                    >
-                        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(0,0,0,0.14))]"></div>
-                    </div>
-                    <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 p-6 md:p-8">
-                        <div className="overflow-hidden">
-                            <h3
-                                className="page-transition-item page-transition-text text-sm md:text-base font-medium uppercase tracking-[0.28em] text-[var(--background)]"
+                    {project.title}
+                </h3>
+
+                <div className="flex flex-col items-end gap-2.5">
+                    <span className="font-mono text-[0.95rem] font-normal leading-none md:text-[1.1rem]">
+                        {project.year}
+                    </span>
+                    <div className="flex flex-wrap justify-end gap-2">
+                        {project.technologies.map((tech) => (
+                            <span
+                                key={tech}
+                                className="font-mono rounded-xl border border-[var(--foreground)]/40 px-3 py-1 md:py-1.5 text-[0.7rem] font-normal tracking-wide md:text-[0.75rem]"
                             >
-                            {project.title}
-                            </h3>
-                        </div>
+                                {tech}
+                            </span>
+                        ))}
                     </div>
                 </div>
             </div>
-        </button>
+
+            {/* Bottom Row: Image & Description */}
+            <div className="flex flex-col w-full justify-between gap-6 md:flex-row md:items-end md:gap-10">
+                <div className="w-full md:w-[60%] lg:w-[58%]">
+                    <ProjectHoverCard panelColor={panelColor}>
+                        <Image
+                            src={project.imageSrc}
+                            alt={project.imageAlt}
+                            fill
+                            quality={84}
+                            sizes={imageSizes}
+                            className="object-cover object-center"
+                        />
+                    </ProjectHoverCard>
+                </div>
+
+                <div className="w-full md:w-[36%] flex justify-start">
+                    <p className="text-left text-[1rem] font-normal leading-[1.6] text-[var(--foreground)]/90 md:text-[1.1rem] md:pb-2">
+                        {project.shortDescription}
+                    </p>
+                </div>
+            </div>
+        </Link>
     );
 }

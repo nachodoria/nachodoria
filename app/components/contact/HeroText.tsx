@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const WORDS = ["move", "idea", "project", "vision"];
 const TYPING_SPEED = 80;
@@ -12,12 +12,36 @@ const LONGEST_WORD = WORDS.reduce((longest, word) => (
 ), WORDS[0]);
 
 export default function HeroText() {
+    const containerRef = useRef<HTMLParagraphElement>(null);
     const [wordIndex, setWordIndex] = useState(0);
     const [displayedWord, setDisplayedWord] = useState("");
     const [isDeleting, setIsDeleting] = useState(false);
-    const isHoldingWord = !isDeleting && displayedWord === WORDS[wordIndex];
+    const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
+        const element = containerRef.current;
+        if (!element) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setIsVisible(entry.isIntersecting);
+            },
+            {
+                rootMargin: "180px 0px",
+                threshold: 0.15,
+            },
+        );
+
+        observer.observe(element);
+
+        return () => {
+            observer.disconnect();
+        };
+    }, []);
+
+    useEffect(() => {
+        if (!isVisible) return;
+
         const target = WORDS[wordIndex];
         let timeoutId: ReturnType<typeof setTimeout>;
 
@@ -43,10 +67,13 @@ export default function HeroText() {
         return () => {
             clearTimeout(timeoutId);
         };
-    }, [displayedWord, isDeleting, wordIndex]);
+    }, [displayedWord, isDeleting, isVisible, wordIndex]);
 
     return (
-        <p className="mt-24 md:mt-28 text-[15vw] md:text-[6.5vw] leading-none tracking-tight font-sans font-semibold text-[var(--foreground)]">
+        <p
+            ref={containerRef}
+            className="mt-16 font-sans text-[18vw] font-semibold leading-none tracking-tight text-[var(--foreground)] sm:mt-24 sm:text-[15vw] md:mt-28 md:text-[6.5vw]"
+        >
             <span>Your </span>
             <span className="inline-grid align-baseline">
                 <span
@@ -56,9 +83,7 @@ export default function HeroText() {
                     {LONGEST_WORD}
                 </span>
                 <span className="col-start-1 row-start-1 inline-flex items-baseline whitespace-nowrap">
-                    <span className={isHoldingWord ? "typewriter-ending" : ""}>
-                        {displayedWord}
-                    </span>
+                    <span>{displayedWord}</span>
                     <span aria-hidden="true" className="typewriter-cursor">|</span>
                 </span>
             </span>
