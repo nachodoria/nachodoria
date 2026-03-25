@@ -74,6 +74,11 @@ body {
   color: var(--foreground);
 }
 
+img {
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
 @keyframes typewriter-cursor-blink {
 
   0%,

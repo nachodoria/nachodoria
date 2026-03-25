@@ -6,8 +6,6 @@ export interface ProjectData {
     technologies: string[];
     year: string;
     imageSrc: string;
-    hoverImageSrc?: string;
-    detailImageSrc?: string;
     imageAlt: string;
     linkHref?: string;
     linkLabel?: string;
@@ -15,25 +13,17 @@ export interface ProjectData {
 
 export interface ProjectTheme {
     panelColor: string;
-    pageBackground: string;
-    pageForeground: string;
 }
 
 export const projectThemesBySlug: Record<string, ProjectTheme> = {
     "nba-predictor": {
         panelColor: "#16191f",
-        pageBackground: "#16191f",
-        pageForeground: "#ffffeb",
     },
     "threejs-worlds": {
         panelColor: "#323232",
-        pageBackground: "#323232",
-        pageForeground: "#ffffeb",
     },
     portfolio: {
         panelColor: "#171717",
-        pageBackground: "#171717",
-        pageForeground: "#ffffeb",
     },
 };
 
@@ -46,10 +36,8 @@ export const projects: ProjectData[] = [
         technologies: ["NextJS", "Gemini AI", "Machine Learning"],
         year: "2026",
         imageSrc: "/projects/nba-predictor/default.png",
-        hoverImageSrc: "/projects/nba-predictor/hover-state.png",
-        detailImageSrc: "/projects/nba-predictor/default.png",
         imageAlt: "NBA Predictor AI shown on a laptop mockup.",
-        linkHref: "https://github.com/nachodoria/nba-predicton",
+        linkHref: "https://github.com/nachodoria/nba-predictor",
         linkLabel: "View More",
     },
     {
@@ -60,8 +48,6 @@ export const projects: ProjectData[] = [
         technologies: ["ThreeJS", "Blender"],
         year: "2024",
         imageSrc: "/projects/threejs-worlds/default.png",
-        hoverImageSrc: "/projects/threejs-worlds/hover-state.png",
-        detailImageSrc: "/projects/threejs-worlds/default.png",
         imageAlt: "Three JS Worlds project shown on a laptop mockup with a particle boat scene.",
         linkHref: "https://three-js-worlds-tau.vercel.app/",
         linkLabel: "View More",
@@ -74,7 +60,6 @@ export const projects: ProjectData[] = [
         technologies: ["NextJS", "GSAP", "Lenis", "Tailwind CSS"],
         year: "2026",
         imageSrc: "/projects/portfolio/default.png",
-        hoverImageSrc: "/projects/portfolio/hover-state.png",
         imageAlt: "Portfolio project shown on two phone mockups.",
         linkHref: "https://ignacio-doria.vercel.app/",
         linkLabel: "View More",

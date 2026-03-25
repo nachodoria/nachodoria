@@ -93,6 +93,7 @@ export default function ProjectCard({
                             src={project.imageSrc}
                             alt={project.imageAlt}
                             fill
+                            draggable={false}
                             quality={84}
                             sizes={imageSizes}
                             className="object-cover object-center"

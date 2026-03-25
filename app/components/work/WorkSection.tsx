@@ -211,11 +211,8 @@ export default function WorkSection() {
 
             <div className="mb-20 flex w-full flex-col gap-12 px-[5vw] md:mb-32 md:w-[82vw] md:max-w-none md:px-0 lg:w-[78vw]">
                 {projects.map((project, index) => {
-                    const speeds = [1, 0.85, 1.15, 0.9];
-                    const speed = speeds[index % speeds.length];
-
                     return (
-                        <div key={project.slug} className="w-full flex flex-col pt-8 md:pt-12" data-speed={speed}>
+                        <div key={project.slug} className="w-full flex flex-col pt-8 md:pt-12">
                             <ProjectCard
                                 project={project}
                                 href={`/work/${project.slug}`}

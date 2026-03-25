@@ -33,8 +33,8 @@ const HERO_BG_START = "#5ea85d";
 const HERO_BG_END = "#ffffeb";
 const HERO_TITLE_START = "#ffffeb";
 const HERO_TITLE_END = "#112712";
-const THEME_EASE_START = 90;
-const THEME_EASE_DISTANCE = 520;
+const THEME_SECTION_START_VIEWPORT = 0.85;
+const THEME_SECTION_END_VIEWPORT = 0.22;
 
 const hexToRgb = (hex: string): RgbColor => {
     const normalized = hex.replace("#", "");
@@ -61,6 +61,12 @@ const mixHexColor = (from: string, to: string, progress: number) => {
 const withAlpha = (hex: string, alphaHex: string) => `${hex}${alphaHex}`;
 const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
+interface ThemeAnchors {
+    aboutTop: number | null;
+    contactTop: number | null;
+    viewportHeight: number;
+}
+
 export default function SmoothScroll({ children, enabled }: SmoothScrollProps) {
     useEffect(() => {
         if (!enabled) return;
@@ -83,22 +89,60 @@ export default function SmoothScroll({ children, enabled }: SmoothScrollProps) {
         let themeRafId: number | null = null;
         let queuedScrollY = window.scrollY;
         let lastThemeProgress = -1;
+        let themeAnchors: ThemeAnchors = {
+            aboutTop: null,
+            contactTop: null,
+            viewportHeight: window.innerHeight,
+        };
 
         const rootStyle = document.documentElement.style;
         const canDragScroll = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
         const isCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
         const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
         const easing = (t: number) => 1 - Math.pow(1 - t, 3);
+        const getSectionTop = (id: string) => {
+            const section = document.getElementById(id);
+            if (!section) return null;
+            return section.getBoundingClientRect().top + window.scrollY;
+        };
+        const refreshThemeAnchors = () => {
+            themeAnchors = {
+                aboutTop: getSectionTop("about"),
+                contactTop: getSectionTop("contact"),
+                viewportHeight: window.innerHeight,
+            };
+        };
+        const getSectionThemeProgress = (scrollY: number, sectionTop: number | null) => {
+            if (sectionTop === null) return 0;
+
+            const transitionStart = sectionTop - themeAnchors.viewportHeight * THEME_SECTION_START_VIEWPORT;
+            const transitionEnd = sectionTop - themeAnchors.viewportHeight * THEME_SECTION_END_VIEWPORT;
+
+            if (transitionEnd <= transitionStart) {
+                return scrollY >= transitionEnd ? 1 : 0;
+            }
+
+            return clamp((scrollY - transitionStart) / (transitionEnd - transitionStart), 0, 1);
+        };
 
         const applyThemeByScroll = (scrollY: number) => {
-            const rawProgress = clamp((scrollY - THEME_EASE_START) / THEME_EASE_DISTANCE, 0, 1);
-            const easedProgress = easeInOutCubic(rawProgress);
+            if (themeAnchors.aboutTop === null || themeAnchors.contactTop === null) {
+                refreshThemeAnchors();
+            }
 
-            if (Math.abs(easedProgress - lastThemeProgress) < 0.004) return;
-            lastThemeProgress = easedProgress;
+            const aboutProgress = easeInOutCubic(
+                getSectionThemeProgress(scrollY, themeAnchors.aboutTop),
+            );
+            const contactProgress = easeInOutCubic(
+                getSectionThemeProgress(scrollY, themeAnchors.contactTop),
+            );
+            const themeProgress = clamp(aboutProgress * (1 - contactProgress), 0, 1);
 
-            const background = mixHexColor(HERO_BG_START, HERO_BG_END, easedProgress);
-            const heroTitle = mixHexColor(HERO_TITLE_START, HERO_TITLE_END, easedProgress);
+            if (Math.abs(themeProgress - lastThemeProgress) < 0.004) return;
+            lastThemeProgress = themeProgress;
+
+            const background = mixHexColor(HERO_BG_START, HERO_BG_END, themeProgress);
+            const heroTitle = mixHexColor(HERO_TITLE_START, HERO_TITLE_END, themeProgress);
 
             rootStyle.setProperty("--background", background);
             rootStyle.setProperty("--background-o", withAlpha(background, "88"));
@@ -261,11 +305,17 @@ export default function SmoothScroll({ children, enabled }: SmoothScrollProps) {
             if (locomotiveScroll) return;
             scheduleThemeUpdate(window.scrollY);
         };
+        const handleResize = () => {
+            refreshThemeAnchors();
+            scheduleThemeUpdate(window.scrollY);
+        };
 
+        refreshThemeAnchors();
         window.addEventListener("portfolio-scroll-stop", handleStop);
         window.addEventListener("portfolio-scroll-start", handleStart);
         window.addEventListener("online", handleOnline);
         window.addEventListener("scroll", handleWindowScroll, { passive: true });
+        window.addEventListener("resize", handleResize);
         window.addEventListener("pointerdown", handlePointerDown);
         window.addEventListener("pointermove", handlePointerMove, { passive: false });
         window.addEventListener("pointerup", handlePointerUp);
@@ -282,6 +332,7 @@ export default function SmoothScroll({ children, enabled }: SmoothScrollProps) {
             window.removeEventListener("portfolio-scroll-start", handleStart);
             window.removeEventListener("online", handleOnline);
             window.removeEventListener("scroll", handleWindowScroll);
+            window.removeEventListener("resize", handleResize);
             window.removeEventListener("pointerdown", handlePointerDown);
             window.removeEventListener("pointermove", handlePointerMove);
             window.removeEventListener("pointerup", handlePointerUp);

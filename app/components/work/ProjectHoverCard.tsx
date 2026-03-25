@@ -163,7 +163,7 @@ export default function ProjectHoverCard({
     return (
         <div
             ref={containerRef}
-            className="relative aspect-[16/10] overflow-hidden rounded-[0.5rem] shadow-[0_18px_45_rgba(0,0,0,0.14)] cursor-none will-change-transform md:rounded-[0.6rem]"
+            className="relative aspect-[16/10] overflow-hidden rounded-[0.5rem] shadow-[0_18px_45_rgba(0,0,0,0.14)] cursor-none will-change-transform md:rounded-[0.6rem] user-drag-none"
             style={{ backgroundColor: panelColor }}
             onPointerEnter={handlePointerEnter}
             onPointerMove={handlePointerMove}

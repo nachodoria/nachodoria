@@ -3,10 +3,9 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef, useState } from "react";
 
-gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+gsap.registerPlugin(ScrollToPlugin);
 
 interface NavbarProps {
     isReady: boolean;
@@ -20,7 +19,7 @@ export default function Navbar({ isReady }: NavbarProps) {
     const underlineReady = useRef(false);
     const underlineXTo = useRef<((value: number) => gsap.core.Tween) | null>(null);
     const underlineWidthTo = useRef<((value: number) => gsap.core.Tween) | null>(null);
-    const [activeItem, setActiveItem] = useState<string>("About");
+    const [hoveredItem, setHoveredItem] = useState<string | null>(null);
     const navItems = [
         { label: "About", target: "top" },
         { label: "Work", target: "#work-section" },
@@ -74,8 +73,7 @@ export default function Navbar({ isReady }: NavbarProps) {
         underlineWidthTo.current?.(nextWidth);
     };
 
-    const handleNavClick = (item: string, target: string) => {
-        setActiveItem(item);
+    const handleNavClick = (target: string) => {
         const smoothScroll = window.__portfolioLocomotive;
         
         // A much more polished cubic in-out easing (power3.inOut)
@@ -172,30 +170,11 @@ export default function Navbar({ isReady }: NavbarProps) {
                 force3D: true,
                 onComplete: () => {
                     underlineReady.current = true;
-                    requestAnimationFrame(() => {
-                        moveUnderline(activeItem, true);
-                    });
                 },
             });
 
-            const sectionTriggers = [
-                { label: "About", trigger: "#about" },
-                { label: "Work", trigger: "#work-section" },
-                { label: "Contact", trigger: "#contact" },
-            ].map(({ label, trigger }) => ScrollTrigger.create({
-                trigger,
-                start: "top center",
-                end: "bottom center",
-                onToggle: (self) => {
-                    if (self.isActive) {
-                        setActiveItem(label);
-                    }
-                },
-            }));
-
             return () => {
                 underlineReady.current = false;
-                sectionTriggers.forEach((trigger) => trigger.kill());
             };
         }
     }, [isReady]);
@@ -203,14 +182,14 @@ export default function Navbar({ isReady }: NavbarProps) {
     useGSAP(() => {
         if (!isReady) return;
 
-        moveUnderline(activeItem);
-    }, [isReady, activeItem]);
+        moveUnderline(hoveredItem);
+    }, [isReady, hoveredItem]);
 
     useGSAP(() => {
         if (!isReady) return;
 
         const handleResize = () => {
-            moveUnderline(activeItem, true);
+            moveUnderline(hoveredItem, true);
         };
 
         window.addEventListener("resize", handleResize);
@@ -218,7 +197,7 @@ export default function Navbar({ isReady }: NavbarProps) {
         return () => {
             window.removeEventListener("resize", handleResize);
         };
-    }, [isReady, activeItem]);
+    }, [isReady, hoveredItem]);
 
     return (
         <nav
@@ -237,14 +216,14 @@ export default function Navbar({ isReady }: NavbarProps) {
                         ref={(node) => {
                             itemRefs.current[label] = node;
                         }}
-                        onClick={() => handleNavClick(label, target)}
+                        onClick={() => handleNavClick(target)}
                         onPointerEnter={(event) => {
                             if (event.pointerType !== "mouse") return;
-                            moveUnderline(label);
+                            setHoveredItem(label);
                         }}
                         onPointerLeave={(event) => {
                             if (event.pointerType !== "mouse") return;
-                            moveUnderline(activeItem);
+                            setHoveredItem(null);
                         }}
                         className="nav-item relative inline-flex w-max items-end bg-transparent pb-1 leading-none text-[var(--nav-active)] opacity-0 translate-y-[-20px] will-change-[transform,opacity] pointer-events-auto"
                     >

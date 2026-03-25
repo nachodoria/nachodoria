@@ -10,15 +10,14 @@ gsap.registerPlugin(ScrollTrigger);
 const highlightedWords = new Set([
     "software",
     "developer",
-    "real",
-    "problems",
-    "new",
+    "reliable",
+    "useful",
+    "exploring",
     "ideas",
-    "grow",
-    "handson",
+    "building",
 ]);
 
-const aboutText = "Aspiring software developer focused on building reliable systems and solving real problems through code. Always exploring new ideas and looking for opportunities to grow through hands-on experience in the industry.";
+const aboutText = "I’m a software developer focused on building systems that are reliable and useful, not just functional. I’m always exploring new ideas and learning by actually building them.";
 const aboutWords = aboutText.split(" ");
 
 export default function AboutSection({ isReady = true }: { isReady?: boolean }) {
@@ -84,8 +83,8 @@ export default function AboutSection({ isReady = true }: { isReady?: boolean }) 
                         <span
                             key={i}
                             data-highlighted={isHighlighted ? "true" : "false"}
-                            className={`word inline-block mr-[0.25em] opacity-20 will-change-[opacity,color] ${isHighlighted ? "word-highlight" : ""}`}
-                            style={isHighlighted ? { color: "var(--foreground-secondary)" } : undefined}
+                            className="word inline-block mr-[0.25em] opacity-20 will-change-[opacity,color]"
+                            style={isHighlighted ? { color: "var(--highlight)" } : { color: "var(--foreground)" }}
                         >
                             {word}
                         </span>

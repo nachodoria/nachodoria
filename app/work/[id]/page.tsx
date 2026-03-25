@@ -1,6 +1,7 @@
 "use client";
 
-import { CSSProperties, useLayoutEffect } from "react";
+import type { CSSProperties } from "react";
+import { useLayoutEffect } from "react";
 import Image from "next/image";
 import { Link } from "next-transition-router";
 import { useParams } from "next/navigation";
@@ -13,7 +14,6 @@ const withAlpha = (hex: string, alphaHex: string) => `${hex}${alphaHex}`;
 export default function ProjectPage() {
     const { id } = useParams();
     const project = projectsBySlug[id as string];
-    const detailImageSrc = project?.detailImageSrc ?? project?.imageSrc ?? "";
     const pageStyle = {
         "--background": "#ffffeb",
         "--background-o": withAlpha("#ffffeb", "88"),
@@ -39,18 +39,18 @@ export default function ProjectPage() {
             className="min-h-[100svh] overflow-x-hidden bg-[var(--background)] px-[5vw] py-8 text-[var(--foreground)] md:py-10"
             style={pageStyle}
         >
-            <div className="mx-auto flex min-h-[calc(100svh-4rem)] w-full max-w-[1400px] flex-col gap-10 lg:min-h-[calc(100svh-5rem)] lg:gap-14">
+            <div className="mx-auto flex min-h-[calc(100svh-4rem)] w-full max-w-[1520px] flex-col gap-10 lg:min-h-[calc(100svh-5rem)] lg:gap-14">
                 <Reveal delay={0} distance={18}>
                     <Link
                         href="/"
                         scroll={false}
-                        className="inline-flex w-fit items-center gap-2 leading-none text-sm font-semibold uppercase tracking-[0.16em] opacity-70 transition-opacity duration-200 hover:opacity-100 md:text-base"
+                        className="inline-flex w-fit items-center gap-1 leading-none text-sm font-semibold uppercase tracking-[0.16em] opacity-70 transition-opacity duration-200 hover:opacity-100 md:text-base"
                     >
                         Back
                     </Link>
                 </Reveal>
 
-                <section className="grid flex-1 gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-center lg:gap-16">
+                <section className="grid flex-1 gap-10 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:items-center lg:gap-20">
                     <div className="flex max-w-xl flex-col justify-center gap-7 lg:gap-9">
                         <div className="space-y-3">
                             <Title
@@ -101,15 +101,16 @@ export default function ProjectPage() {
                         direction="right"
                         distance={80}
                         imageScale={1.08}
-                        className="relative h-[32vh] min-h-[230px] overflow-hidden rounded-[1.8rem] border border-[var(--foreground)]/12 shadow-[0_24px_60px_rgba(0,0,0,0.16)] sm:h-[38vh] lg:h-[50vh]"
+                        className="relative h-[32vh] min-h-[230px] overflow-hidden rounded-[1.8rem] border border-[var(--foreground)]/12 shadow-[0_16px_38px_rgba(0,0,0,0.1)] sm:h-[38vh] lg:h-[54vh] xl:h-[58vh]"
                     >
                         <Image
-                            src={detailImageSrc}
+                            src={project.imageSrc}
                             alt={project.imageAlt}
                             fill
+                            draggable={false}
                             priority
                             quality={88}
-                            sizes="(min-width: 1280px) 46vw, (min-width: 1024px) 44vw, 88vw"
+                            sizes="(min-width: 1536px) 56vw, (min-width: 1280px) 54vw, (min-width: 1024px) 50vw, 88vw"
                             className="object-cover object-center"
                         />
                     </Reveal>
