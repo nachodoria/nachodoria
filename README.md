@@ -34,7 +34,7 @@ Courses include: Object-Oriented Programming, Computational Thinking, Problem So
 ## 🚀 Projects
 
 ### 🌐 [Personal Portfolio (2026)](https://ignacio-doria.vercel.app/)
-A high-performance personal portfolio featuring advanced GSAP animations, a truly infinite marquee, and perfectly fluid smooth scrolling.  
+A high-performance personal portfolio.  
 **Technologies:** NextJS, GSAP (ScrollTrigger & Observer), Locomotive Scroll (Lenis), Tailwind CSS
 
 

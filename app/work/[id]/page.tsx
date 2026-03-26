@@ -1,19 +1,51 @@
-"use client";
-
-import type { CSSProperties } from "react";
-import { useLayoutEffect } from "react";
+import type { Metadata } from "next";
 import Image from "next/image";
-import { Link } from "next-transition-router";
-import { useParams } from "next/navigation";
+import { notFound } from "next/navigation";
 import { Reveal } from "@/app/components/transition/Reveal";
 import { Title } from "@/app/components/transition/Title";
-import { projectsBySlug } from "../../data/projects";
+import ScrollToTop from "@/app/components/transition/ScrollToTop";
+import BackLink from "@/app/components/transition/BackLink";
+import { projects, projectsBySlug } from "../../data/projects";
 
 const withAlpha = (hex: string, alphaHex: string) => `${hex}${alphaHex}`;
 
-export default function ProjectPage() {
-    const { id } = useParams();
-    const project = projectsBySlug[id as string];
+interface ProjectPageProps {
+    params: Promise<{ id: string }>;
+}
+
+export function generateStaticParams() {
+    return projects.map((project) => ({
+        id: project.slug,
+    }));
+}
+
+export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
+    const { id } = await params;
+    const project = projectsBySlug[id];
+
+    if (!project) {
+        return { title: "Project Not Found" };
+    }
+
+    return {
+        title: project.title,
+        description: project.shortDescription,
+        openGraph: {
+            title: `${project.title} | Ignacio Doria`,
+            description: project.shortDescription,
+            images: [{ url: project.imageSrc }],
+        },
+    };
+}
+
+export default async function ProjectPage({ params }: ProjectPageProps) {
+    const { id } = await params;
+    const project = projectsBySlug[id];
+
+    if (!project) {
+        notFound();
+    }
+
     const pageStyle = {
         "--background": "#ffffeb",
         "--background-o": withAlpha("#ffffeb", "88"),
@@ -24,57 +56,44 @@ export default function ProjectPage() {
         "--hero-title-color": "#112712",
         "--hero-title-dim": withAlpha("#112712", "bf"),
         "--highlight": "#5ea85d",
-    } as CSSProperties;
-
-    useLayoutEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
-
-    if (!project) {
-        return <div>Project not found</div>;
-    }
+    } as React.CSSProperties;
 
     return (
         <main
             className="min-h-[100svh] overflow-x-hidden bg-[var(--background)] px-[5vw] py-8 text-[var(--foreground)] md:py-10"
             style={pageStyle}
         >
+            <ScrollToTop />
             <div className="mx-auto flex min-h-[calc(100svh-4rem)] w-full max-w-[1520px] flex-col gap-10 lg:min-h-[calc(100svh-5rem)] lg:gap-14">
-                <Reveal delay={0} distance={18}>
-                    <Link
-                        href="/"
-                        scroll={false}
-                        className="inline-flex w-fit items-center gap-1 leading-none text-sm font-semibold uppercase tracking-[0.16em] opacity-70 transition-opacity duration-200 hover:opacity-100 md:text-base"
-                    >
-                        Back
-                    </Link>
+                <Reveal delay={0.05} distance={14} variant="slide">
+                    <BackLink />
                 </Reveal>
 
                 <section className="grid flex-1 gap-10 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:items-center lg:gap-20">
                     <div className="flex max-w-xl flex-col justify-center gap-7 lg:gap-9">
                         <div className="space-y-3">
                             <Title
-                                delay={0.05}
-                                className="font-mono text-4xl font-semibold uppercase leading-[0.9] tracking-[-0.04em] sm:text-5xl lg:text-[clamp(3.8rem,5vw,6.4rem)]"
+                                delay={0.12}
+                                className=" text-4xl font-semibold uppercase leading-[0.9] tracking-[-0.04em] sm:text-5xl lg:text-[clamp(3.8rem,5vw,6.4rem)]"
                             >
                                 {project.title}
                             </Title>
                         </div>
 
-                        <Reveal delay={0.1} distance={24}>
+                        <Reveal delay={0.3} distance={20} variant="fade">
                             <p className="max-w-xl text-[1.08rem] leading-[1.6] text-[var(--foreground)]/88 md:text-[1.22rem]">
                                 {project.longDescription}
                             </p>
                         </Reveal>
 
                         <div className="font-mono flex flex-col gap-2 pt-2 text-[0.95rem] tracking-tight text-[var(--foreground)]/70 md:text-[1.05rem]">
-                            <Reveal delay={0.16} distance={12}>
+                            <Reveal delay={0.42} distance={10} variant="slide">
                                 <p>
                                     <span className="font-semibold text-[var(--foreground)]">Stack: </span>
                                     {project.technologies.join(", ")}
                                 </p>
                             </Reveal>
-                            <Reveal delay={0.22} distance={12}>
+                            <Reveal delay={0.5} distance={10} variant="slide">
                                 <p>
                                     <span className="font-semibold text-[var(--foreground)]">Year: </span>
                                     {project.year}
@@ -83,7 +102,7 @@ export default function ProjectPage() {
                         </div>
 
                         {project.linkHref ? (
-                            <Reveal delay={0.28} distance={18} className="mt-4">
+                            <Reveal delay={0.58} distance={16} variant="fade" className="mt-4">
                                 <a
                                     href={project.linkHref}
                                     target="_blank"
@@ -97,9 +116,9 @@ export default function ProjectPage() {
                     </div>
 
                     <Reveal
-                        delay={0.03}
+                        delay={0.08}
                         direction="right"
-                        distance={80}
+                        variant="clip"
                         imageScale={1.08}
                         className="relative h-[32vh] min-h-[230px] overflow-hidden rounded-[1.8rem] border border-[var(--foreground)]/12 shadow-[0_16px_38px_rgba(0,0,0,0.1)] sm:h-[38vh] lg:h-[54vh] xl:h-[58vh]"
                     >

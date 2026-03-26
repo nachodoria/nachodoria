@@ -24,35 +24,46 @@ export function Title({ children, className = "", delay = 0 }: TitleProps) {
 
     useLayoutEffect(() => {
         const ctx = gsap.context(() => {
-            const spans = ref.current?.querySelectorAll("span[data-title-word]") ?? [];
+            const wordWrappers = ref.current?.querySelectorAll<HTMLElement>("span[data-title-word]") ?? [];
+            const chars = ref.current?.querySelectorAll<HTMLElement>("span[data-title-char]") ?? [];
 
             gsap.set(ref.current, {
                 autoAlpha: 0,
             });
-            gsap.set(spans, {
-                yPercent: 110,
+
+            // Each character starts translated down, rotated, and slightly scaled
+            gsap.set(chars, {
+                yPercent: 120,
+                rotateX: -80,
+                scaleY: 0.6,
+                opacity: 0,
             });
 
             if (!isReady) {
                 return;
             }
 
-            gsap.timeline({
+            const tl = gsap.timeline({
                 delay,
-                defaults: {
-                    ease: "circ.out",
+            });
+
+            // Reveal the container
+            tl.set(ref.current, {
+                autoAlpha: 1,
+            });
+
+            // Animate each character with a cascading stagger
+            tl.to(chars, {
+                yPercent: 0,
+                rotateX: 0,
+                scaleY: 1,
+                opacity: 1,
+                duration: 0.9,
+                ease: "expo.out",
+                stagger: {
+                    each: 0.035,
                 },
-            })
-                .set(ref.current, {
-                    autoAlpha: 1,
-                })
-                .to(spans, {
-                    yPercent: 0,
-                    duration: 0.6,
-                    stagger: {
-                        each: 0.12,
-                    },
-                });
+            });
         }, ref);
 
         return () => {
@@ -69,12 +80,27 @@ export function Title({ children, className = "", delay = 0 }: TitleProps) {
     }
 
     return (
-        <h1 ref={ref} className={className}>
-            {words.map((word, index) => (
-                <span key={`${word}-${index}`} className="mr-[0.18em] inline-block overflow-hidden align-top last:mr-0">
-                    <span data-title-word className="inline-block">
-                        {word}
-                    </span>
+        <h1 ref={ref} className={className} style={{ perspective: "600px" }}>
+            {words.map((word, wordIndex) => (
+                <span
+                    key={`${word}-${wordIndex}`}
+                    data-title-word
+                    className="mr-[0.18em] inline-block align-top last:mr-0"
+                >
+                    {word.split("").map((char, charIndex) => (
+                        <span
+                            key={`${char}-${charIndex}`}
+                            className="inline-block overflow-hidden"
+                        >
+                            <span
+                                data-title-char
+                                className="inline-block will-change-transform"
+                                style={{ transformOrigin: "bottom center" }}
+                            >
+                                {char}
+                            </span>
+                        </span>
+                    ))}
                 </span>
             ))}
         </h1>

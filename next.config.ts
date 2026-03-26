@@ -18,10 +18,12 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   productionBrowserSourceMaps: false,
+  compress: true,
   turbopack: {
     root: process.cwd(),
   },
   images: {
+    formats: ["image/avif", "image/webp"],
     qualities: [25, 50, 75, 92, 95, 100],
   },
   async headers() {

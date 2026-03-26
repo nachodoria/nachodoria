@@ -24,31 +24,11 @@ body {
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    --background: #5ea85d;
-    --foreground: #112712;
-    --foreground-secondary: #5ea85d;
-  }
-}
-
-html {
+*, *::before, *::after {
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
 
-body {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-* {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-html::-webkit-scrollbar,
-body::-webkit-scrollbar,
 *::-webkit-scrollbar {
   width: 0;
   height: 0;

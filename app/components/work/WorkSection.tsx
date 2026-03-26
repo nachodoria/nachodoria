@@ -124,8 +124,8 @@ export default function WorkSection() {
         if (!railRef.current || !sectionRef.current) return;
 
         const items = gsap.utils.toArray<HTMLElement>(".marquee-item", railRef.current);
-        const idleTimeScale = 0.38;
-        let settleTween: gsap.core.Tween | null = null;
+        // Negative idle speed to natively scroll to the right
+        const idleTimeScale = -1.5;
 
         // Initialize the seamless horizontal loop
         const loop = horizontalLoop(items, {
@@ -134,33 +134,54 @@ export default function WorkSection() {
             paddingRight: 50,
         });
 
-        loop.timeScale(idleTimeScale);
+        let targetSpeed = idleTimeScale;
+        let currentSpeed = idleTimeScale;
+        let scrollTimeout: ReturnType<typeof setTimeout> | null = null;
 
+        // Global observer to catch scrolls anywhere
         const obs = Observer.create({
-            target: sectionRef.current,
+            target: window,
             type: "wheel,touch",
             onChangeY(self) {
-                const direction = self.deltaY > 0 ? 1 : -1;
-                const boost = gsap.utils.clamp(2, 3, 2 + Math.abs(self.deltaY) / 180);
+                // deltaY > 0 means scroll down -> rightwards (negative speed)
+                const direction = self.deltaY > 0 ? -1 : 1;
+                const boost = gsap.utils.clamp(8.0, 25.0, 8.0 + Math.abs(self.deltaY) / 80);
+                targetSpeed = direction * boost;
 
-                settleTween?.kill();
-
-                gsap.to(loop, {
-                    timeScale: direction * boost,
-                    duration: 0.35,
-                    ease: "power3.out",
-                    overwrite: "auto"
-                });
-
-                settleTween = gsap.to(loop, {
-                    timeScale: direction * idleTimeScale,
-                    duration: 1.4,
-                    delay: 0.08,
-                    ease: "power2.out",
-                    overwrite: "auto"
-                });
+                if (scrollTimeout) clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    // Let it persist in the direction it was going, or map back to idle
+                    const currentDirection = targetSpeed !== 0 ? Math.sign(targetSpeed) : -1;
+                    targetSpeed = currentDirection * Math.abs(idleTimeScale);
+                }, 120);
             }
         });
+        
+        // Start disabled so it doesn't affect performance until visible
+        obs.disable();
+
+        // Only enable the scroll-boost when the marquee section is in the viewport
+        const st = ScrollTrigger.create({
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            onEnter: () => obs.enable(),
+            onLeave: () => obs.disable(),
+            onEnterBack: () => obs.enable(),
+            onLeaveBack: () => obs.disable(),
+        });
+
+        const tickerFn = () => {
+            const dt = gsap.ticker.deltaRatio(60);
+            const isAccelerating = Math.abs(targetSpeed) > Math.abs(idleTimeScale);
+            // Faster lerp (0.12) when actively scrolling, smoother slightly quicker settle (0.025)
+            const lerpFactor = isAccelerating ? 0.12 : 0.15;
+            
+            currentSpeed += (targetSpeed - currentSpeed) * lerpFactor * dt;
+            loop.timeScale(currentSpeed);
+        };
+
+        gsap.ticker.add(tickerFn);
 
         // 1. Grid Reveal Animation
         const cards = gsap.utils.toArray<HTMLElement>(".project-card", sectionRef.current);
@@ -182,9 +203,11 @@ export default function WorkSection() {
         });
 
         return () => {
-            settleTween?.kill();
+            if (scrollTimeout) clearTimeout(scrollTimeout);
+            gsap.ticker.remove(tickerFn);
             if (loop) loop.kill();
             if (obs) obs.kill();
+            if (st) st.kill();
         };
     }, { scope: sectionRef });
 
