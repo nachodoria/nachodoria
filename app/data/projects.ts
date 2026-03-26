@@ -7,6 +7,7 @@ export interface ProjectData {
     year: string;
     imageSrc: string;
     imageAlt: string;
+    detailImageSrc?: string;
     linkHref?: string;
     linkLabel?: string;
 }
@@ -59,7 +60,8 @@ export const projects: ProjectData[] = [
         longDescription: "A high-performance personal portfolio featuring advanced GSAP animations, a truly infinite marquee, and perfectly fluid smooth scrolling. The project focuses on creating a polished interactive experience with carefully tuned motion design, responsive layouts, and performance-first rendering techniques built with NextJS and Tailwind.",
         technologies: ["NextJS", "GSAP", "Lenis", "Tailwind CSS"],
         year: "2026",
-        imageSrc: "/projects/portfolio/default.png",
+        imageSrc: "/projects/portfolio/main.png",
+        detailImageSrc: "/projects/portfolio/detail.png",
         imageAlt: "Portfolio project shown on two phone mockups.",
         linkHref: "https://ignaciodoria.vercel.app/",
         linkLabel: "View More",

@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
         openGraph: {
             title: `${project.title} | Ignacio Doria`,
             description: project.shortDescription,
-            images: [{ url: project.imageSrc }],
+            images: [{ url: project.detailImageSrc || project.imageSrc }],
         },
     };
 }
@@ -123,7 +123,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                         className="relative h-[32vh] min-h-[230px] overflow-hidden rounded-[1.8rem] border border-[var(--foreground)]/12 shadow-[0_16px_38px_rgba(0,0,0,0.1)] sm:h-[38vh] lg:h-[54vh] xl:h-[58vh]"
                     >
                         <Image
-                            src={project.imageSrc}
+                            src={project.detailImageSrc || project.imageSrc}
                             alt={project.imageAlt}
                             fill
                             draggable={false}
