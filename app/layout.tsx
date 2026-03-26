@@ -90,9 +90,9 @@ const smokum = Smokum({
 
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://ignacio-doria.vercel.app"),
+  metadataBase: new URL("https://ignaciodoria.vercel.app"),
   title: {
-    default: "Ignacio Doria — Software Developer",
+    default: "Ignacio Doria",
     template: "%s | Ignacio Doria",
   },
   description:
@@ -101,13 +101,13 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "Ignacio Doria",
-    title: "Ignacio Doria — Software Developer",
+    title: "Ignacio Doria",
     description:
       "Portfolio of Ignacio Doria — a software developer from Toronto focused on building reliable, high-performance web experiences.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Ignacio Doria — Software Developer",
+    title: "Ignacio Doria",
     description:
       "Portfolio of Ignacio Doria — a software developer from Toronto focused on building reliable, high-performance web experiences.",
   },

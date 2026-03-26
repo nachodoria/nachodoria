@@ -61,7 +61,7 @@ export const projects: ProjectData[] = [
         year: "2026",
         imageSrc: "/projects/portfolio/default.png",
         imageAlt: "Portfolio project shown on two phone mockups.",
-        linkHref: "https://ignacio-doria.vercel.app/",
+        linkHref: "https://ignaciodoria.vercel.app/",
         linkLabel: "View More",
     },
 ];

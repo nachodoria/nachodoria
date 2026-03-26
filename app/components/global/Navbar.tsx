@@ -3,7 +3,7 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
-import { useRef, useState } from "react";
+import { useCallback, useRef } from "react";
 
 gsap.registerPlugin(ScrollToPlugin);
 
@@ -13,72 +13,20 @@ interface NavbarProps {
 
 export default function Navbar({ isReady }: NavbarProps) {
     const container = useRef<HTMLDivElement>(null);
-    const itemsRow = useRef<HTMLDivElement>(null);
-    const underline = useRef<HTMLSpanElement>(null);
     const itemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-    const underlineReady = useRef(false);
-    const underlineXTo = useRef<((value: number) => gsap.core.Tween) | null>(null);
-    const underlineWidthTo = useRef<((value: number) => gsap.core.Tween) | null>(null);
-    const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+    const introComplete = useRef(false);
+
     const navItems = [
         { label: "About", target: "top" },
         { label: "Work", target: "#work-section" },
         { label: "Contact", target: "#contact" },
     ];
 
-    const moveUnderline = (label: string | null, immediate = false) => {
-        const underlineElement = underline.current;
-        const rowElement = itemsRow.current;
-
-        if (!underlineElement || !rowElement) return;
-        if (!underlineReady.current && !immediate) return;
-
-        const targetButton = label ? itemRefs.current[label] : null;
-        if (!targetButton) {
-            if (immediate) {
-                gsap.set(underlineElement, {
-                    width: 0,
-                    autoAlpha: 0,
-                    x: 0,
-                });
-            } else {
-                gsap.to(underlineElement, {
-                    autoAlpha: 0,
-                    duration: 0.14,
-                    ease: "power2.out",
-                    overwrite: true,
-                });
-            }
-            return;
-        }
-
-        const rowBounds = rowElement.getBoundingClientRect();
-        const buttonBounds = targetButton.getBoundingClientRect();
-        const nextWidth = buttonBounds.width;
-        const nextX = buttonBounds.left - rowBounds.left;
-
-        if (immediate) {
-            gsap.set(underlineElement, {
-                x: nextX,
-                width: nextWidth,
-                autoAlpha: 1,
-            });
-            return;
-        }
-
-        gsap.set(underlineElement, {
-            autoAlpha: 1,
-        });
-        underlineXTo.current?.(nextX);
-        underlineWidthTo.current?.(nextWidth);
-    };
-
     const handleNavClick = (target: string) => {
         const smoothScroll = window.__portfolioLocomotive;
-        
-        // A much more polished cubic in-out easing (power3.inOut)
-        // Starts smoothly, hits moderate max speed, glides nicely into place.
-        const cubicInOut = (t: number) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+        const cubicInOut = (t: number) =>
+            t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
         if (target === "top") {
             if (smoothScroll?.scrollTo) {
@@ -129,85 +77,83 @@ export default function Navbar({ isReady }: NavbarProps) {
         });
     };
 
+    const handlePointerEnter = useCallback(
+        (event: React.PointerEvent<HTMLButtonElement>, label: string) => {
+            if (event.pointerType !== "mouse") return;
+            if (!introComplete.current) return;
+
+            const btn = itemRefs.current[label];
+            if (!btn) return;
+
+            gsap.to(btn, {
+                opacity: 1,
+                duration: 0.25,
+                ease: "power2.out",
+                overwrite: true,
+            });
+        },
+        []
+    );
+
+    const handlePointerLeave = useCallback(
+        (event: React.PointerEvent<HTMLButtonElement>, label: string) => {
+            if (event.pointerType !== "mouse") return;
+            if (!introComplete.current) return;
+
+            const btn = itemRefs.current[label];
+            if (!btn) return;
+
+            gsap.to(btn, {
+                opacity: 0.8,
+                duration: 0.25,
+                ease: "power2.out",
+                overwrite: true,
+            });
+        },
+        []
+    );
+
+    // Intro animation: stagger items sliding down and fading to 0.8
     useGSAP(() => {
         if (isReady && container.current) {
-            const navButtons = container.current.querySelectorAll<HTMLElement>(".nav-item");
-            const underlineElement = underline.current;
+            const navButtons =
+                container.current.querySelectorAll<HTMLElement>(".nav-item");
+
+            introComplete.current = false;
 
             gsap.set(container.current, {
                 "--nav-active": "var(--foreground)",
-                "--nav-underline": "var(--foreground)",
                 backgroundColor: "transparent",
             });
-            underlineReady.current = false;
 
-            if (underlineElement) {
-                gsap.set(underlineElement, {
-                    autoAlpha: 0,
-                    width: 0,
-                    x: 0,
-                });
-
-                underlineXTo.current = gsap.quickTo(underlineElement, "x", {
-                    duration: 0.2,
-                    ease: "power3.out",
-                    overwrite: true,
-                });
-                underlineWidthTo.current = gsap.quickTo(underlineElement, "width", {
-                    duration: 0.2,
-                    ease: "power3.out",
-                    overwrite: true,
-                });
-            }
-
-            gsap.to(navButtons, {
-                opacity: 1,
-                y: 0,
-                duration: 0.8,
-                stagger: 0.05,
-                ease: "power4.out",
-                delay: 0.1,
-                force3D: true,
-                onComplete: () => {
-                    underlineReady.current = true;
+            gsap.fromTo(
+                navButtons,
+                {
+                    opacity: 0,
+                    y: -20,
                 },
-            });
-
-            return () => {
-                underlineReady.current = false;
-            };
+                {
+                    opacity: 0.8,
+                    y: 0,
+                    duration: 0.8,
+                    stagger: 0.05,
+                    ease: "power4.out",
+                    delay: 0.1,
+                    force3D: true,
+                    onComplete: () => {
+                        introComplete.current = true;
+                    },
+                }
+            );
         }
     }, [isReady]);
-
-    useGSAP(() => {
-        if (!isReady) return;
-
-        moveUnderline(hoveredItem);
-    }, [isReady, hoveredItem]);
-
-    useGSAP(() => {
-        if (!isReady) return;
-
-        const handleResize = () => {
-            moveUnderline(hoveredItem, true);
-        };
-
-        window.addEventListener("resize", handleResize);
-
-        return () => {
-            window.removeEventListener("resize", handleResize);
-        };
-    }, [isReady, hoveredItem]);
 
     return (
         <nav
             ref={container}
             className="fixed top-0 left-0 z-[100] flex h-16 w-full items-center justify-center gap-5 px-4 font-sans text-sm font-medium tracking-tight sm:text-base md:h-[12vh] md:justify-end md:gap-10 md:px-[5vw] md:text-xl pointer-events-none"
         >
-            <div
-                ref={itemsRow}
-                className="relative flex items-center gap-5 sm:gap-6 md:gap-10 pointer-events-auto"
-            >
+            <div className="relative flex items-center gap-5 sm:gap-6 md:gap-10 pointer-events-auto">
                 {navItems.map(({ label, target }) => (
                     <button
                         type="button"
@@ -217,25 +163,13 @@ export default function Navbar({ isReady }: NavbarProps) {
                             itemRefs.current[label] = node;
                         }}
                         onClick={() => handleNavClick(target)}
-                        onPointerEnter={(event) => {
-                            if (event.pointerType !== "mouse") return;
-                            setHoveredItem(label);
-                        }}
-                        onPointerLeave={(event) => {
-                            if (event.pointerType !== "mouse") return;
-                            setHoveredItem(null);
-                        }}
-                        className="nav-item relative inline-flex w-max items-end bg-transparent pb-1 leading-none text-[var(--nav-active)] opacity-0 translate-y-[-20px] will-change-[transform,opacity] pointer-events-auto"
+                        onPointerEnter={(e) => handlePointerEnter(e, label)}
+                        onPointerLeave={(e) => handlePointerLeave(e, label)}
+                        className="nav-item relative inline-flex w-max cursor-pointer items-end bg-transparent pb-1 leading-none text-[var(--nav-active)] opacity-0 will-change-[transform,opacity] pointer-events-auto"
                     >
                         <span>{label}</span>
                     </button>
                 ))}
-
-                <span
-                    ref={underline}
-                    aria-hidden="true"
-                    className="pointer-events-none absolute -bottom-1 left-0 h-0.5 bg-[var(--nav-underline)] opacity-0"
-                />
             </div>
         </nav>
     );
