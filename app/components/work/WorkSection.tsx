@@ -124,18 +124,19 @@ export default function WorkSection() {
         if (!railRef.current || !sectionRef.current) return;
 
         const items = gsap.utils.toArray<HTMLElement>(".marquee-item", railRef.current);
-        // Negative idle speed to natively scroll to the right
-        const idleTimeScale = -1.5;
+
+        const getIsMobile = () => window.innerWidth < 768;
+        const getIdleSpeed = () => getIsMobile() ? -0.7 : -1.5;
 
         // Initialize the seamless horizontal loop
         const loop = horizontalLoop(items, {
             repeat: -1,
-            speed: 1.5,
+            speed: 1.5, // Base speed
             paddingRight: 50,
         });
 
-        let targetSpeed = idleTimeScale;
-        let currentSpeed = idleTimeScale;
+        let targetSpeed = getIdleSpeed();
+        let currentSpeed = getIdleSpeed();
         let scrollTimeout: ReturnType<typeof setTimeout> | null = null;
 
         // Global observer to catch scrolls anywhere
@@ -143,17 +144,23 @@ export default function WorkSection() {
             target: window,
             type: "wheel,touch",
             onChangeY(self) {
+                const isMobile = getIsMobile();
+                const boostMin = isMobile ? 2.5 : 8.0;
+                const boostMax = isMobile ? 8.0 : 25.0;
+                const boostDivisor = isMobile ? 200 : 80;
+                const settleDelay = isMobile ? 200 : 120;
+
                 // deltaY > 0 means scroll down -> rightwards (negative speed)
                 const direction = self.deltaY > 0 ? -1 : 1;
-                const boost = gsap.utils.clamp(8.0, 25.0, 8.0 + Math.abs(self.deltaY) / 80);
+                const boost = gsap.utils.clamp(boostMin, boostMax, boostMin + Math.abs(self.deltaY) / boostDivisor);
                 targetSpeed = direction * boost;
 
                 if (scrollTimeout) clearTimeout(scrollTimeout);
                 scrollTimeout = setTimeout(() => {
                     // Let it persist in the direction it was going, or map back to idle
                     const currentDirection = targetSpeed !== 0 ? Math.sign(targetSpeed) : -1;
-                    targetSpeed = currentDirection * Math.abs(idleTimeScale);
-                }, 120);
+                    targetSpeed = currentDirection * Math.abs(getIdleSpeed());
+                }, settleDelay);
             }
         });
         
@@ -173,10 +180,15 @@ export default function WorkSection() {
 
         const tickerFn = () => {
             const dt = gsap.ticker.deltaRatio(60);
-            const isAccelerating = Math.abs(targetSpeed) > Math.abs(idleTimeScale);
+            const isAccelerating = Math.abs(targetSpeed) > Math.abs(getIdleSpeed());
             // Faster lerp (0.12) when actively scrolling, smoother slightly quicker settle (0.025)
             const lerpFactor = isAccelerating ? 0.12 : 0.15;
             
+            // Re-target speed constantly in case user resizes window while idle
+            if (!isAccelerating) {
+                targetSpeed = Math.sign(targetSpeed) * Math.abs(getIdleSpeed());
+            }
+
             currentSpeed += (targetSpeed - currentSpeed) * lerpFactor * dt;
             loop.timeScale(currentSpeed);
         };
