@@ -17,6 +17,9 @@ export interface ProjectTheme {
 }
 
 export const projectThemesBySlug: Record<string, ProjectTheme> = {
+    "government-of-ontario": {
+        panelColor: "#0b1a2e",
+    },
     "nba-predictor": {
         panelColor: "#16191f",
     },
@@ -29,6 +32,16 @@ export const projectThemesBySlug: Record<string, ProjectTheme> = {
 };
 
 export const projects: ProjectData[] = [
+    {
+        slug: "government-of-ontario",
+        title: "Government of Ontario",
+        shortDescription: "I&IT Analyst/Developer configuring and deploying call centre solutions for government clients.",
+        longDescription: "I configure and deploy call centre solutions for Government of Ontario clients, working with enterprise contact centre platforms, IVR systems, and telecommunications infrastructure to support critical public services.",
+        technologies: ["Contact Centre", "IVR", "Telecommunications"],
+        year: "2025–Present",
+        imageSrc: "/projects/government/default.jpg",
+        imageAlt: "Government of Ontario logo and workspace.",
+    },
     {
         slug: "nba-predictor",
         title: "NBA Predictor",

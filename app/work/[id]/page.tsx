@@ -70,7 +70,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 </Reveal>
 
                 <section className="grid flex-1 gap-10 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:items-center lg:gap-20">
-                    <div className="flex max-w-xl flex-col justify-center gap-7 lg:gap-9">
+                    <div className="flex w-full flex-col justify-center gap-7 lg:gap-9">
                         <div className="space-y-3">
                             <Title
                                 delay={0.12}
@@ -81,7 +81,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                         </div>
 
                         <Reveal delay={0.3} distance={20} variant="fade">
-                            <p className="max-w-xl text-[1.08rem] leading-[1.6] text-[var(--foreground)]/88 md:text-[1.22rem]">
+                            <p className="max-w-prose break-words text-[1.08rem] leading-[1.6] text-[var(--foreground)]/88 md:text-[1.22rem]">
                                 {project.longDescription}
                             </p>
                         </Reveal>
