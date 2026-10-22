@@ -6,16 +6,16 @@ import gsap from "gsap";
 
 const services = [
     {
-        title: "Full stack web development",
-        description: "You have an idea, I build it.",
+        title: "Web Development",
+        description: "You have an idea, I build it. Fast, responsive, and built to last.",
     },
     {
-        title: "Service Two",
-        description: "Placeholder description for this service — to be filled in later.",
+        title: "Visual & Motion",
+        description: "Logos, palettes, and animation that give a brand a pulse.",
     },
     {
-        title: "Service Three",
-        description: "Placeholder description for this service — to be filled in later.",
+        title: "Cloud Engineering",
+        description: "Infrastructure that scales, deploys itself, and doesn't wake you up at 3am.",
     },
 ];
 

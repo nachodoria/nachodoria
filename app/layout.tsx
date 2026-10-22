@@ -21,7 +21,7 @@ const anton = Anton({
 
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://ignaciodoria.vercel.app"),
+  metadataBase: new URL("https://idoria.dev"),
   title: {
     default: "Ignacio Doria",
     template: "%s | Ignacio Doria",

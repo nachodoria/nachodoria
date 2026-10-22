@@ -94,16 +94,19 @@ export default function HackerText({ text }: HackerTextProps) {
             lockWidth();
         }
 
-        // The focusable element is the surrounding <a>/<button>, not this span, so the
-        // focus-visible listener goes on that ancestor instead of here.
+        // The hoverable/focusable element is the surrounding <a>/<button>, not this
+        // span (which is sized tightly to the text) — both listeners go on that
+        // ancestor instead of here, so the animation triggers over the whole control.
         const focusTarget = root.closest<HTMLElement>("a, button") ?? root;
         const handleFocus = () => {
             if (focusTarget.matches(":focus-visible")) play();
         };
         focusTarget.addEventListener("focus", handleFocus);
+        focusTarget.addEventListener("pointerenter", play);
 
         return () => {
             focusTarget.removeEventListener("focus", handleFocus);
+            focusTarget.removeEventListener("pointerenter", play);
             if (intervalRef.current !== null) window.clearInterval(intervalRef.current);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -112,7 +115,6 @@ export default function HackerText({ text }: HackerTextProps) {
     return (
         <span
             ref={rootRef}
-            onPointerEnter={play}
             className="relative inline-flex"
             style={{ fontVariantNumeric: "tabular-nums" }}
         >

@@ -8,6 +8,6 @@ export default function robots(): MetadataRoute.Robots {
                 allow: "/",
             },
         ],
-        sitemap: "https://ignacio-doria.vercel.app/sitemap.xml",
+        sitemap: "https://idoria.dev/sitemap.xml",
     };
 }

@@ -57,10 +57,18 @@ export const projects: ProjectData[] = [
         longDescription: "An AI-assisted NBA prediction interface that combines matchup analysis, live NBA data, and machine learning predictions in a focused desktop experience. The platform integrates AI-driven responses with statistical insights, allowing users to explore game predictions, analyze team performance, and interact with real-time sports data through an intuitive interface.",
         technologies: ["NextJS", "Gemini AI", "Machine Learning"],
         year: "2026",
-        imageSrc: "/projects/nba-predictor/default.png",
-        imageAlt: "NBA Predictor AI shown on a laptop mockup.",
+        imageSrc: "/projects/nba-predictor/default.svg",
+        imageAlt: "A robot emoji centered on a dark field, standing in for NBA Predictor's AI engine.",
         linkHref: "https://github.com/nachodoria/nba-predictor",
         linkLabel: "View More",
+        gallery: [
+            {
+                src: "/projects/nba-predictor/detail.svg",
+                width: 1600,
+                height: 1200,
+                alt: "A robot and a basketball side by side on a crimson field, pairing the AI engine with the NBA data it analyzes.",
+            },
+        ],
     },
     {
         slug: "threejs-worlds",
@@ -85,7 +93,7 @@ export const projects: ProjectData[] = [
         year: "2026",
         imageSrc: "/projects/portfolio/01-cover.svg",
         imageAlt: "Brand identity artwork for the Personal Portfolio project — ink and clay marks on a dotted ground.",
-        linkHref: "https://ignaciodoria.vercel.app/",
+        linkHref: "https://idoria.dev/",
         linkLabel: "View More",
         cardImage: {
             src: "/projects/portfolio/02-mark.svg",

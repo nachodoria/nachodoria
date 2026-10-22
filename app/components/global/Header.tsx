@@ -161,7 +161,7 @@ export default function Header() {
                 <nav className="flex flex-col gap-3">
                     {navItems.map(({ label, hash, href }) => {
                         const className =
-                            "drawer-item w-fit text-left font-display text-5xl uppercase tracking-tight text-[var(--panel-foreground)] opacity-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--panel-foreground)] md:text-6xl";
+                            "stack-label-trigger drawer-item w-fit text-left font-display text-5xl uppercase tracking-tight text-[var(--panel-foreground)] opacity-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--panel-foreground)] md:text-6xl";
 
                         if (hash && isHome) {
                             return (

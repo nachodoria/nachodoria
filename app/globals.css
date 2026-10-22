@@ -160,11 +160,17 @@ img {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .stack-label:hover .stack-label__row:first-child {
+  /* Triggered by the clickable pill/button (.stack-label-trigger) the label
+     sits inside, not by the label's own tight text box — otherwise the swap
+     only fires when the cursor is directly over the glyphs instead of
+     anywhere on the control. A dedicated class, not the generic .group used
+     elsewhere for whole-card hover effects: on ProjectCard, .group is the
+     entire card (image included), which would fire this on image hover too. */
+  .stack-label-trigger:hover .stack-label__row:first-child {
     transform: translateY(-100%);
   }
 
-  .stack-label:hover .stack-label__row:last-child {
+  .stack-label-trigger:hover .stack-label__row:last-child {
     transform: translateY(0);
   }
 }

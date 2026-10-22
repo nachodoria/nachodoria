@@ -3,7 +3,7 @@
 Toronto, ON, Canada  
 647-504-8840  
 ignaciodoria01@gmail.com  
-[Portfolio](https://ignacio-doria.vercel.app/)  
+[Portfolio](https://idoria.dev/)  
 Languages: Spanish / English  
 
 ---
@@ -33,7 +33,7 @@ Courses include: Object-Oriented Programming, Computational Thinking, Problem So
 
 ## 🚀 Projects
 
-### 🌐 [Personal Portfolio (2026)](https://ignacio-doria.vercel.app/)
+### 🌐 [Personal Portfolio (2026)](https://idoria.dev/)
 A high-performance personal portfolio.  
 **Technologies:** NextJS, GSAP (ScrollTrigger & Observer), Locomotive Scroll (Lenis), Tailwind CSS
 

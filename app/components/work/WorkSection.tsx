@@ -23,7 +23,7 @@ export default function WorkSection() {
                     href="https://github.com/nachodoria"
                     target="_blank"
                     rel="noreferrer"
-                    className="dot-after inline-flex items-center rounded-full bg-[var(--accent)] px-5 py-2 font-sans text-sm font-medium text-[var(--accent-foreground)] transition-colors hover:bg-[var(--accent-strong)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ink)]"
+                    className="stack-label-trigger dot-after inline-flex items-center rounded-full bg-[var(--accent)] px-5 py-2 font-sans text-sm font-medium text-[var(--accent-foreground)] transition-colors hover:bg-[var(--accent-strong)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ink)]"
                 >
                     <StackLabel label="See All Projects" speed="fast" />
                 </a>

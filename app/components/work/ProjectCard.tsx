@@ -42,7 +42,7 @@ export default function ProjectCard({
             </h3>
 
             <div className="flex items-center gap-3">
-                <span className="dot-after dot-after--accent inline-flex items-center rounded-full border border-[var(--ink)]/25 px-3.5 py-1 font-sans text-sm text-[var(--ink)] transition-colors group-hover:border-[var(--ink)]/50">
+                <span className="stack-label-trigger dot-after dot-after--accent inline-flex items-center rounded-full border border-[var(--ink)]/25 px-3.5 py-1 font-sans text-sm text-[var(--ink)] transition-colors group-hover:border-[var(--ink)]/50">
                     <StackLabel label="View" speed="fast" />
                 </span>
                 <span className="font-sans text-sm text-[var(--muted)]">{project.category}</span>
@@ -68,6 +68,7 @@ export default function ProjectCard({
                         draggable={false}
                         quality={84}
                         sizes={imageSizes}
+                        unoptimized={project.imageSrc.endsWith(".svg")}
                         className="object-cover object-center"
                     />
                 )}

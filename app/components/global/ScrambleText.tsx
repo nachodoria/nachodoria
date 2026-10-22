@@ -22,9 +22,21 @@ export default function ScrambleText({ text }: ScrambleTextProps) {
 
     useEffect(() => {
         supportsHoverRef.current = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+        const root = rootRef.current;
+        if (!root) return;
+
+        // The hoverable element is the surrounding <a>/<button>, not this span (which
+        // is sized tightly to the text) — the listener goes on that ancestor instead
+        // of here, so the animation triggers over the whole control.
+        const hoverTarget = root.closest<HTMLElement>("a, button") ?? root;
+        hoverTarget.addEventListener("pointerenter", play);
+
         return () => {
+            hoverTarget.removeEventListener("pointerenter", play);
             if (intervalRef.current !== null) window.clearInterval(intervalRef.current);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const play = () => {
@@ -95,7 +107,7 @@ export default function ScrambleText({ text }: ScrambleTextProps) {
     };
 
     return (
-        <span ref={rootRef} onPointerEnter={play} className="relative inline-flex">
+        <span ref={rootRef} className="relative inline-flex">
             <span aria-hidden="true" className="inline-flex">
                 {text.split("").map((ch, i) => (
                     <span key={i} className="scramble-letter">
