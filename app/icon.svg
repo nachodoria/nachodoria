@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <rect width="100" height="100" rx="20" fill="#5ea85d"/>
-  <text x="50" y="72" font-family="sans-serif" font-weight="bold" font-size="65" text-anchor="middle" fill="#ffffeb">I</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="480" viewBox="270 360 480 480">
+  <rect x="270" y="360" width="480" height="480" rx="105.6" fill="#191814"/>
+  <path fill="#D0202A" d="M463.6 600a46.4 46.4 0 1 0 92.8 0a46.4 46.4 0 1 0 -92.8 0M574 600a38.4 38.4 0 1 0 76.8 0a38.4 38.4 0 1 0 -76.8 0M522.8 688.7a38.4 38.4 0 1 0 76.8 0a38.4 38.4 0 1 0 -76.8 0M420.4 688.7a38.4 38.4 0 1 0 76.8 0a38.4 38.4 0 1 0 -76.8 0M369.2 600a38.4 38.4 0 1 0 76.8 0a38.4 38.4 0 1 0 -76.8 0M420.4 511.3a38.4 38.4 0 1 0 76.8 0a38.4 38.4 0 1 0 -76.8 0M522.8 511.3a38.4 38.4 0 1 0 76.8 0a38.4 38.4 0 1 0 -76.8 0"/>
 </svg>

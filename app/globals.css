@@ -1,27 +1,38 @@
 @import "tailwindcss";
 
 :root {
-  --background: #5ea85d;
-  --background-o: #5ea85d88;
-  --foreground: #112712;
-  --foreground-o: #112712bf;
-  --foreground-secondary: #5ea85d;
-  --foreground-tertiary: #3f7d3e;
-  --hero-title-color: #fefae0;
-  --hero-title-dim: #fefae0bf;
-}
+  /* Named by role per the site's palette: --paper (ground), --ink (text/strongest
+     marks), --accent (the one accent), plus the muted/border/panel tones found
+     alongside them. Every color in the site should route through these. */
+  --paper: #f4f0e8;
+  --paper-o: #f4f0e8cc;
+  --ink: #1a1713;
+  --ink-o: #1a1713bf;
+  --ink-soft: #2c2822; /* the route-transition middle panel; not quite --ink */
+  --muted: #8a8172;
+  --border: #e3ddcf;
+  --accent: #D0202A;
+  --accent-strong: #A61A22; /* hover/active: a deeper red, not an opacity change */
+  --accent-foreground: #ffffff;
 
-html,
-body {
-  --highlight: #5ea85d;
+  --panel: #16171c;
+  --panel-foreground: #f5f4f1;
+  --panel-muted: #f5f4f180;
+  --panel-border: #ffffff2e;
+
+  /* Dot grid idle tint: a solid light red, not --accent at low opacity (which
+     reads grayish/dirty on --paper). See DotGrid.tsx and references/colour.md. */
+  --dot-idle: #E8A5A9;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-highlight: var(--highlight);
+  --color-background: var(--paper);
+  --color-foreground: var(--ink);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
   --font-sans: var(--font-instrument-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-anton);
 }
 
 *, *::before, *::after {
@@ -50,72 +61,14 @@ html.lenis body {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
 }
 
 img {
   -webkit-user-drag: none;
   user-select: none;
-}
-
-@keyframes typewriter-cursor-blink {
-
-  0%,
-  49% {
-    opacity: 1;
-  }
-
-  50%,
-  100% {
-    opacity: 0;
-  }
-}
-
-.typewriter-cursor {
-  animation: typewriter-cursor-blink 1s steps(1, end) infinite;
-}
-
-@keyframes contact-link-shake {
-  0% {
-    transform: translateX(0);
-  }
-
-  25% {
-    transform: translateX(-1px) rotate(-0.5deg);
-  }
-
-  50% {
-    transform: translateX(1.5px) rotate(0.5deg);
-  }
-
-  75% {
-    transform: translateX(-0.75px) rotate(-0.25deg);
-  }
-
-  100% {
-    transform: translateX(0);
-  }
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .contact-link:hover {
-    animation: contact-link-shake 0.22s ease-out 1;
-  }
-
-  .project-card:hover .project-card-title {
-    color: var(--highlight);
-    opacity: 1;
-  }
-
-  .button--anthe:hover::before {
-    -webkit-clip-path: polygon(0% 0%, 92% 0%, 100% 50%, 92% 100%, 0% 100%);
-    clip-path: polygon(0% 0%, 92% 0%, 100% 50%, 92% 100%, 0% 100%);
-  }
-
-  .button--anthe:hover span {
-    transform: translate3d(-3px, 0, 0);
-  }
 }
 
 .transition-wrapper {
@@ -137,36 +90,94 @@ img {
 }
 
 .panel-1 {
-  background: var(--foreground-secondary);
+  background: var(--ink);
 }
 
 .panel-2 {
-  background: var(--foreground);
+  background: var(--ink-soft);
 }
 
 .panel-3 {
-  background: var(--foreground-secondary);
+  background: var(--ink);
 }
 
 .project-card-title {
-  color: var(--foreground);
-  opacity: 0.42;
-  transition: color 220ms ease-out, opacity 220ms ease-out;
+  color: var(--ink);
 }
 
-.text-highlight-var {
-  color: var(--highlight);
+/* Bullet dot used after pill/nav labels, Operator-style */
+.dot-after::after {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background: currentColor;
+  margin-left: 0.5em;
+  vertical-align: middle;
+  opacity: 0.7;
 }
 
-.bg-highlight-var {
-  background-color: var(--highlight);
+/* The "View" pill's dot specifically carries the accent, rather than the
+   pill's own (ink) text color like every other dot-after pill. */
+.dot-after--accent::after {
+  background: var(--accent);
+  opacity: 1;
 }
 
-.border-highlight-var {
-  border-color: var(--highlight);
+::selection {
+  background: color-mix(in srgb, var(--accent) 28%, transparent);
 }
 
-/* Infinite horizontal text scroll inside CTA circle */
+/* Stacked double-label: swap reveal on hover — text rises up. Used by the sidebar
+   drawer nav (default speed) and, faster, by marquee pills (View, See All Projects…). */
+.stack-label {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.stack-label__row {
+  display: inline-block;
+  transition: transform 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.stack-label--fast .stack-label__row {
+  transition-duration: 0.22s;
+}
+
+.stack-label__row:first-child {
+  position: relative;
+}
+
+.stack-label__row:last-child {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateY(100%);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .stack-label:hover .stack-label__row:first-child {
+    transform: translateY(-100%);
+  }
+
+  .stack-label:hover .stack-label__row:last-child {
+    transform: translateY(0);
+  }
+}
+
+/* Marquee pills: "hacked" scramble reveal on hover — see ScrambleText.tsx. */
+.scramble-letter {
+  display: inline-block;
+}
+
+.scramble-letter.is-scrambling {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+}
+
 @keyframes marquee-x {
   0% {
     transform: translateX(0);
@@ -176,32 +187,142 @@ img {
   }
 }
 
-.button--anthe {
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
-  color: var(--background);
-  background: none;
+/* Self-contained infinite horizontal scroller, independent of page scroll.
+   --marquee-duration lets each instance set its own speed. */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-x var(--marquee-duration, 24s) linear infinite;
 }
 
-.button--anthe::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  border-radius: inherit;
-  background: var(--foreground);
-  opacity: 0.94;
-  -webkit-clip-path: polygon(0% 0%, 100% 0, 100% 50%, 100% 100%, 0% 100%);
-  clip-path: polygon(0% 0%, 100% 0, 100% 50%, 100% 100%, 0% 100%);
-  transition: clip-path 0.32s cubic-bezier(0.24, 0.9, 0.34, 1), -webkit-clip-path 0.32s cubic-bezier(0.24, 0.9, 0.34, 1);
+.marquee-pause:hover .marquee-track {
+  animation-play-state: paused;
 }
 
-.button--anthe span {
-  position: relative;
-  z-index: 1;
-  display: block;
-  mix-blend-mode: normal;
-  transition: transform 0.32s cubic-bezier(0.24, 0.9, 0.34, 1);
-  will-change: transform;
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
+
+/* Project-page entrance: a quiet settle on mount (opacity + a small rise; the
+   hero also gets a hair of scale). Every piece starts paused so the sequence
+   can't play while [data-intro="paused"] (IntroGate, set from the route
+   transition's isReady) still has the curtain over the page; it releases
+   once the ancestor flips to [data-intro="running"]. */
+:root {
+  --intro-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --intro-rise: 12px;
+  --intro-scale: 1.015;
+  --intro-t-title: 500ms;
+  --intro-t-meta: 500ms;
+  --intro-d-meta: 60ms;
+  --intro-t-hero: 700ms;
+  --intro-d-hero: 120ms;
+  --intro-t-body: 400ms;
+  --intro-d-body: 200ms;
+  --intro-t-reduced: 200ms;
+}
+
+.intro-title,
+.intro-meta,
+.intro-hero,
+.intro-body {
+  animation-play-state: paused;
+}
+
+[data-intro="running"] .intro-title,
+[data-intro="running"] .intro-meta,
+[data-intro="running"] .intro-hero,
+[data-intro="running"] .intro-body {
+  animation-play-state: running;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .intro-title {
+    opacity: 0;
+    animation-name: intro-rise;
+    animation-duration: var(--intro-t-title);
+    animation-timing-function: var(--intro-ease);
+    animation-fill-mode: both;
+  }
+
+  .intro-meta {
+    opacity: 0;
+    animation-name: intro-rise;
+    animation-duration: var(--intro-t-meta);
+    animation-delay: var(--intro-d-meta);
+    animation-timing-function: var(--intro-ease);
+    animation-fill-mode: both;
+  }
+
+  /* The container (rounded corners, overflow hidden) stays fixed and never
+     animates; this class goes on the <img> itself so only the picture moves. */
+  .intro-hero {
+    opacity: 0;
+    animation-name: intro-hero;
+    animation-duration: var(--intro-t-hero);
+    animation-delay: var(--intro-d-hero);
+    animation-timing-function: var(--intro-ease);
+    animation-fill-mode: both;
+  }
+
+  /* Everything after the hero gets one fade, not a per-section stagger. This
+     is a deliberate departure from choreographing each section on its own:
+     the brief for this page is "quiet, almost unnoticeable," and a single
+     case-study page doesn't carry enough distinct sections to make per-block
+     staggering read as anything but the generic fade-up-on-every-block tell.
+     Don't restore per-section staggering here without re-reading why. */
+  .intro-body {
+    opacity: 0;
+    animation-name: intro-fade;
+    animation-duration: var(--intro-t-body);
+    animation-delay: var(--intro-d-body);
+    animation-timing-function: var(--intro-ease);
+    animation-fill-mode: both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-title,
+  .intro-meta,
+  .intro-hero,
+  .intro-body {
+    opacity: 0;
+    animation-name: intro-fade;
+    animation-duration: var(--intro-t-reduced);
+    animation-timing-function: ease;
+    animation-fill-mode: both;
+  }
+}
+
+@keyframes intro-rise {
+  from {
+    opacity: 0;
+    transform: translateY(var(--intro-rise));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes intro-hero {
+  from {
+    opacity: 0;
+    transform: scale(var(--intro-scale));
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes intro-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

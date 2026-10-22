@@ -33,6 +33,13 @@ export default function Providers({ children }: { children: React.ReactNode }) {
             duration: 0.52
           });
 
+          // panel1 now fully covers the viewport, so the jump is hidden —
+          // the single global Lenis instance is reset here, before the next
+          // route mounts, so a new page never opens scrolled halfway down.
+          tl.call(() => {
+            window.__lenis?.scrollTo(0, { immediate: true });
+          });
+
           tl.to(panel2.current, {
             y: "0%",
             duration: 0.5

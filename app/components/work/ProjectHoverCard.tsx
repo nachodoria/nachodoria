@@ -10,7 +10,7 @@ interface ProjectHoverCardProps {
 
 export default function ProjectHoverCard({
     children,
-    panelColor = "var(--foreground)",
+    panelColor = "#23242b",
 }: ProjectHoverCardProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const ctaRef = useRef<HTMLDivElement>(null);
@@ -163,7 +163,7 @@ export default function ProjectHoverCard({
     return (
         <div
             ref={containerRef}
-            className="relative aspect-[16/10] overflow-hidden rounded-[0.5rem] shadow-[0_18px_45_rgba(0,0,0,0.14)] cursor-none will-change-transform md:rounded-[0.6rem] user-drag-none"
+            className="relative aspect-[16/10] overflow-hidden rounded-[0.3rem] shadow-[0_18px_45px_rgba(0,0,0,0.14)] cursor-none will-change-transform md:rounded-[0.36rem] user-drag-none"
             style={{ backgroundColor: panelColor }}
             onPointerEnter={handlePointerEnter}
             onPointerMove={handlePointerMove}
@@ -174,7 +174,7 @@ export default function ProjectHoverCard({
             {/* Black circle CTA — positioned from top-left corner, translated by lerp */}
             <div
                 ref={ctaRef}
-                className="pointer-events-none absolute left-1/2 top-1/2 z-20 flex h-24 w-24 items-center justify-center rounded-full bg-[#111] shadow-lg will-change-transform md:h-28 md:w-28"
+                className="pointer-events-none absolute left-1/2 top-1/2 z-20 flex h-24 w-24 items-center justify-center rounded-full bg-[var(--accent)] shadow-lg will-change-transform md:h-28 md:w-28"
                 style={{ opacity: 0 } as React.CSSProperties}
             >
                 {/* Horizontal scrolling "View more" ticker */}

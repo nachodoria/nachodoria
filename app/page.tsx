@@ -2,14 +2,16 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useLayoutEffect, useState } from "react";
-import AnimatedTitle from "./components/main/AnimatedTitle";
-import SubHeader from "./components/main/SubHeader";
-import Navbar from "./components/global/Navbar";
-import SmoothScroll from "./components/global/SmoothScroll";
+import HeroName from "./components/main/HeroName";
+import Header from "./components/global/Header";
+import Footer from "./components/global/Footer";
 
-const AboutSection = dynamic(() => import("./components/main/AboutSection"));
 const WorkSection = dynamic(() => import("./components/work/WorkSection"));
-const ContactSection = dynamic(() => import("./components/contact/ContactSection"));
+const ServicesSection = dynamic(() => import("./components/main/ServicesSection"));
+// Pure canvas decoration, no server-renderable content — skip SSR entirely so it doesn't
+// add to the server-rendered payload or block first paint. The wrapper div below already
+// reserves its box size, so there's no layout shift once it mounts.
+const DotGrid = dynamic(() => import("./components/main/DotGrid"), { ssr: false });
 
 export default function Home() {
   const [returnScrollY] = useState<number | null>(() => {
@@ -69,26 +71,23 @@ export default function Home() {
   }, [isReady]);
 
   return (
-    <SmoothScroll enabled={isReady}>
-      <main className="flex w-full flex-col overflow-x-hidden bg-[var(--background)]">
-        <Navbar isReady={isReady} />
+    <main className="flex w-full flex-col overflow-x-hidden bg-[var(--paper)]">
+      <Header />
 
-        {/* Hero Section - Not Sticky */}
-        <section className="flex min-h-[100svh] w-full items-center justify-center">
-          <div className="flex flex-col w-full items-center">
-            <AnimatedTitle
-              text="IGNACIO DORIA"
-              skipAnimation={skipIntro}
-              onComplete={() => setIsReady(true)}
-            />
-            <SubHeader isReady={isReady} />
-          </div>
-        </section>
+      {/* Hero Section - Not Sticky */}
+      <section className="relative mb-32 flex min-h-[110svh] w-full flex-col gap-10 overflow-hidden md:mb-56 md:flex-row md:items-center md:gap-16">
+        <div className="relative flex w-full items-center px-[8vw] py-16 md:w-1/2 md:px-[6vw] md:py-0">
+          <HeroName skipAnimation={skipIntro} onComplete={() => setIsReady(true)} />
+        </div>
 
-        <AboutSection isReady={isReady} />
-        <WorkSection />
-        <ContactSection />
-      </main>
-    </SmoothScroll>
+        <div className="relative h-[56svh] w-full pr-[8vw] md:h-[74vh] md:w-1/2 md:pr-[6vw]">
+          <DotGrid />
+        </div>
+      </section>
+
+      <WorkSection />
+      <ServicesSection />
+      <Footer />
+    </main>
   );
 }

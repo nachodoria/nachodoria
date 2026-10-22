@@ -1,4 +1,7 @@
 import type { NextConfig } from "next";
+import bundleAnalyzer from "@next/bundle-analyzer";
+
+const withBundleAnalyzer = bundleAnalyzer({ enabled: process.env.ANALYZE === "true" });
 
 const csp = [
   "default-src 'self'",
@@ -24,7 +27,7 @@ const nextConfig: NextConfig = {
   },
   images: {
     formats: ["image/avif", "image/webp"],
-    qualities: [25, 50, 75, 92, 95, 100],
+    qualities: [25, 50, 75, 84, 88, 92, 95, 100],
   },
   async headers() {
     if (process.env.NODE_ENV !== "production") {
@@ -44,8 +47,15 @@ const nextConfig: NextConfig = {
           { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains; preload" },
         ],
       },
+      {
+        // Self-hosted font files and JS/CSS chunks under /_next/static are content-hashed
+        // by the build, so they're safe to cache forever. Vercel already does this at its
+        // edge by default — this just makes it explicit at the app level too.
+        source: "/_next/static/(.*)",
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
     ];
   },
 };
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);
