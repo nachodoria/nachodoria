@@ -1,66 +1,52 @@
-# 👋 Hi, I'm Ignacio Doria Oberman
+<div align="center">
 
-Toronto, ON, Canada  
-647-504-8840  
-ignaciodoria01@gmail.com  
-[Portfolio](https://idoria.dev/)  
-Languages: Spanish / English  
+# Ignacio Doria Oberman
 
----
+**Creative developer building interactive, high-performance web experiences.**
+Computer Science @ York University · Toronto, Canada
 
-## 🎓 Education
+[Portfolio](https://idoria.dev) · [Email](mailto:ignaciodoria01@gmail.com) · [LinkedIn](#)
 
-**York University – Toronto, Canada**  
-*BSc in Computer Science (Honours)* (2023–Present)  
-Currently in my third year, building a strong foundation in algorithms, software development, and mathematics.  
-Courses include: Object-Oriented Programming, Computational Thinking, Problem Solving, Calculus, and Linear Algebra.  
-
-**ORT Argentina Belgrano – Buenos Aires, Argentina**  
-*High School Diploma in Information Technology* (2018–2022)  
-- Graduated with Honors (GPA: 9.75/10)  
-- 1st Place, Taub Young Entrepreneurship Program (2021)  
-- Strengthened teamwork and communication skills through group projects  
+</div>
 
 ---
 
-## 💻 Skills
+### About
 
-- **Languages:** JavaScript, CSS, HTML5, XML, Java, C, Dart  
-- **Frameworks & Libraries:** ReactJS, NextJS, GSAP, Locomotive Scroll (Lenis), Tailwind CSS, ThreeJS, Flutter, NextUI, Framer Motion  
-- **Design Tools:** Figma, Blender  
+I build websites that feel alive: generative animation, 3D on the web, and clean,
+fast front-ends. I also design the visual identities behind them.
+Fluent in English and Spanish.
 
----
+### Projects
 
-## 🚀 Projects
+| Project | Description | Stack |
+|---|---|---|
+| [**Personal Portfolio**](https://idoria.dev) | Portfolio with a generative, cursor-driven dot animation and custom branding | Next.js, Canvas, Lenis, Tailwind |
+| [**NBA Predictor**](#) | AI-powered NBA game predictions | *add stack* |
+| [**Three JS Worlds**](#) | Interactive 3D scenes, including Golden Portal and Galaxy Generator | Three.js, Blender |
+| [**Text Animations**](#) | Library of reusable text animations for developers | Next.js, Framer Motion |
+| [**Othello**](#) | Othello/Reversi with move validation and an AI opponent | Java |
+| [**Fridge Finder**](#) | Mobile app to track fridge inventory and expiration dates | Flutter, Dart |
 
-### 🌐 [Personal Portfolio (2026)](https://idoria.dev/)
-A high-performance personal portfolio.  
-**Technologies:** NextJS, GSAP (ScrollTrigger & Observer), Locomotive Scroll (Lenis), Tailwind CSS
+### Stack
 
+**Languages:** JavaScript, Java, C, Dart, HTML, CSS
+**Frontend:** React, Next.js, Tailwind CSS, Three.js, GSAP, Framer Motion, Lenis
+**Mobile:** Flutter
+**Design:** Figma, Blender
 
-### ✨ Text Animations by Ignacio (2023)
-Built a library of reusable text animations to inspire developers.  
-**Technologies:** NextJS, Framer Motion, Observer API  
+### Education
 
-### 🌍 Three JS Worlds
-A collection of interactive **ThreeJS experiments and 3D web scenes** built to explore graphics, animation, and real-time rendering on the web.  
-This project showcases multiple ThreeJS creations including **Golden Portal** and **Galaxy Generator**.
+**York University**, BSc Computer Science (Honours) · 2023–present
+OOP, algorithms, calculus, linear algebra
 
-**Technologies:** ThreeJS, Blender  
-
-### ♟️ Othello Board
-Implementation of the classic **Othello (Reversi)** board game. Players can play **against another player or against an AI** while the system validates moves and flips discs automatically.
-
-**Technologies:** Java, Object-Oriented Programming  
-
-### 📱 Fridge Finder
-A mobile application designed to help users **organize fridge inventory, track expiration dates, and manage food items efficiently**.
-
-**Technologies:** Dart, Flutter  
+**ORT Argentina**, High School Diploma in IT · 2022
+Graduated with honors (9.75/10) · 1st place, Taub Young Entrepreneurship Program
 
 ---
 
-## 📫 Contact
-Feel free to reach out for collaborations or opportunities:  
-**Email:** ignaciodoria01@gmail.com  
-**Phone:** 647-504-8840  
+<div align="center">
+
+Open to collaborations and opportunities. [ignaciodoria01@gmail.com](mailto:ignaciodoria01@gmail.com)
+
+</div>
