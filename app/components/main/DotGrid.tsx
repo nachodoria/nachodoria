@@ -50,7 +50,7 @@ const LEAN_DAMPING = 22; // critically damped for stiffness 120 (2*sqrt(120) ≈
 // click wakes it back up. ---
 const SETTLE_EPS_PX = 0.05;
 const SETTLE_EPS_SCALAR = 0.002;
-const RESIZE_DEBOUNCE_MS = 150;
+const RESIZE_DEBOUNCE_MS = 120;
 
 function easeOutCubic(t: number) {
     return 1 - Math.pow(1 - t, 3);
@@ -169,16 +169,23 @@ export default function DotGrid() {
             rectTop = rect.top;
         };
 
+        // Reads size from the CONTAINER, not the canvas itself — the canvas's own CSS
+        // box is JS-pinned (see below) and so isn't a reliable source of "what size
+        // should this be now" during a resize. dpr is re-read every time so monitor
+        // drags and browser zoom (which the DPR-change watcher below triggers this
+        // from) pick up the new density, not just CSS-size changes.
         const resize = () => {
-            const rect = canvas.getBoundingClientRect();
+            const rect = container.getBoundingClientRect();
             width = rect.width;
             height = rect.height;
             rectLeft = rect.left;
             rectTop = rect.top;
             dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-            canvas.width = width * dpr;
-            canvas.height = height * dpr;
+            // Setting canvas.width/height always clears the bitmap and resets the 2D
+            // context transform, so the explicit setTransform below must come after.
+            canvas.width = Math.round(width * dpr);
+            canvas.height = Math.round(height * dpr);
             canvas.style.width = `${width}px`;
             canvas.style.height = `${height}px`;
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -191,6 +198,8 @@ export default function DotGrid() {
 
             cols = Math.ceil(width / GRID_GAP) + 1;
             rows = Math.ceil(height / GRID_GAP) + 1;
+            // Float32Array zero-fills by default, so every dot's offset/velocity/lean
+            // starts at rest — nothing carries over and jumps after a rebuild.
             offsetX = new Float32Array(cols * rows);
             offsetY = new Float32Array(cols * rows);
             velX = new Float32Array(cols * rows);
@@ -199,6 +208,11 @@ export default function DotGrid() {
             leanOffY = new Float32Array(cols * rows);
             leanVelX = new Float32Array(cols * rows);
             leanVelY = new Float32Array(cols * rows);
+
+            // Ripple rings carry (x, y) in the old canvas's coordinate space — keeping
+            // them across a rebuild would animate them from positions that no longer
+            // mean anything relative to the new grid.
+            wavesRef.current = [];
         };
 
         // Accumulates into one of COLOR_STEPS + 1 shared paths (by color bucket) rather
@@ -459,14 +473,41 @@ export default function DotGrid() {
         };
         document.addEventListener("visibilitychange", handleVisibilityChange);
 
-        const resizeObserver = new ResizeObserver(() => {
+        // Shared by the ResizeObserver and the DPR watcher below, so a CSS-size
+        // change and a pure density change (zoom, dragging to another monitor)
+        // both rebuild the same way. startLoop() after resize() redraws one frame
+        // immediately if the loop had stopped at rest — resize() zeroes every
+        // offset/velocity, so that frame settles right back out unless something
+        // else (pointer motion, a click) is also active.
+        const scheduleResize = () => {
             if (resizeTimeoutId !== null) window.clearTimeout(resizeTimeoutId);
             resizeTimeoutId = window.setTimeout(() => {
+                resizeTimeoutId = null;
                 resize();
                 startLoop();
             }, RESIZE_DEBOUNCE_MS);
-        });
+        };
+
+        const resizeObserver = new ResizeObserver(scheduleResize);
         resizeObserver.observe(container);
+
+        // ResizeObserver only fires on CSS-size changes, so it misses a pure
+        // devicePixelRatio change — browser zoom, or dragging the window to a
+        // monitor with a different pixel density — where the CSS size can stay
+        // identical. matchMedia's `resolution` query fires once when the current
+        // dpr stops matching; it's re-created for the new dpr each time so the
+        // next change is still caught.
+        let dprMediaQuery: MediaQueryList | null = null;
+        const handleDprChange = () => {
+            scheduleResize();
+            watchDpr();
+        };
+        const watchDpr = () => {
+            dprMediaQuery?.removeEventListener("change", handleDprChange);
+            dprMediaQuery = window.matchMedia(`(resolution: ${window.devicePixelRatio || 1}dppx)`);
+            dprMediaQuery.addEventListener("change", handleDprChange);
+        };
+        watchDpr();
 
         return () => {
             if (rafId !== null) cancelAnimationFrame(rafId);
@@ -477,6 +518,7 @@ export default function DotGrid() {
             document.removeEventListener("pointerleave", handlePointerLeaveWindow);
             document.removeEventListener("visibilitychange", handleVisibilityChange);
             container.removeEventListener("pointerdown", handlePointerDown);
+            dprMediaQuery?.removeEventListener("change", handleDprChange);
             intersectionObserver.disconnect();
             resizeObserver.disconnect();
         };
