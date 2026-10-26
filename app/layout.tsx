@@ -19,17 +19,17 @@ const anton = Anton({
   adjustFontFallback: true,
 });
 
-
-const SITE_URL = "https://idoria.dev";
+// Must match the primary domain in Vercel (the one other domains redirect TO).
+const SITE_URL = "https://www.idoria.dev";
 const FULL_NAME = "Ignacio Doria Oberman";
 const SITE_DESCRIPTION =
   "Portfolio of Ignacio Doria Oberman, known as Ignacio Doria — a software developer from Toronto focused on building reliable, high-performance web experiences.";
 
+// Note: no `alternates.canonical` here. A canonical in the root layout is
+// inherited by every route, which would mark /about and /work/* as duplicates
+// of the homepage. Set it per page instead (e.g. canonical: "/about").
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  alternates: {
-    canonical: SITE_URL,
-  },
   title: {
     default: "Ignacio Doria",
     template: "%s | Ignacio Doria",
@@ -38,6 +38,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
+    url: SITE_URL,
     siteName: "Ignacio Doria",
     title: "Ignacio Doria",
     description: SITE_DESCRIPTION,
@@ -53,26 +54,39 @@ export const metadata: Metadata = {
   },
 };
 
-// Person structured data (schema.org), read by search engines to associate this
-// site with every name/handle variant the person goes by — not just the display
-// name used in visible copy. See the SEO note where this is wired into <body>.
-const personJsonLd = {
+// Structured data (schema.org) read by search engines.
+// - WebSite: tells Google which site name to show above the URL in results.
+// - Person: associates this site with every name/handle variant you go by.
+const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "Person",
-  name: "Ignacio Doria",
-  alternateName: [FULL_NAME, "Doria Oberman", "Ignacio Doria Oberman", "Idoria", "Doria"],
-  url: SITE_URL,
-  sameAs: [
-    "https://www.linkedin.com/in/ignacio-doria-oberman-459b33267/",
-    "https://github.com/nachodoria",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      name: "Ignacio Doria",
+      alternateName: ["idoria.dev", "Idoria"],
+      url: `${SITE_URL}/`,
+      publisher: { "@id": `${SITE_URL}/#person` },
+    },
+    {
+      "@type": "Person",
+      "@id": `${SITE_URL}/#person`,
+      name: "Ignacio Doria",
+      alternateName: [FULL_NAME, "Doria Oberman", "Idoria", "Doria"],
+      url: `${SITE_URL}/`,
+      sameAs: [
+        "https://www.linkedin.com/in/ignacio-doria-oberman-459b33267/",
+        "https://github.com/nachodoria",
+      ],
+      jobTitle: "Software Developer",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Toronto",
+        addressRegion: "ON",
+        addressCountry: "CA",
+      },
+    },
   ],
-  jobTitle: "Software Developer",
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: "Toronto",
-    addressRegion: "ON",
-    addressCountry: "CA",
-  },
 };
 
 export default function RootLayout({
@@ -88,7 +102,7 @@ export default function RootLayout({
       >
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
 
         <SmoothScroll>
