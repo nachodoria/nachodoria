@@ -10,16 +10,17 @@ const INFLUENCE_RADIUS = 150;
 const DOT_MIN_RADIUS = 0.3;
 
 // --- Shockwave on click: each dot gets an (offset, velocity) pushed by passing rings,
-// then springs back to 0. A gentle swell, not a snap: a wide, Gaussian-shaped kick and a
-// soft underdamped spring. Rings expand at WAVE_SPEED and weaken (fade) as they travel. ---
+// then springs back to 0. A bold, springy kick: a wide, Gaussian-shaped push and an
+// underdamped spring that overshoots before it settles. Rings expand at WAVE_SPEED and
+// weaken (fade) as they travel. ---
 const MAX_WAVES = 6;
 const WAVE_SPEED = 400; // px/s
-const WAVE_BAND = 160; // px — beyond this the Gaussian kick is negligible, skip the dot
-const WAVE_GAUSSIAN_SIGMA = 60; // px — width of the kick's Gaussian falloff
-const WAVE_KICK = 400; // px/s outward kick at the ring's center
+const WAVE_BAND = 200; // px — beyond this the Gaussian kick is negligible, skip the dot
+const WAVE_GAUSSIAN_SIGMA = 70; // px — width of the kick's Gaussian falloff
+const WAVE_KICK = 900; // px/s outward kick at the ring's center
 const OFFSET_STIFFNESS = 60;
-const OFFSET_DAMPING = 11;
-const SHOCKWAVE_GROW = 1.2; // size multiplier at the peak of a ring passing through
+const OFFSET_DAMPING = 9;
+const SHOCKWAVE_GROW = 1.4; // size multiplier at the peak of a ring passing through
 const OFFSET_REST_EPSILON = 0.05;
 const MAX_DT = 1 / 30;
 
@@ -134,6 +135,11 @@ export default function DotGrid() {
         // read inside the pointermove handler itself.
         let rectLeft = 0;
         let rectTop = 0;
+        // Last known pointer/touch position in viewport coordinates — kept so a scroll
+        // (which moves rectLeft/rectTop but fires no pointermove) can recompute targetRef
+        // instead of leaving the spotlight behind at its old on-page position.
+        let lastClientX: number | null = null;
+        let lastClientY: number | null = null;
         let rafId: number | null = null;
         let resizeTimeoutId: number | null = null;
         let running = false;
@@ -167,6 +173,10 @@ export default function DotGrid() {
             const rect = canvas.getBoundingClientRect();
             rectLeft = rect.left;
             rectTop = rect.top;
+            if (lastClientX !== null && lastClientY !== null) {
+                targetRef.current = { x: lastClientX - rectLeft, y: lastClientY - rectTop };
+                startLoop();
+            }
         };
 
         // Reads size from the CONTAINER, not the canvas itself — the canvas's own CSS
@@ -437,6 +447,8 @@ export default function DotGrid() {
         // cursor is even while it's outside the canvas. Uses the cached rect position, never
         // getBoundingClientRect() directly.
         const handlePointerMove = (event: PointerEvent) => {
+            lastClientX = event.clientX;
+            lastClientY = event.clientY;
             targetRef.current = { x: event.clientX - rectLeft, y: event.clientY - rectTop };
             pointerInWindow = true;
             startLoop();
@@ -450,7 +462,29 @@ export default function DotGrid() {
             if (wavesRef.current.length > MAX_WAVES) wavesRef.current.shift();
             startLoop();
         };
+        // Touch has no hover, so a finger landing on the page only ever fires
+        // pointerdown — never a pointermove first — and once the browser recognizes the
+        // drag as a scroll it cancels pointer events entirely and stops sending
+        // pointermove. touchmove keeps firing throughout the gesture regardless, so it's
+        // what actually tracks "every finger movement" on phone; touchstart covers the
+        // very first touch so the spotlight snaps there before any movement.
+        const handleTouchTrack = (event: TouchEvent) => {
+            const touch = event.touches[0];
+            if (!touch) return;
+            lastClientX = touch.clientX;
+            lastClientY = touch.clientY;
+            targetRef.current = { x: touch.clientX - rectLeft, y: touch.clientY - rectTop };
+            pointerInWindow = true;
+            startLoop();
+        };
+        const handleTouchRelease = () => {
+            pointerInWindow = false;
+        };
         window.addEventListener("pointermove", handlePointerMove, { passive: true });
+        window.addEventListener("touchstart", handleTouchTrack, { passive: true });
+        window.addEventListener("touchmove", handleTouchTrack, { passive: true });
+        window.addEventListener("touchend", handleTouchRelease, { passive: true });
+        window.addEventListener("touchcancel", handleTouchRelease, { passive: true });
         window.addEventListener("scroll", updateRectPosition, { passive: true });
         // Lenis drives scroll from its own rAF loop, which can update the page's
         // scroll position between native "scroll" events — listen to Lenis
@@ -473,12 +507,24 @@ export default function DotGrid() {
         };
         document.addEventListener("visibilitychange", handleVisibilityChange);
 
-        // Shared by the ResizeObserver and the DPR watcher below, so a CSS-size
-        // change and a pure density change (zoom, dragging to another monitor)
-        // both rebuild the same way. startLoop() after resize() redraws one frame
-        // immediately if the loop had stopped at rest — resize() zeroes every
-        // offset/velocity, so that frame settles right back out unless something
-        // else (pointer motion, a click) is also active.
+        // ResizeObserver already fires at most once per frame and the rebuild is a
+        // handful of small Float32Arrays, so there's no need to debounce it — doing so
+        // left the canvas stale/clipped for the whole duration of a window drag or phone
+        // rotation. startLoop() after resize() redraws one frame immediately if the loop
+        // had stopped at rest — resize() zeroes every offset/velocity, so that frame
+        // settles right back out unless something else (pointer motion, a click) is also
+        // active.
+        const resizeObserver = new ResizeObserver(() => {
+            resize();
+            startLoop();
+        });
+        resizeObserver.observe(container);
+
+        // A pure devicePixelRatio change (zoom, dragging to another monitor) doesn't
+        // touch CSS size, so the ResizeObserver above misses it — debounced separately
+        // here since there's no per-frame signal to hang it off. matchMedia's
+        // `resolution` query fires once when the current dpr stops matching; it's
+        // re-created for the new dpr each time so the next change is still caught.
         const scheduleResize = () => {
             if (resizeTimeoutId !== null) window.clearTimeout(resizeTimeoutId);
             resizeTimeoutId = window.setTimeout(() => {
@@ -488,15 +534,6 @@ export default function DotGrid() {
             }, RESIZE_DEBOUNCE_MS);
         };
 
-        const resizeObserver = new ResizeObserver(scheduleResize);
-        resizeObserver.observe(container);
-
-        // ResizeObserver only fires on CSS-size changes, so it misses a pure
-        // devicePixelRatio change — browser zoom, or dragging the window to a
-        // monitor with a different pixel density — where the CSS size can stay
-        // identical. matchMedia's `resolution` query fires once when the current
-        // dpr stops matching; it's re-created for the new dpr each time so the
-        // next change is still caught.
         let dprMediaQuery: MediaQueryList | null = null;
         const handleDprChange = () => {
             scheduleResize();
@@ -513,6 +550,10 @@ export default function DotGrid() {
             if (rafId !== null) cancelAnimationFrame(rafId);
             if (resizeTimeoutId !== null) window.clearTimeout(resizeTimeoutId);
             window.removeEventListener("pointermove", handlePointerMove);
+            window.removeEventListener("touchstart", handleTouchTrack);
+            window.removeEventListener("touchmove", handleTouchTrack);
+            window.removeEventListener("touchend", handleTouchRelease);
+            window.removeEventListener("touchcancel", handleTouchRelease);
             window.removeEventListener("scroll", updateRectPosition);
             unsubscribeLenisScroll?.();
             document.removeEventListener("pointerleave", handlePointerLeaveWindow);
