@@ -206,8 +206,13 @@ export default function DotGrid() {
             spotX = targetRef.current.x;
             spotY = targetRef.current.y;
 
-            cols = Math.ceil(width / GRID_GAP) + 1;
-            rows = Math.ceil(height / GRID_GAP) + 1;
+            // One column/row per full GRID_GAP step that fits inside the box, never a
+            // trailing one whose natural position would land past the edge — that extra
+            // column had nowhere to go but get yanked back by the edge clamp below,
+            // bunching it against its neighbor instead of leaving a (smaller, but real)
+            // margin. ceil() here would add that overshooting column; floor() doesn't.
+            cols = Math.max(1, Math.floor((width - GRID_GAP / 2) / GRID_GAP) + 1);
+            rows = Math.max(1, Math.floor((height - GRID_GAP / 2) / GRID_GAP) + 1);
             // Float32Array zero-fills by default, so every dot's offset/velocity/lean
             // starts at rest — nothing carries over and jumps after a rebuild.
             offsetX = new Float32Array(cols * rows);
