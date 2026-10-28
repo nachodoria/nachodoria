@@ -24,6 +24,12 @@ const SHOCKWAVE_GROW = 1.4; // size multiplier at the peak of a ring passing thr
 const OFFSET_REST_EPSILON = 0.05;
 const MAX_DT = 1 / 30;
 
+// The biggest a dot ever gets drawn at — MAX_RADIUS under full spotlight strength,
+// further grown by SHOCKWAVE_GROW mid-ring. The grid keeps every column/row this far
+// inside the canvas edge (plus a hair more) so that dot is never clipped, however close
+// its column sits to the edge.
+const GRID_PADDING = MAX_RADIUS * SHOCKWAVE_GROW + 2;
+
 // Idle dots sit at --dot-idle; dots lit by the spotlight or a passing wave blend
 // toward --accent — solid tints, not opacity, so nothing turns grayish on --paper.
 const DOT_IDLE_FALLBACK: RGB = [232, 165, 169]; // --dot-idle
@@ -149,6 +155,11 @@ export default function DotGrid() {
 
         let cols = 0;
         let rows = 0;
+        // Position of the first column/row — the grid is centered in whatever space is
+        // left over once GRID_PADDING and whole GRID_GAP steps are accounted for, so the
+        // margin is identical on both sides.
+        let gridOffsetX = 0;
+        let gridOffsetY = 0;
         let offsetX = new Float32Array(0);
         let offsetY = new Float32Array(0);
         let velX = new Float32Array(0);
@@ -206,8 +217,15 @@ export default function DotGrid() {
             spotX = targetRef.current.x;
             spotY = targetRef.current.y;
 
-            cols = Math.ceil(width / GRID_GAP) + 1;
-            rows = Math.ceil(height / GRID_GAP) + 1;
+            // Whole GRID_GAP steps only, inside a GRID_PADDING inset on every side — never
+            // a trailing partial column/row that would land past the edge and need
+            // snapping back, which is what used to bunch the last column against its
+            // neighbor. Centering in the leftover space (not pinning to the start) makes
+            // the margin equal on both sides instead of all piling up on one.
+            cols = Math.max(1, Math.floor((width - 2 * GRID_PADDING) / GRID_GAP) + 1);
+            rows = Math.max(1, Math.floor((height - 2 * GRID_PADDING) / GRID_GAP) + 1);
+            gridOffsetX = (width - (cols - 1) * GRID_GAP) / 2;
+            gridOffsetY = (height - (rows - 1) * GRID_GAP) / 2;
             // Float32Array zero-fills by default, so every dot's offset/velocity/lean
             // starts at rest — nothing carries over and jumps after a rebuild.
             offsetX = new Float32Array(cols * rows);
@@ -277,8 +295,8 @@ export default function DotGrid() {
             for (let row = 0; row < rows; row += 1) {
                 for (let col = 0; col < cols; col += 1) {
                     const index = row * cols + col;
-                    const hx = col * GRID_GAP + GRID_GAP / 2;
-                    const hy = row * GRID_GAP + GRID_GAP / 2;
+                    const hx = gridOffsetX + col * GRID_GAP;
+                    const hy = gridOffsetY + row * GRID_GAP;
 
                     const spotDist = Math.hypot(spotX - hx, spotY - hy);
                     const spotlightT = easeOutCubic(clamp(1 - spotDist / INFLUENCE_RADIUS, 0, 1));
@@ -387,10 +405,11 @@ export default function DotGrid() {
                         }
                     }
 
-                    // Never crosses the edge — the dot's center stays at least its own
-                    // radius inside the box.
-                    const drawX = clamp(hx + ox + lox, drawRadius, Math.max(drawRadius, width - drawRadius));
-                    const drawY = clamp(hy + oy + loy, drawRadius, Math.max(drawRadius, height - drawRadius));
+                    // Never crosses the edge — clamped to the same GRID_PADDING inset the
+                    // grid itself is laid out inside, not a per-dot radius, so a column
+                    // leaning or kicked toward the edge still can't pile into the last one.
+                    const drawX = clamp(hx + ox + lox, GRID_PADDING, Math.max(GRID_PADDING, width - GRID_PADDING));
+                    const drawY = clamp(hy + oy + loy, GRID_PADDING, Math.max(GRID_PADDING, height - GRID_PADDING));
 
                     addDotToPath(colorPaths[colorBucket], drawX, drawY, drawRadius);
                 }
