@@ -23,7 +23,7 @@ const anton = Anton({
 const SITE_URL = "https://www.idoria.dev";
 const FULL_NAME = "Ignacio Doria Oberman";
 const SITE_DESCRIPTION =
-  "Portfolio of Ignacio Doria Oberman, known as Ignacio Doria — a software developer from Toronto focused on building reliable, high-performance web experiences.";
+  "I'm Ignacio Doria Oberman, known as Ignacio Doria — a Toronto-based software developer building reliable, high-performance web experiences.";
 
 // Note: no `alternates.canonical` here. A canonical in the root layout is
 // inherited by every route, which would mark /about and /work/* as duplicates
