@@ -4,6 +4,7 @@ import "./globals.css";
 import Providers from "./providers";
 import SmoothScroll from "./components/global/SmoothScroll";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 
 const instrumentSans = Instrument_Sans({
   variable: "--font-instrument-sans",
@@ -110,6 +111,7 @@ export default function RootLayout({
           <Providers>{children}</Providers>
         </SmoothScroll>
         <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );
